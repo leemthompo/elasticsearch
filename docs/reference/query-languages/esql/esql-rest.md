@@ -259,7 +259,7 @@ Instead of embedding values directly in a query string, you can use parameters t
 {{esql}} supports value and identifier parameters:
 
 - [**Value** (`?`)](#esql-rest-value-params) inserts a literal. Strings are quoted, numbers stay as-is.
-- [**Identifier** (`??`)](#esql-rest-identifier-params) inserts a field name or function name.
+- [**Identifier** (`??`)](#esql-rest-identifier-params) inserts a field name or function name. {applies_to}`stack: preview 9.1`
 
 These parameters can be named, positional, or anonymous:
 
@@ -271,9 +271,12 @@ These parameters can be named, positional, or anonymous:
 Don't mix parameter styles in the same query. For example, you cannot use named `?name` with positional `??1`. Choose one style and use it consistently across both value and identifier parameters.
 ::::
 
-### Value parameters [esql-rest-value-params]
+### Value parameters (`?`) [esql-rest-value-params]
 
-Use value parameters when filter values, thresholds, or other literals come from user input or application variables. This prevents injection attacks and allows query reuse.
+::::{tip} 
+:applies_to: stack: ga 9.1.0
+We recommend using the [`??`](#esql-rest-identifier-params) syntax instead in 9.1 and above.
+::::
 
 **Syntax:**
 
@@ -321,11 +324,15 @@ POST /_query
 1. `?1` refers to the first param, `?2` to the second
 2. Values are provided as a simple array, matched by position
 
-### Identifier parameters [esql-rest-identifier-params]
+### Identifier parameters (`??`) [esql-rest-identifier-params]
 
-Use identifier parameters when the field name or aggregation function is determined at runtime. This is common in dynamic dashboards, query builders, or multi-tenant applications where users select which fields to query or aggregate.
+```{applies_to}
+stack: preview 9.1
+```
 
-Use `??` instead of `?` so the query parser can distinguish identifiers from values.
+The `??` placeholder lets you pass field and function names as plain strings in `params`, without needing to annotate them as identifiers.
+
+We recommend using this syntax instead of the original `?` syntax.
 
 **Syntax:**
 
@@ -372,6 +379,24 @@ POST /_query?format=txt
 
 1. `??1` is the first param (function name), `??2` second (field), `??3` third (group by field)
 2. Simple array of identifier names
+
+With anonymous parameters, each `??` consumes the next param in order:
+
+```console
+POST /_query?format=txt
+{
+  "query": """
+    FROM sample_data
+    | STATS result = ??(??) BY ?? <1>
+    | SORT ??
+  """,
+  "params": ["avg", "event.duration", "client.ip", "client.ip"] <2>
+}
+```
+% TEST[skip:no sample_data index]
+
+1. Each `??` is replaced by the next param in the array
+2. `client.ip` appears twice because `SORT ??` consumes a separate param
 
 #### Qualified field names
 
