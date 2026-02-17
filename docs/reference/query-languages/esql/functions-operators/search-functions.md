@@ -16,7 +16,7 @@ our [hands-on tutorial](/reference/query-languages/esql/esql-search-tutorial.md)
 For a high-level overview of search functionalities in {{esql}}, and to learn about relevance scoring, refer to [{{esql}} for search](docs-content://solutions/search/esql-for-search.md#esql-for-search-scoring).
 
 For information regarding dense vector search functions,
-including [KNN](dense-vector-functions.md#esql-knn), please refer to
+including [KNN](dense-vector-functions/knn.md), please refer to
 the [Dense vector functions](dense-vector-functions.md) documentation.
 :::
 
