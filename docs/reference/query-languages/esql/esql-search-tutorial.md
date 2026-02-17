@@ -622,7 +622,7 @@ FROM cooking_blog
 
 The parameters control:
 - `num_snippets`: Maximum number of matching snippets to return (useful when a query matches multiple parts of a document)
-- `num_words`: Maximum number of words per snippet (helps control token usage for LLM inference)
+- `num_words`: Maximum number of words per snippet (helps control token usage for LLM inference). This parameter automatically configures sentence-based chunking; other custom chunking configurations are not currently supported.
 
 ::::{dropdown} Example response
 :icon: code
@@ -635,6 +635,8 @@ Vegan Chocolate Avocado Mousse                |Discover the magic of avocado in 
 ```
 
 Notice how the snippets are now limited to approximately 25 words each, compared to the basic example which returned the full description. The `num_words` parameter helps you control snippet length for more precise LLM context.
+
+Because `TOP_SNIPPETS` uses sentence-based chunking, it prioritizes breaking at the nearest sentence boundary rather than cutting off mid-sentence, which may result in a slightly lower word count than requested.
 ::::
 
 #### Combine with `COMPLETION` for efficient LLM context
