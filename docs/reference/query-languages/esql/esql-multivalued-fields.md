@@ -256,13 +256,13 @@ POST /_query
 
 Work around this limitation by converting the field to single value with one of:
 
-* [`MV_AVG`](/reference/query-languages/esql/functions-operators/mv-functions.md#esql-mv_avg)
-* [`MV_CONCAT`](/reference/query-languages/esql/functions-operators/mv-functions.md#esql-mv_concat)
-* [`MV_COUNT`](/reference/query-languages/esql/functions-operators/mv-functions.md#esql-mv_count)
-* [`MV_MAX`](/reference/query-languages/esql/functions-operators/mv-functions.md#esql-mv_max)
-* [`MV_MEDIAN`](/reference/query-languages/esql/functions-operators/mv-functions.md#esql-mv_median)
-* [`MV_MIN`](/reference/query-languages/esql/functions-operators/mv-functions.md#esql-mv_min)
-* [`MV_SUM`](/reference/query-languages/esql/functions-operators/mv-functions.md#esql-mv_sum)
+* [`MV_AVG`](/reference/query-languages/esql/functions-operators/mv-functions/mv_avg.md)
+* [`MV_CONCAT`](/reference/query-languages/esql/functions-operators/mv-functions/mv_concat.md)
+* [`MV_COUNT`](/reference/query-languages/esql/functions-operators/mv-functions/mv_count.md)
+* [`MV_MAX`](/reference/query-languages/esql/functions-operators/mv-functions/mv_max.md)
+* [`MV_MEDIAN`](/reference/query-languages/esql/functions-operators/mv-functions/mv_median.md)
+* [`MV_MIN`](/reference/query-languages/esql/functions-operators/mv-functions/mv_min.md)
+* [`MV_SUM`](/reference/query-languages/esql/functions-operators/mv-functions/mv_sum.md)
 
 ```console
 POST /_query
