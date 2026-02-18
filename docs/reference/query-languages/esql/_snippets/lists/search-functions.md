@@ -5,4 +5,4 @@
 * [`QSTR`](../../functions-operators/search-functions/qstr.md)
 * [`SCORE`](../../functions-operators/search-functions/score.md) {applies_to}`stack: preview` {applies_to}`serverless: preview`
 % * [`TERM`](../../functions-operators/search-functions/term.md) {applies_to}`stack: preview` {applies_to}`serverless: preview`
-* [`TOP_SNIPPETS`](../../functions-operators/search-functions/top_snippets.md) {applies_to}`stack: preview` {applies_to}`serverless: preview`
+* [`TOP_SNIPPETS`](../../functions-operators/search-functions/top-snippets.md) {applies_to}`stack: preview` {applies_to}`serverless: preview`

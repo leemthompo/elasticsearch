@@ -246,7 +246,7 @@ toc:
                   - file: esql/functions-operators/search-functions/match_phrase.md
                   - file: esql/functions-operators/search-functions/qstr.md
                   - file: esql/functions-operators/search-functions/score.md
-                  - file: esql/functions-operators/search-functions/top_snippets.md
+                  - file: esql/functions-operators/search-functions/top-snippets.md
               - file: esql/functions-operators/spatial-functions.md
                 children:
                   - file: esql/functions-operators/spatial-functions/st_distance.md

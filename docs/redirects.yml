@@ -344,7 +344,7 @@ redirects:
         anchors: {'esql-qstr'}
       - to: 'reference/query-languages/esql/functions-operators/search-functions/score.md'
         anchors: {'esql-score'}
-      - to: 'reference/query-languages/esql/functions-operators/search-functions/top_snippets.md'
+      - to: 'reference/query-languages/esql/functions-operators/search-functions/top-snippets.md'
         anchors: {'esql-top_snippets'}
   'reference/query-languages/esql/functions-operators/spatial-functions.md':
     to: 'reference/query-languages/esql/functions-operators/spatial-functions.md'
