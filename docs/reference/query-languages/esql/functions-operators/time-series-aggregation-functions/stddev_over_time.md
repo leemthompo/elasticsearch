@@ -4,7 +4,7 @@ mapped_pages:
   - https://www.elastic.co/guide/en/elasticsearch/reference/current/esql-functions-operators.html#esql-stddev_over_time
 ---
 
-# `STDDEV_OVER_TIME` [esql-stddev_over_time]
+# ES|QL `STDDEV_OVER_TIME` function [esql-stddev_over_time]
 
 :::{include} ../../_snippets/functions/layout/stddev_over_time.md
 :::

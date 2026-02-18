@@ -4,7 +4,7 @@ mapped_pages:
   - https://www.elastic.co/guide/en/elasticsearch/reference/current/esql-functions-operators.html#esql-floor
 ---
 
-# `FLOOR` [esql-floor]
+# ES|QL `FLOOR` function [esql-floor]
 
 :::{include} ../../_snippets/functions/layout/floor.md
 :::

@@ -4,7 +4,7 @@ mapped_pages:
   - https://www.elastic.co/guide/en/elasticsearch/reference/current/esql-functions-operators.html#esql-now
 ---
 
-# `NOW` [esql-now]
+# ES|QL `NOW` function [esql-now]
 
 :::{include} ../../_snippets/functions/layout/now.md
 :::
