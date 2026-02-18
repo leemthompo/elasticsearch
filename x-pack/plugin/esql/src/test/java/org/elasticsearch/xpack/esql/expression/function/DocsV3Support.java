@@ -543,51 +543,50 @@ public abstract class DocsV3Support {
         if (cmd.startsWith("st_")) return "spatial-functions";
         if (cmd.startsWith("to_")) return "type-conversion-functions";
         if (cmd.startsWith("date_")) return "date-time-functions";
-        if (cmd.startsWith("is_")) return "predicate-operators"; 
+        if (cmd.startsWith("is_")) return "predicate-operators";
 
         // ---------------------------------------------------------
         // 2. MANUAL: Un-prefixed / Legacy Functions
         // ---------------------------------------------------------
-        // Only update this if you add a new "root level" function 
+        // Only update this if you add a new "root level" function
         // that doesn't match a known prefix.
         return switch (cmd) {
             // String
-            case "concat", "left", "length", "ltrim", "replace", "right", "rtrim", 
-                 "split", "substring", "trim" -> "string-functions";
-            
+            case "concat", "left", "length", "ltrim", "replace", "right", "rtrim", "split", "substring", "trim" -> "string-functions";
+
             // Search
             case "match" -> "search-functions";
-            
+
             // Grouping
             case "bucket", "tbucket", "categorize" -> "grouping-functions";
-            
+
             // Time series
             case "avg_over_time", "rate", "last_over_time", "count_distinct_over_time" -> "time-series-aggregation-functions";
-            
+
             // IP
             case "cidr_match", "ip_prefix" -> "ip-functions";
-            
+
             // Math
-            case "abs", "acos", "asin", "atan", "atan2", "ceil", "cos", "cosh", "e", 
-                 "floor", "log", "log10", "pi", "pow", "round", "sign", "sin", 
-                 "sinh", "sqrt", "tan", "tanh", "tau" -> "math-functions";
-            
+            case "abs", "acos", "asin", "atan", "atan2", "ceil", "cos", "cosh", "e", "floor", "log", "log10", "pi", "pow", "round", "sign",
+                "sin", "sinh", "sqrt", "tan", "tanh", "tau" -> "math-functions";
+
             // Conditional
             case "case", "coalesce", "greatest", "least" -> "conditional-functions";
-            
+
             // System
             case "user", "version" -> "system-functions";
 
             // Aggregation (The big bucket)
-            case "avg", "count", "count_distinct", "max", "median", 
-                 "median_absolute_deviation", "min", "percentile", "sum", 
-                 "top", "values", "weighted_avg" -> "aggregation-functions";
-            
+            case "avg", "count", "count_distinct", "max", "median", "median_absolute_deviation", "min", "percentile", "sum", "top",
+                "values", "weighted_avg" -> "aggregation-functions";
+
             // FAIL FAST: Don't guess. Force the developer to categorize new generic functions.
             default -> throw new IllegalArgumentException(
-                "Docs Generation Error: Unknown function group for [" + cmd + "]. " +
-                "This function does not have a recognized prefix (st_, mv_, etc). " +
-                "Please add it to the switch statement in DocsV3Support#functionGroupFor."
+                "Docs Generation Error: Unknown function group for ["
+                    + cmd
+                    + "]. "
+                    + "This function does not have a recognized prefix (st_, mv_, etc). "
+                    + "Please add it to the switch statement in DocsV3Support#functionGroupFor."
             );
         };
     }
@@ -827,8 +826,7 @@ public abstract class DocsV3Support {
                     :class: text-center
                     :::
 
-                    """
-                    .replace("$NAME$", name)
+                    """.replace("$NAME$", name)
                     .replace("$CATEGORY$", category)
                     .replace("$APPLIES_TO$", makeAppliesToText(Arrays.asList(info.appliesTo()), info.preview(), false))
             );
