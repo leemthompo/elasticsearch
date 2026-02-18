@@ -531,7 +531,9 @@ public abstract class DocsV3Support {
         }
         // Individual function page within its group
         String group = functionGroupFor(cmd);
-        return "/reference/query-languages/esql/functions-operators/" + group + "/" + cmd + ".md";
+        // Hyphenate filenames containing "snippets" to avoid docs-builder _snippets directory matching
+        String fileName = cmd.contains("snippets") ? cmd.replace("_", "-") : cmd;
+        return "/reference/query-languages/esql/functions-operators/" + group + "/" + fileName + ".md";
     }
 
     private static String functionGroupFor(String cmd) {
