@@ -578,7 +578,7 @@ stack: preview 9.3
 serverless: preview
 ```
 
-The [`TOP_SNIPPETS` function](/reference/query-languages/esql/functions-operators/search-functions.md/top-snippets.md) is like the [`CHUNK` function](/reference/query-languages/esql/functions-operators/string-functions.md/chunk.md) with additional relevance ranking capabilities. `TOP_SNIPPETS` ranks chunks by relevance to your query and returns only the top matches.
+The [`TOP_SNIPPETS` function](/reference/query-languages/esql/functions-operators/search-functions/top-snippets.md) is like the [`CHUNK` function](/reference/query-languages/esql/functions-operators/string-functions/chunk.md) with additional relevance ranking capabilities. `TOP_SNIPPETS` ranks chunks by relevance to your query and returns only the top matches.
 
 This is very useful for context engineering with LLMs: instead of sending entire field values, you send only the most relevant portions. This reduces token costs, helps you stay within context limits, and avoids the ["lost in the middle"](https://arxiv.org/abs/2307.03172) problem where important information is overlooked in large blocks of text.
 
