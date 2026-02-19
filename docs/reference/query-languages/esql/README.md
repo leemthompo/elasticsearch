@@ -299,6 +299,10 @@ To add a new function called `<my_func>` to the `<group>` group (e.g. `string-fu
 1. Implement the function's Java class
    - Add `@FunctionInfo` and `@Param` annotations
    - Add version metadata — see [Version differentiation in Docs V3](#version-differentiation-in-docs-v3)
+   - If the function name doesn't start with a known prefix (`mv_`, `st_`, `to_`, `date_`, `is_`),
+     add it to the switch statement in `DocsV3Support.functionGroupFor()`.
+     This maps function names to groups for cross-reference link generation.
+     Without it, the test in the next step will fail with `Docs Generation Error: Unknown function group`.
 2. Create a test class extending `AbstractFunctionTestCase`
 3. Run the test to generate all snippets
    - `./gradlew :x-pack:plugin:esql:test -Dtests.class='<MyFunc>Tests'`
@@ -312,10 +316,6 @@ To add a new function called `<my_func>` to the `<group>` group (e.g. `string-fu
    - See `functions-operators/aggregation-functions/avg.md` as a template
 6. Add the page to `docs/reference/query-languages/toc.yml`
    - As a child of the group page entry
-7. If the function name doesn't start with a known prefix (`mv_`, `st_`, `to_`, `date_`, `is_`):
-   - Add it to the switch statement in `DocsV3Support.functionGroupFor()`
-   - This maps function names to groups for cross-reference link generation
-   - Without this, tests will fail with `Docs Generation Error: Unknown function group`
 
 ## PromQL
 
