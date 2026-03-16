@@ -78,15 +78,28 @@ FROM employees-00001,other-employees-*
 ```
 
 ### Query remote clusters
+```{applies_to}
+stack: ga
+```
 
-{applies_to}`stack: ga 9.1+` Use the format `<remote_cluster_name>:<target>` to
+Use the format `<remote_cluster_name>:<target>` to
 [query data streams and indices on remote clusters](/reference/query-languages/esql/esql-cross-clusters.md):
 
 ```esql
 FROM cluster_one:employees-00001,cluster_two:other-employees-*
 ```
 
-{applies_to}`serverless: preview` In {{serverless-short}}, use the `<project-alias>:<target>` format to [query across projects](/reference/query-languages/esql/esql-cross-serverless-projects.md#use-index-expressions) with cross-project search (CPS).
+### Query across serverless projects
+
+```{applies_to}
+serverless: preview
+```
+
+Use the `<project-alias>:<target>` format to [query across serverless projects](/reference/query-languages/esql/esql-cross-serverless-projects.md#use-index-expressions) with cross-project search (CPS).
+
+```esql
+FROM linked-project-1:data
+```
 
 ### Include metadata fields
 
