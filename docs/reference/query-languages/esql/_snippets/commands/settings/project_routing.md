@@ -10,7 +10,7 @@ If `project_routing` is specified in both the `SET` directive and the API reques
 
 **Type**: `keyword`
 
-## Example
+#### Example
 
 Route a query to a specific project by alias:
 
