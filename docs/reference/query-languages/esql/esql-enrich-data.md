@@ -77,6 +77,10 @@ Enrich indices contain enrich data from source indices but have a few special pr
 
 You can use `ENRICH` with remote clusters. For detailed information about cross-cluster enrichment syntax and configuration, refer to [ENRICH across clusters](/reference/query-languages/esql/esql-cross-clusters.md#ccq-enrich).
 
+::::{note}
+`ENRICH` is not supported in [cross-project search (CPS)](/reference/query-languages/esql/esql-cross-serverless-projects.md). Enrich policies are not available in {{serverless-short}}.
+::::
+
 ## Set up an enrich policy [esql-set-up-enrich-policy]
 
 To start using `ENRICH`, follow these steps:

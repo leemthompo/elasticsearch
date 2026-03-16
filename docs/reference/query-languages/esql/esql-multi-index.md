@@ -23,6 +23,10 @@ Use the format `<remote_cluster_name>:<target>` to [query data streams and indic
 FROM cluster_one:employees-00001,cluster_two:other-employees-*
 ```
 
+::::{note}
+{applies_to}`serverless: preview` In {{serverless-short}}, use `<project-alias>:<target>` to query across projects with [cross-project search (CPS)](esql-cross-serverless-projects.md#use-index-expressions).
+::::
+
 
 ## Field type mismatches [esql-multi-index-invalid-mapping]
 

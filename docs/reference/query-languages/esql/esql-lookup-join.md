@@ -68,6 +68,8 @@ If you're familiar with SQL, `LOOKUP JOIN` has left-join behavior. This means th
 FROM log-cluster-*:logs-* | LOOKUP JOIN hosts ON source.ip
 ```
 
+{applies_to}`serverless: preview` `LOOKUP JOIN` is also supported in [cross-project search (CPS)](/reference/query-languages/esql/esql-cross-serverless-projects.md). The lookup index must exist on every {{serverless-short}} project being queried.
+
 ## Example
 
 You can run this example for yourself if you'd like to see how it works, by setting up the indices and adding sample data.

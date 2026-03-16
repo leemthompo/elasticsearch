@@ -12,6 +12,10 @@ products:
 
 # Use ES|QL across clusters [esql-cross-clusters]
 
+::::{note}
+To learn how to query across multiple {{serverless-short}} projects, see [Query across {{serverless-short}} projects](esql-cross-serverless-projects.md).
+::::
+
 With {{esql}}, you can execute a single query across multiple clusters.
 
 
@@ -514,3 +518,12 @@ Running multiple versions of {{es}} in the same cluster beyond the duration of a
 
 
 For more information about upgrades, see [Upgrading {{es}}](docs-content://deploy-manage/upgrade/deployment-or-cluster.md).
+
+
+## Query across {{serverless-short}} projects [ccq-cps]
+
+```{applies_to}
+serverless: preview
+```
+
+In {{serverless-short}}, use cross-project search (CPS) to query across multiple linked projects. To learn more, refer to [Query across {{serverless-short}} projects](esql-cross-serverless-projects.md).

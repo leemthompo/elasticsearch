@@ -32,6 +32,9 @@ ENRICH policy [ON match_field] [WITH [new_name1 = ]field1, [new_name2 = ]field2,
 `mode`
 :   The mode of the enrich command in cross cluster {{esql}}.
     See [enrich across clusters](/reference/query-languages/esql/esql-cross-clusters.md#ccq-enrich).
+    ::::{note}
+    The `mode` parameter does not apply in [cross-project search (CPS)](/reference/query-languages/esql/esql-cross-serverless-projects.md).
+    ::::
 
 `match_field`
 :   The match field. `ENRICH` uses its value to look for records in the enrich
