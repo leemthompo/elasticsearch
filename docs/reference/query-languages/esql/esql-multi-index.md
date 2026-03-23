@@ -24,7 +24,7 @@ FROM cluster_one:employees-00001,cluster_two:other-employees-*
 ```
 
 
-Use `<project-alias>:<target>` to query across serverless projects with [cross-project search (CPS)](esql-cross-serverless-projects.md#use-index-expressions). {applies_to}`serverless: preview`
+In {{serverless-short}}, queries using an unqualified `<target>` automatically run across all linked projects with [cross-project search (CPS)](esql-cross-serverless-projects.md). Use `<project-alias>:<target>` to restrict the query to a specific project. {applies_to}`serverless: preview`
 
 
 ## Field type mismatches [esql-multi-index-invalid-mapping]
