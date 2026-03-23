@@ -1,7 +1,7 @@
 ---
 applies_to:
   stack: ga
-  serverless: unavailable
+  serverless: ga
 navigation_title: "Combine data with ENRICH"
 mapped_pages:
   - https://www.elastic.co/guide/en/elasticsearch/reference/current/esql-enrich-data.html
@@ -76,10 +76,6 @@ Enrich indices contain enrich data from source indices but have a few special pr
 ## Using `ENRICH` across clusters
 
 You can use `ENRICH` with remote clusters. For detailed information about cross-cluster enrichment syntax and configuration, refer to [ENRICH across clusters](/reference/query-languages/esql/esql-cross-clusters.md#ccq-enrich).
-
-::::{note}
-`ENRICH` is not supported in [cross-project search (CPS)](/reference/query-languages/esql/esql-cross-serverless-projects.md), because enrich policies are not available in {{serverless-short}}.
-::::
 
 ## Set up an enrich policy [esql-set-up-enrich-policy]
 
