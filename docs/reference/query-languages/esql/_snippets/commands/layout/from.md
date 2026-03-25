@@ -95,11 +95,7 @@ FROM cluster_one:employees-00001,cluster_two:other-employees-*
 serverless: preview
 ```
 
-Use the `<project-alias>:<target>` format to [query across serverless projects](/reference/query-languages/esql/esql-cross-serverless-projects.md#use-index-expressions) with cross-project search (CPS).
-
-```esql
-FROM linked-project-1:data
-```
+To learn about using {{esql}} for cross-project search (CPS), refer to [query across serverless projects](/reference/query-languages/esql/esql-cross-serverless-projects.md#use-index-expressions).
 
 ### Include metadata fields
 
