@@ -30,7 +30,7 @@ A kNN retriever returns top documents from a [k-nearest neighbor search (kNN)](d
 `query_vector_builder`
 :   (Required if `query_vector` is not defined, query vector builder object)
 
-    Defines a [model](docs-content://solutions/search/vector/knn.md#knn-semantic-search) to build a query vector.
+    Defines a query vector builder to generate the query vector at search time. Refer to [Query vector builders](/reference/query-languages/query-dsl/query-vector-builders.md) for available builders and their parameters.
 
 
 `k`

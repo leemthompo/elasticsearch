@@ -119,27 +119,28 @@ PUT my-image-index
 `query_vector_builder`
 :   (Optional, object) Query vector builder. A configuration object indicating how to build a query_vector before executing the request. You must provide either a `query_vector_builder` or `query_vector`, but not both.
 
+    For full parameter details, refer to [Query vector builders](/reference/query-languages/query-dsl/query-vector-builders.md).
+
     **Parameters for `query_vector_builder`**:
-    `lookup` {applies_to}`stack: ga 9.4`
-    :   (Optional, object) Build the query vector by looking up an existing document's vector.
-
-        **Parameters for `lookup`**:
-
-        `id`
-        :   (Required, string) The ID of the document to look up.
-
-        `path`
-        :   (Required, string) The name of the vector field in the document to use as the query vector.
-
-        `index`
-        :   (Required, string) The name of the index containing the document to look up
-
-        `routing`
-        :   (Optional, string) The routing value to use when looking up the document.
 
     `text_embedding`
-    :   (Optional, object) Build the query vector by generating an embedding from input text. Refer to [Perform semantic search](docs-content://solutions/search/vector/knn.md#knn-semantic-search) to learn more.
+    :   (Optional, object) Build the query vector by generating an embedding from input text using a deployed ML model. Refer to [Perform semantic search](docs-content://solutions/search/vector/knn.md#knn-semantic-search) to learn more.
         If all queried fields are of type [semantic_text](/reference/elasticsearch/mapping-reference/semantic-text.md), the inference ID associated with the `semantic_text` field may be inferred.
+
+        :::{include} _snippets/qvb-text-embedding-params.md
+        :::
+
+    `lookup` {applies_to}`stack: ga 9.4+`
+    :   (Optional, object) Build the query vector by looking up a vector stored in an existing document. Refer to [Use `lookup` to build the query vector](docs-content://solutions/search/vector/knn.md#knn-query-vector-lookup) to learn more.
+
+        :::{include} _snippets/qvb-lookup-params.md
+        :::
+
+    `embedding` {applies_to}`stack: ga 9.4+`
+    :   (Optional, object) Build the query vector by generating an embedding from text or image inputs using an inference service with the `EMBEDDING` task type. Refer to [Use `embedding` to build the query vector](docs-content://solutions/search/vector/knn.md#knn-query-vector-embedding) to learn more.
+
+        :::{include} _snippets/qvb-embedding-params.md
+        :::
 
 
 `k`
@@ -427,6 +428,23 @@ Here is an example utilizing lookup. It gets the document with id `vector_doc_0`
 }
 ```
 %NOTCONSOLE
+
+## Knn query with embedding [knn-query-with-embedding]
+
+```{applies_to}
+stack: ga 9.4+
+serverless: ga
+```
+
+Elasticsearch supports knn queries with a query vector generated at search time from text or image inputs, using an inference service.
+
+Here is an example using a plain text input:
+
+:::{include} _snippets/qvb-embedding-example-text.md
+:::
+
+For image and multimodal examples, and full parameter details, refer to [Query vector builders](/reference/query-languages/query-dsl/query-vector-builders.md#embedding-qvb).
+
 ## Knn query with aggregations [knn-query-aggregations]
 
 `knn` query calculates aggregations on top `k` documents from each shard. Thus, the final results from aggregations contain `k * number_of_shards` documents. This is different from the [top level knn section](docs-content://solutions/search/vector/knn.md) where aggregations are calculated on the global top `k` nearest documents.
