@@ -137,7 +137,7 @@ PUT my-image-index
         :::
 
     `embedding` {applies_to}`stack: ga 9.4+`
-    :   (Optional, object) Build the query vector by generating an embedding from text or image inputs using an inference service with the `EMBEDDING` task type. Refer to [Use `embedding` to build the query vector](docs-content://solutions/search/vector/knn.md#knn-query-vector-embedding) to learn more.
+    :   (Optional, object) Build the query vector by generating an embedding from text or image inputs using an inference service with the `EMBEDDING` task type. Refer to [Query vector builders](/reference/query-languages/query-dsl/query-vector-builders.md#embedding-qvb) for full parameter details.
 
         :::{include} _snippets/qvb-embedding-params.md
         :::

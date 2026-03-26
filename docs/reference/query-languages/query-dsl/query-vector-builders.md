@@ -22,7 +22,7 @@ Three query vector builders are available:
 
 ## `text_embedding` [text-embedding-qvb]
 
-Generates a query vector from input text using a [text embedding model](../../../explore-analyze/machine-learning/nlp/ml-nlp-search-compare.md#ml-nlp-text-embedding) deployed in Elasticsearch. Start the model before use.
+Generates a query vector from input text using a [text embedding model](docs-content://explore-analyze/machine-learning/nlp/ml-nlp-search-compare.md#ml-nlp-text-embedding) deployed in Elasticsearch. Start the model before use.
 
 ### Parameters [text-embedding-qvb-params]
 
@@ -102,4 +102,4 @@ Pass multiple inputs together to create a combined multimodal embedding:
 :::{include} _snippets/qvb-embedding-example-multimodal.md
 :::
 
-For more detail, refer to [Use `embedding` to build the query vector](docs-content://solutions/search/vector/knn.md#knn-query-vector-embedding).
+For more detail, refer to [Use `embedding` to build the query vector](docs-content://solutions/search/vector/knn.md).
