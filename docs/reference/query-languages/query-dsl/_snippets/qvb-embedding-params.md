@@ -20,4 +20,4 @@
     - **List of input objects**: An array of input objects (as described above) for multimodal inputs that combine text and images in a single embedding request.
 
 `timeout`
-:   (Optional, [time value](/reference/elasticsearch/rest-apis/common-options.md#time-units)) The timeout for the inference request. Defaults to `30s`.
+:   (Optional, [time value](/reference/elasticsearch/rest-apis/api-conventions.md#time-units)) The timeout for the inference request. Defaults to `30s`.
