@@ -101,3 +101,5 @@ Pass multiple inputs together to create a combined multimodal embedding:
 
 :::{include} _snippets/qvb-embedding-example-multimodal.md
 :::
+
+For a guide to kNN search and how to use query vector builders, refer to [kNN search in {{es}}](docs-content://solutions/search/vector/knn.md).
