@@ -95,7 +95,7 @@ FROM cluster_one:employees-00001,cluster_two:other-employees-*
 serverless: preview
 ```
 
-To learn about using {{esql}} for cross-project search (CPS), refer to [query across serverless projects](/reference/query-languages/esql/esql-cross-serverless-projects.md#use-index-expressions).
+By default, queries run across the origin project and all linked projects. To learn more, refer to [query across serverless projects](/reference/query-languages/esql/esql-cross-serverless-projects.md#use-index-expressions).
 
 ### Include metadata fields
 

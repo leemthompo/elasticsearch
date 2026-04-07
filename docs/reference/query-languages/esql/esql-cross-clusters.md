@@ -15,7 +15,7 @@ products:
 With {{esql}}, you can execute a single query across multiple clusters.
 
 ::::{note}
-To learn how to query across multiple {{serverless-short}} projects, see [Query across {{serverless-short}} projects](esql-cross-serverless-projects.md).
+This page covers remote clusters and {{ccs}}, which are not available in {{serverless-full}}. In {{serverless-short}}, you can use {{cps}} instead. To learn how to query across multiple {{serverless-short}} projects using {{cps-init}}, see [](esql-cross-serverless-projects.md).
 ::::
 
 ## Prerequisites [esql-ccs-prerequisites]

@@ -72,7 +72,7 @@ Remote lookup joins are supported in [cross-cluster queries](/reference/query-la
 FROM log-cluster-*:logs-* | LOOKUP JOIN hosts ON source.ip
 ```
 
-#### Serverless
+### Cross-{{serverless-short}} project support
 
 ```{applies_to}
 serverless: preview
