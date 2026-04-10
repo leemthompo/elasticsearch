@@ -93,7 +93,8 @@ Use comma-separated lists or wildcards to
 FROM employees-00001,other-employees-*
 ```
 
-### Query remote clus```{applies_to}
+### Query remote clusters
+```{applies_to}
 stack: ga
 ```
 
