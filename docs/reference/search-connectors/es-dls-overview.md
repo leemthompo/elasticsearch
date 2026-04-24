@@ -33,6 +33,22 @@ At a very high level, there are two essential components that enable document le
 
 To enable DLS, you need to perform the following steps:
 
+::::{note}
+In Serverless projects, the DLS toggle in the UI is currently disabled due to a known bug. You can enable DLS using the Dev Tools console as a workaround:
+
+```console
+PUT /_connector/{connector_id}/_configuration
+{
+  "values": {
+    "use_document_level_security": true
+  }
+}
+```
+% TEST[skip:TODO]
+
+Replace `{connector_id}` with your connector's ID.
+::::
+
 1. First **enable DLS** for your connector as part of the connector configuration.
 2. Run an **Access control** sync.
 3. This creates a hidden access control index prefixed with `.search-acl-filter-`. For example, if you named your connector index `search-sharepoint`, the access control index would be named `.search-acl-filter-search-sharepoint`.

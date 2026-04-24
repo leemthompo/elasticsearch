@@ -121,6 +121,22 @@ The connector service has the following known issues:
     As a result, true document volume will be under-reported by a factor of 1024.
 
 
+* **Document-Level Security (DLS) toggle is disabled in Serverless projects**
+
+    When setting up a connector in a Serverless project, the Document-Level Security toggle in the UI is incorrectly disabled. This is a UI-only bug. As a workaround, you can enable DLS via the [Update connector configuration API](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-connector-update-configuration):
+
+    ```console
+    PUT /_connector/{connector_id}/_configuration
+    {
+      "values": {
+        "use_document_level_security": true
+      }
+    }
+    ```
+    % TEST[skip:TODO]
+
+    Replace `{connector_id}` with your connector's ID.
+
 ## Individual connector known issues [es-connectors-known-issues-specific]
 
 Individual connectors may have additional known issues. Refer to [each connector’s reference documentation](/reference/search-connectors/index.md) for connector-specific known issues.
