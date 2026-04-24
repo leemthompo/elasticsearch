@@ -34,6 +34,8 @@ At a very high level, there are two essential components that enable document le
 To enable DLS, you need to perform the following steps:
 
 ::::{note}
+:applies_to: serverless: ga
+
 In Serverless projects, the DLS toggle in the UI is currently disabled due to a known bug. You can enable DLS using the Dev Tools console as a workaround:
 
 ```console
