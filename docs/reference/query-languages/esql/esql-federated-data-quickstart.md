@@ -280,66 +280,43 @@ The response includes execution metadata, followed by the result columns and val
 If the query returns results, your data source is working. You can now use the full range of {{esql}} processing commands on this dataset.
 ::::::
 
-<!-- TODO: Heterogeneous FROM (FROM dataset, index) was not working against the 9.5.0 snapshot
-     used during testing — "FROM mixing datasets and non-datasets is not supported". The fix
-     landed in elastic/elasticsearch#151977 (merged 2026-06-25) after the snapshot was cut.
-     Verify this step works against the 9.5.0 release build before publishing. -->
-
 ::::::{step} Query federated and indexed data together
-Datasets share the same namespace as regular indices, so you can query both in a single `FROM`. This lets you correlate external data with indexed data without ingesting anything.
+Datasets share the same namespace as regular indices, so you can query both in a single `FROM`. This lets you combine external data with indexed data in a single query.
 
-First, index a few sample documents to query alongside the dataset:
+First, create an index with a few sample documents to query alongside the dataset:
+
+```console
+PUT /network_incidents
+{
+  "mappings": {
+    "properties": {
+      "category":     { "type": "keyword" },
+      "severity":     { "type": "keyword" },
+      "duration_min": { "type": "integer" }
+    }
+  }
+}
+```
 
 ```console
 POST /_bulk
 {"index":{"_index":"network_incidents"}}
-{"quadkey":"0320101","type":"outage","duration_min":45}
+{"category":"outage","severity":"high","duration_min":45}
 {"index":{"_index":"network_incidents"}}
-{"quadkey":"1202032","type":"degradation","duration_min":12}
+{"category":"degradation","severity":"medium","duration_min":12}
 {"index":{"_index":"network_incidents"}}
-{"quadkey":"0320101","type":"degradation","duration_min":8}
+{"category":"outage","severity":"low","duration_min":8}
 ```
 
-The response confirms that all three documents were created. Generated document IDs and shard metadata are omitted here:
-
-```json
-{
-  "errors": false,
-  "items": [
-    {
-      "index": {
-        "_index": "network_incidents",
-        "result": "created",
-        "status": 201
-      }
-    },
-    {
-      "index": {
-        "_index": "network_incidents",
-        "result": "created",
-        "status": 201
-      }
-    },
-    {
-      "index": {
-        "_index": "network_incidents",
-        "result": "created",
-        "status": 201
-      }
-    }
-  ]
-}
-```
-
-Now query both sources together. `FROM` resolves each name independently, whether it is an index (or index abstraction such as a data stream, alias, etc.) or a dataset:
+Now query both sources together. `FROM` resolves each name independently, whether it is an index (or index abstraction such as a data stream, alias, etc.) or a dataset. Use `METADATA _index` to see where each row came from:
 
 ```esql
-FROM speedtest_fixed, network_incidents
-| WHERE quadkey IS NOT NULL
-| STATS avg_latency = AVG(avg_lat_ms), records = COUNT(*) BY quadkey
-| SORT records DESC
-| LIMIT 20
+FROM speedtest_fixed, network_incidents METADATA _index
+| KEEP _index, category, severity, duration_min, avg_d_kbps, avg_lat_ms
+| LIMIT 5
 ```
+
+Rows from `network_incidents` carry the incident fields (`category`, `severity`, `duration_min`), while rows from `speedtest_fixed` carry the speedtest fields (`avg_d_kbps`, `avg_lat_ms`). Columns that do not exist in a given source return `null`.
 ::::::
 
 :::::::
