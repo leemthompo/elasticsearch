@@ -223,7 +223,7 @@ The following settings are available for `s3` data sources:
 |---|---|---|
 | `access_key` | No | AWS access key ID. |
 | `secret_key` | No | AWS secret access key. |
-| `session_token` | No | Session token for temporary STS credentials. Use with `access_key` and `secret_key`. |
+| `session_token` | No | Session token, when using temporary credentials. Use with `access_key` and `secret_key`. |
 | `auth` | No | Set to `"none"` for anonymous access to public buckets, or `"workload_identity"` to use the node's cloud identity. |
 
 <!-- NOTE: The scope doc uses "workload_identity" but the code shipped "ambient".
@@ -237,7 +237,11 @@ A data source authenticates to its store with one of the models below. The model
 |---|---|
 | Static credentials | A fixed access key and secret key, supplied in the data source settings. The common form for a service account. |
 | Anonymous | `auth: "none"`. For public data that needs no credentials. |
-| Workload identity | `auth: "workload_identity"`. Keyless, using the node's own cloud identity. For single-cloud, single-tenant deployments. Requires `esql.datasource.workload_identity.enabled: true` (operator-only). Not available in serverless. |
+| Workload identity | `auth: "workload_identity"`. Keyless, using the node's own cloud identity. Requires `esql.datasource.workload_identity.enabled: true` (operator-only). Not available in serverless. API-only. |
+
+:::{warning}
+Workload identity authentication uses the cloud identity attached to each {{es}} node (for example, an IAM role on EC2 or a service account on GKE). Different nodes may have different identities, and the node that performs the connection is not guaranteed. You are responsible for configuring cloud IAM so that every node's identity has the required permissions on the target bucket. This model is best suited for single-cloud, single-tenant deployments where node identities are uniform.
+:::
 
 When `access_key` and `secret_key` are omitted and `auth` is not set, {{es}} uses the default AWS credential chain: IAM roles, environment variables, or instance profiles.
 
@@ -438,7 +442,7 @@ Parquet is self-describing and is read with no settings in the common case. Its 
 A dataset is a read source for the standard {{esql}} pipeline. Every processing command operates on it as on an index. Filters and limits are applied during the file scan.
 
 ```esql
-FROM sales | WHERE region == "EMEA" | STATS revenue = SUM(amount) BY product | SORT revenue DESC
+FROM sales | WHERE region == "EMEA" | STATS revenue = SUM(amount) BY product | SORT revenue DESC | LIMIT 20
 ```
 
 A single query may read more than one source:
@@ -504,7 +508,12 @@ When a dataset spans multiple files, the files may have different schemas. Two m
 
 ## Cluster settings
 
-The data sources feature adds the cluster settings below. All are node-scoped.
+:::{applies_to}
+stack: preview =9.5
+serverless: unavailable
+:::
+
+The data sources feature adds the cluster settings below. All are node-scoped. Most are dynamic; the cache size and the cache TTLs are applied at node startup only. The object-count limits and the workload-identity gate are operator-managed.
 
 ### Object limits
 
@@ -531,7 +540,7 @@ The data sources feature adds the cluster settings below. All are node-scoped.
 
 | Setting | Default | Description |
 |---|---|---|
-| `esql.datasource.workload_identity.enabled` | false | Enables `auth: "workload_identity"` (the node's own cloud identity via IMDS / metadata server). Operator-only. Not available in serverless. |
+| `esql.datasource.workload_identity.enabled` | false | Enables `auth: "workload_identity"` (the node's own cloud identity via IMDS / metadata server). Operator-only; intended for single-cloud, single-tenant deployments. Never enable in serverless or multi-tenant clusters. |
 
 ### Caching
 
@@ -553,10 +562,10 @@ An administrator defines and manages data sources and datasets. An analyst queri
 | Query a dataset | `read` | Index, on the dataset name |
 | Create, read, or delete a dataset | `manage` or `all` | Index, on the dataset name |
 | Dataset administration granted on its own | `create_dataset`, `read_dataset_metadata`, `delete_dataset`, `manage_dataset` | Index, on the dataset name |
-| Create or replace a data source | `global.data_source` `create` / `cluster.manage` | Global (fine-grained) / Cluster (global) |
-| Read a data source definition | `global.data_source` `read_metadata` / `cluster.manage` | Global (fine-grained) / Cluster (global) |
-| Delete a data source | `global.data_source` `delete` / `cluster.manage` | Global (fine-grained) / Cluster (global) |
-| All data source operations | `global.data_source` `manage` / `cluster.manage` | Global (fine-grained) / Cluster (global) |
+| Create or replace a data source | `global.data_source` `create` / `cluster.manage` | Global (fine-grained) / Cluster |
+| Read a data source definition | `global.data_source` `read_metadata` / `cluster.manage` | Global (fine-grained) / Cluster |
+| Delete a data source | `global.data_source` `delete` / `cluster.manage` | Global (fine-grained) / Cluster |
+| All data source operations | `global.data_source` `manage` / `cluster.manage` | Global (fine-grained) / Cluster |
 
 `superuser` has full access to data sources and datasets. Data source management is reached only through `superuser` or a role explicitly granted `global.data_source`.
 
