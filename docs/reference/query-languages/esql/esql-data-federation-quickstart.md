@@ -1,0 +1,434 @@
+---
+navigation_title: "Quickstart"
+description: "Register a data source, create a dataset, and run your first federated data query using {{esql}}."
+applies_to:
+  stack: preview =9.5
+  serverless: preview
+products:
+  - id: elasticsearch
+---
+
+# Get started with {{esql}} Data Federation
+
+This guide walks you through connecting {{es}} to external data and querying it with {{esql}}. By the end, you will have a working data source, a dataset, and a query returning results from external storage.
+
+The example uses the [Ookla Open Speedtest dataset](https://github.com/teamookla/ookla-open-data), a publicly accessible collection of internet performance metrics aggregated by geographic tile. Because the bucket allows anonymous access, you can follow along without AWS credentials.
+
+## Before you begin
+
+Make sure you have the following:
+
+- An {{es}} deployment running version 9.5 or later, or a serverless project.
+- The cluster `manage` privilege to create data sources.
+- The index `manage` privilege to create datasets.
+
+## Quickstart
+
+These steps walk you through registering a data source, creating a dataset, and querying federated data with {{esql}}.
+
+:::::::{stepper}
+
+::::::{step} Register a data source
+A data source defines the connection to an external storage system, including its type, region, and credentials. Once registered, any number of datasets can reference it. Create one by sending a `PUT` request.
+
+This example registers a data source pointing at a public S3 bucket with anonymous access:
+
+::::{tab-set}
+:group: api-examples
+
+:::{tab-item} Console
+:sync: console
+```console
+PUT /_query/data_source/ookla_speedtest
+{
+  "type": "s3",
+  "settings": {
+    "region": "us-east-1",
+    "auth": "none" <1>
+  }
+}
+```
+1. Enables anonymous access for public buckets. For private data, supply `access_key` and `secret_key` instead.
+:::
+
+:::{tab-item} curl
+:sync: curl
+```bash
+curl -X PUT "${ELASTICSEARCH_URL}/_query/data_source/ookla_speedtest" \
+  -H "Authorization: ApiKey ${API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "type": "s3",
+  "settings": {
+    "region": "us-east-1",
+    "auth": "none"
+  }
+}'
+```
+:::
+
+::::
+
+A successful request returns:
+
+```json
+{
+  "acknowledged": true
+}
+```
+
+Confirm that the data source was created by retrieving it:
+
+::::{tab-set}
+:group: api-examples
+
+:::{tab-item} Console
+:sync: console
+```console
+GET /_query/data_source/ookla_speedtest
+```
+:::
+
+:::{tab-item} curl
+:sync: curl
+```bash
+curl -X GET "${ELASTICSEARCH_URL}/_query/data_source/ookla_speedtest" \
+  -H "Authorization: ApiKey ${API_KEY}"
+```
+:::
+
+::::
+
+The response includes all data source settings:
+
+```json
+{
+  "data_sources": [
+    {
+      "name": "ookla_speedtest",
+      "type": "s3",
+      "settings": {
+        "region": "us-east-1",
+        "auth": "none"
+      }
+    }
+  ]
+}
+```
+
+:::{note}
+Creating a data source does not validate connectivity to the external system. To verify that a data source is working, create a dataset that references it and run a query. If the credentials or endpoint are incorrect, the query will return an error.
+:::
+::::::
+
+::::::{step} Create a dataset
+A dataset points at specific files within a data source and makes them queryable as a virtual index. It references a data source by name and specifies a resource path that identifies the files to read.
+
+This example creates a dataset over one quarter of Ookla's fixed-broadband performance data. Each Parquet file contains speedtest results aggregated into geographic tiles. The key columns are:
+
+- `avg_d_kbps`, `avg_u_kbps`: average download and upload throughput per tile, in kbps
+- `avg_lat_ms`: average latency per tile, in milliseconds
+- `tests`, `devices`: number of speedtests and unique devices per tile
+
+::::{tab-set}
+:group: api-examples
+
+:::{tab-item} Console
+:sync: console
+```console
+PUT /_query/dataset/speedtest_fixed
+{
+  "data_source": "ookla_speedtest", <1>
+  "resource": "s3://ookla-open-data/parquet/performance/type=fixed/year=2024/quarter=1/*.parquet" <2>
+}
+```
+1. The name of the data source to connect through.
+2. A glob pattern matching all Parquet files for Q1 2024 fixed-broadband tests. The `*` wildcard matches any filename in that directory.
+:::
+
+:::{tab-item} curl
+:sync: curl
+```bash
+curl -X PUT "${ELASTICSEARCH_URL}/_query/dataset/speedtest_fixed" \
+  -H "Authorization: ApiKey ${API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "data_source": "ookla_speedtest",
+  "resource": "s3://ookla-open-data/parquet/performance/type=fixed/year=2024/quarter=1/*.parquet"
+}'
+```
+:::
+
+::::
+
+A successful request returns:
+
+```json
+{
+  "acknowledged": true
+}
+```
+
+Confirm that the dataset was created:
+
+::::{tab-set}
+:group: api-examples
+
+:::{tab-item} Console
+:sync: console
+```console
+GET /_query/dataset/speedtest_fixed
+```
+:::
+
+:::{tab-item} curl
+:sync: curl
+```bash
+curl -X GET "${ELASTICSEARCH_URL}/_query/dataset/speedtest_fixed" \
+  -H "Authorization: ApiKey ${API_KEY}"
+```
+:::
+
+::::
+
+The response includes the full dataset definition:
+
+```json
+{
+  "datasets": [
+    {
+      "name": "speedtest_fixed",
+      "data_source": "ookla_speedtest",
+      "resource": "s3://ookla-open-data/parquet/performance/type=fixed/year=2024/quarter=1/*.parquet"
+    }
+  ]
+}
+```
+::::::
+
+::::::{step} Query the dataset
+Once a dataset exists, query it with `FROM` just like any {{es}} index. This query summarizes the Q1 2024 fixed-broadband data across all geographic tiles:
+
+::::{tab-set}
+:group: query-examples
+
+:::{tab-item} {{esql}}
+:sync: esql
+```esql
+FROM speedtest_fixed
+| STATS
+    total_tiles        = COUNT(*),    // Geographic tiles in the dataset
+    total_tests        = SUM(tests),  // Speedtests recorded in Q1 2024
+    total_devices      = SUM(devices), // Unique devices that contributed
+    max_tests_per_tile = MAX(tests)   // Busiest single tile
+```
+:::
+
+:::{tab-item} Console
+:sync: console
+```console
+POST /_query
+{
+  "query": "FROM speedtest_fixed | STATS total_tiles = COUNT(*), total_tests = SUM(tests), total_devices = SUM(devices), max_tests_per_tile = MAX(tests)"
+}
+```
+:::
+
+:::{tab-item} curl
+:sync: curl
+```bash
+curl -X POST "${ELASTICSEARCH_URL}/_query" \
+  -H "Authorization: ApiKey ${API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "query": "FROM speedtest_fixed | STATS total_tiles = COUNT(*), total_tests = SUM(tests), total_devices = SUM(devices), max_tests_per_tile = MAX(tests)"
+}'
+```
+:::
+
+::::
+
+The response includes execution metadata, followed by the result columns and values. Execution metadata is omitted here because it varies by cluster:
+
+```json
+{
+  "columns": [
+    {
+      "name": "total_tiles",
+      "type": "long"
+    },
+    {
+      "name": "total_tests",
+      "type": "long"
+    },
+    {
+      "name": "total_devices",
+      "type": "long"
+    },
+    {
+      "name": "max_tests_per_tile",
+      "type": "long"
+    }
+  ],
+  "values": [
+    [6655986, 118589626, 34467251, 35873]
+  ]
+}
+```
+
+If the query returns results, your data source is working. You can now use the full range of {{esql}} processing commands on this dataset.
+::::::
+
+::::::{step} Query federated and indexed data together
+Datasets share the same namespace as regular indices, so you can query both in a single `FROM`. This lets you combine external data with indexed data in a single query.
+
+First, create an index with a few sample documents to query alongside the dataset:
+
+```console
+PUT /network_incidents
+{
+  "mappings": {
+    "properties": {
+      "category":     { "type": "keyword" },
+      "severity":     { "type": "keyword" },
+      "duration_min": { "type": "integer" }
+    }
+  }
+}
+```
+
+```console
+POST /_bulk
+{"index":{"_index":"network_incidents"}}
+{"category":"outage","severity":"high","duration_min":45}
+{"index":{"_index":"network_incidents"}}
+{"category":"degradation","severity":"medium","duration_min":12}
+{"index":{"_index":"network_incidents"}}
+{"category":"outage","severity":"low","duration_min":8}
+```
+
+Now query both sources together. `FROM` resolves each name independently, whether it is an index, an index abstraction such as a data stream or alias, or a dataset. Use `METADATA _index` to see where each row came from:
+
+::::{tab-set}
+:group: query-examples
+
+:::{tab-item} {{esql}}
+:sync: esql
+```esql
+FROM speedtest_fixed, network_incidents METADATA _index
+| KEEP _index, category, severity, duration_min, avg_d_kbps, avg_lat_ms
+| LIMIT 5
+```
+:::
+
+:::{tab-item} Console
+:sync: console
+```console
+POST /_query
+{
+  "query": "FROM speedtest_fixed, network_incidents METADATA _index | KEEP _index, category, severity, duration_min, avg_d_kbps, avg_lat_ms | LIMIT 5"
+}
+```
+:::
+
+:::{tab-item} curl
+:sync: curl
+```bash
+curl -X POST "${ELASTICSEARCH_URL}/_query" \
+  -H "Authorization: ApiKey ${API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "query": "FROM speedtest_fixed, network_incidents METADATA _index | KEEP _index, category, severity, duration_min, avg_d_kbps, avg_lat_ms | LIMIT 5"
+}'
+```
+:::
+
+::::
+
+The `_index` column shows where each row came from. Columns that do not exist in a given source return `null`. Execution metadata is omitted here:
+
+```json
+{
+  "columns": [
+    { "name": "_index", "type": "keyword" },
+    { "name": "category", "type": "keyword" },
+    { "name": "severity", "type": "keyword" },
+    { "name": "duration_min", "type": "integer" },
+    { "name": "avg_d_kbps", "type": "long" },
+    { "name": "avg_lat_ms", "type": "long" }
+  ],
+  "values": [
+    ["network_incidents", "outage",      "high",   45, null, null],
+    ["network_incidents", "degradation", "medium", 12, null, null],
+    ["network_incidents", "outage",      "low",     8, null, null],
+    ["speedtest_fixed",   null,           null,   null, 8033,  70],
+    ["speedtest_fixed",   null,           null,   null, 10327,  8]
+  ]
+}
+```
+::::::
+
+:::::::
+
+## Use your own data
+
+To connect to a private S3 bucket, supply credentials when registering the data source:
+
+```console
+PUT /_query/data_source/my_s3_logs
+{
+  "type": "s3",
+  "description": "Production logs bucket",
+  "settings": {
+    "region": "us-east-1",
+    "access_key": "<AWS_ACCESS_KEY_ID>",
+    "secret_key": "<AWS_SECRET_ACCESS_KEY>"
+  }
+}
+```
+
+:::{important}
+When a data source includes credentials, {{es}} encrypts them before storing them in the cluster state. This is handled automatically in {{ech}} and {{serverless-short}} deployments. For self-managed, {{ece}}, and {{eck}} deployments, you must configure [credential encryption](esql-data-federation-security.md#credential-encryption) before creating a data source with credentials, or the request returns a `503` error.
+:::
+
+Credential values are never returned in API responses. When you retrieve a data source, secrets are replaced by `::es_redacted::`.
+
+## Clean up
+
+To remove the resources created in this guide, delete the dataset first because a data source cannot be deleted while datasets reference it. Then delete the data source and the sample index:
+
+::::{tab-set}
+:group: api-examples
+
+:::{tab-item} Console
+:sync: console
+```console
+DELETE /_query/dataset/speedtest_fixed
+DELETE /_query/data_source/ookla_speedtest
+DELETE /network_incidents
+```
+:::
+
+:::{tab-item} curl
+:sync: curl
+```bash
+curl -X DELETE "${ELASTICSEARCH_URL}/_query/dataset/speedtest_fixed" \
+  -H "Authorization: ApiKey ${API_KEY}"
+
+curl -X DELETE "${ELASTICSEARCH_URL}/_query/data_source/ookla_speedtest" \
+  -H "Authorization: ApiKey ${API_KEY}"
+
+curl -X DELETE "${ELASTICSEARCH_URL}/network_incidents" \
+  -H "Authorization: ApiKey ${API_KEY}"
+```
+:::
+
+::::
+
+## Next steps
+
+Explore these resources to go further:
+
+- To set up connections and authentication, refer to [connect external data sources](esql-data-federation-sources.md).
+- For file formats, dataset settings, and schema inference, refer to [select external datasets](esql-data-federation-datasets.md).
+- For a high-level overview of concepts and capabilities, refer to the [{{esql}} Data Federation overview](esql-data-federation-overview.md).
