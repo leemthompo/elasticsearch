@@ -46,7 +46,7 @@ A dataset is a file, not an {{es}} index, so the operations below are not availa
 | LOGSDB and other non-standard index modes | These index modes apply only to {{es}} indices. | `LOGSDB index mode on FROM <dataset> is not supported` |
 | MATCH, MATCH_PHRASE, KNN | These resolve a field from an index mapping, which a dataset does not have. | `… cannot operate on [<field>], which is not a field from an index mapping` |
 | KQL, QSTR | These query an {{es}} index. | `… cannot be used after [FROM <dataset>]` |
-| Document-level security (DLS) and field-level security (FLS) | Queries that apply DLS or FLS to a dataset fail at planning time. | |
+| Document-level security (DLS) and field-level security (FLS) | A dataset's `read` grant cannot carry document- or field-level security. Queries where DLS or FLS applies to a dataset are rejected during authorization. | `Datasets with document or field level security restrictions are not supported` |
 | Snapshot and restore | Data sources and datasets cannot be snapshotted or restored. | |
 
 Complex Parquet types MAP and nested LIST are not currently supported and return null. STRUCT is supported and flattened to dot-notation column names (for example, `address.city`).

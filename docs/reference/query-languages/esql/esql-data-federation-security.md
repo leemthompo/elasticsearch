@@ -69,6 +69,10 @@ Dataset operations are authorized by the standard {{es}} [index privileges](../.
 | Delete a data source | `global.data_source` `delete` / `cluster.manage` | Global (fine-grained) / Cluster |
 | All data source operations | `global.data_source` `manage` / `cluster.manage` | Global (fine-grained) / Cluster |
 
+Creating a dataset that references a data source also requires the `read` data source privilege for that data source; the two are authorized independently.
+
+The `read` privilege granted on a dataset name must not carry document-level or field-level security; `FROM <dataset>` is rejected if it does.
+
 `superuser` has full access to data sources and datasets. Data source management is reached only through `superuser` or a role explicitly granted `global.data_source`.
 
 A role configures these privileges as follows. The example grants querying `sales` and `clicks`, dataset administration over `acme_*`, and management of the `acme_*` data sources:
