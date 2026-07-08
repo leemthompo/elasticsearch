@@ -18,7 +18,7 @@ Use this page to avoid the most common `NULL` gotchas, then refer to the section
 
 Use these patterns to avoid unexpected behavior:
 
-| Instead of | Use | Why |
+| ❌ | ✅ | Why |
 | --- | --- | --- |
 | `field == NULL` | `field IS NULL` | Comparisons with `NULL` return `NULL`, not `true`. |
 | `field != NULL` | `field IS NOT NULL` | Comparisons with `NULL` return `NULL`, not `false`. |
