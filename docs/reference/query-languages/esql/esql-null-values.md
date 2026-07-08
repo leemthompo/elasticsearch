@@ -178,7 +178,7 @@ Useful references:
 
 - [`COALESCE`](functions-operators/conditional-functions-and-expressions/coalesce.md) returns the first non-null value.
 - [`CASE`](functions-operators/conditional-functions-and-expressions/case.md) chooses a result based on conditions.
-- [Type conversion functions](esql-functions-operators.md#esql-type-conversion-functions) can produce `NULL` when a value cannot be converted.
+- [Type conversion functions](functions-operators/type-conversion-functions.md) can produce `NULL` when a value cannot be converted.
 
 For exact behavior, check the reference page for the function you are using.
 
@@ -219,7 +219,7 @@ FROM employees
 | STATS hired = COUNT(*) WHERE still_hired
 ```
 
-Refer to [`COUNT`](functions-operators/aggregation-functions/count.md) and [aggregation functions](esql-functions-operators.md#esql-aggregation-functions).
+Refer to [`COUNT`](functions-operators/aggregation-functions/count.md) and [aggregation functions](functions-operators/aggregation-functions.md).
 
 ## Sorting and NULL [esql-null-sorting]
 
@@ -283,7 +283,7 @@ Refer to [multivalued fields](esql-multivalued-fields.md) and [`MV_APPEND`](func
 - [`WHERE`](commands/where.md)
 - [`SORT`](commands/sort.md)
 - [`IS NULL`](functions-operators/operators.md#esql-is_null) and [`IS NOT NULL`](functions-operators/operators.md#esql-is_not_null)
-- [Conditional functions and expressions](esql-functions-operators.md#esql-conditional-functions-and-expressions)
-- [Aggregation functions](esql-functions-operators.md#esql-aggregation-functions)
+- [Conditional functions and expressions](functions-operators/conditional-functions-and-expressions.md)
+- [Aggregation functions](functions-operators/aggregation-functions.md)
 - [Multivalued fields](esql-multivalued-fields.md)
 - [Unmapped fields](esql-unmapped-fields.md)
