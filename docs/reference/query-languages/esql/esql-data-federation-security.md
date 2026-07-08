@@ -18,36 +18,20 @@ When a data source connects to a private bucket, its credentials are stored in t
 
 ### Credential encryption
 
-When a data source includes credentials, {{es}} encrypts them before storing them in the cluster state. This encryption is configured automatically in {{ech}} and {{serverless-short}} deployments. For self-managed, {{ece}}, and {{eck}} deployments, you must configure encryption manually.
+<!-- TODO: restore the link to the project encryption key page once PR #152731 (docs/reference/elasticsearch/project-encryption-key.md) merges. Linking now breaks the build because the target does not exist on this branch. Link markup: [project encryption key](../../elasticsearch/project-encryption-key.md) -->
+When a data source includes credentials, {{es}} encrypts them before writing them to the cluster state. It uses the cluster's project encryption key, a single key that {{es}} manages on your behalf. Federated data is the first feature to rely on this key.
 
-If encryption is not configured, any `PUT /_query/data_source` request that includes credentials returns a `503` error.
+The project encryption key is available automatically in most deployments:
 
-::::{applies-switch}
-:::{applies-item} self:
-Use the [elasticsearch-keystore](../../elasticsearch/command-line-tools/elasticsearch-keystore.md) tool to add a password and set the active password ID on every node:
+* On {{ech}}, {{ece}}, {{eck}}, and {{serverless-short}}, the platform provides the key's password for you.
+* On self-managed deployments, the password is generated automatically the first time a node starts with security auto-configuration, the same process that configures TLS. You configure it yourself only if security auto-configuration did not run.
 
-```bash
-bin/elasticsearch-keystore add cluster.state.encryption.password.1
-bin/elasticsearch-keystore add cluster.state.encryption.active_password_id
-```
+<!-- TODO: restore this line once PR #152731 (docs/reference/elasticsearch/project-encryption-key.md) merges. It links to a page not yet on this branch and would break the build.
+For how to set the password, rotate the key, and check its health, refer to [project encryption key](../../elasticsearch/project-encryption-key.md). -->
 
-When prompted for the active password ID, enter the ID that matches the password setting suffix (in this example, `1`). Then call the [reload secure settings API](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-nodes-reload-secure-settings) to apply the new settings without a full restart:
+For how to set the password, rotate the key, and check its health, refer to your deployment's encryption documentation.
 
-```console
-POST /_nodes/reload_secure_settings
-```
-:::
-:::{applies-item} eck:
-Add the encryption password and active password ID as [secure settings](docs-content://deploy-manage/security/k8s-secure-settings.md) through Kubernetes secrets referenced in `spec.secureSettings`.
-:::
-:::{applies-item} ece:
-Add the encryption password and active password ID as [secure settings](docs-content://deploy-manage/security/secure-settings.md) using the Cloud UI or the [RESTful API](cloud://reference/cloud-enterprise/restful-api.md).
-:::
-::::
-
-:::{warning}
-To allow plaintext credential storage without encryption, set `cluster.state.encryption.required` to `false`. **This is not recommended for production use.**
-:::
+By default, if the project encryption key is not available when you create a data source, a `PUT /_query/data_source` request that includes credentials returns a `503` error. Retry once the key is available, or configure the key first.
 
 ### Credential masking
 
