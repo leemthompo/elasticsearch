@@ -35,6 +35,8 @@ Rows can disappear when a `WHERE` condition evaluates to `NULL`. `WHERE` keeps o
 
 Use `IS NULL` and `IS NOT NULL` to test whether an expression evaluates to a `NULL` value.
 
+The following query returns rows where `department` evaluates to `NULL`:
+
 ```esql
 FROM employees
 | WHERE department IS NULL
@@ -46,14 +48,12 @@ Do not use equality or inequality comparisons to test for `NULL`. A comparison w
 If the question is "does this value exist?", use `IS NULL` or `IS NOT NULL`.
 :::
 
+The following query compares equality and inequality checks with the `IS NULL` predicate:
+
 ```esql
 ROW x = NULL
 | EVAL eq_null = x == NULL, neq_null = x != NULL, is_null = x IS NULL
 ```
-
-| `x` | `eq_null` | `neq_null` | `is_null` |
-| --- | --- | --- | --- |
-| `NULL` | `NULL` | `NULL` | `true` |
 
 ::::{dropdown} Example response
 ```text
@@ -122,18 +122,20 @@ Boolean operators use three-valued logic. `NULL` means unknown, so it is preserv
 
 `WHERE` keeps rows only when the condition evaluates to `true`. Rows where the condition evaluates to `false` or `NULL` are filtered out.
 
+The following query returns no rows, because `x == NULL` evaluates to `NULL`:
+
 ```esql
 ROW x = NULL
 | WHERE x == NULL
 ```
-
-This returns no rows. Use `IS NULL` instead:
 
 ::::{dropdown} Example response
 ```text
 Empty result set
 ```
 ::::
+
+Use `IS NULL` to keep rows where an expression evaluates to `NULL`:
 
 ```esql
 ROW x = NULL
@@ -147,6 +149,8 @@ ROW x = NULL
     null
 ```
 ::::
+
+The `IS NULL` predicate returns `true`, so `WHERE` keeps the row.
 
 If you want a filter to keep rows where a value is either missing or matches another condition, include both cases:
 
@@ -195,14 +199,12 @@ Common cases:
 - Other aggregates generally ignore null input values and return `NULL` when there are no values to aggregate. Check each aggregate function's reference page for details.
 - Grouping by a `NULL` expression creates a group with a `NULL` key.
 
+The following query shows the difference between counting rows and counting non-null values:
+
 ```esql
 ROW x = NULL
 | STATS rows = COUNT(*), values = COUNT(x), nulls = COUNT(NULL)
 ```
-
-| `rows` | `values` | `nulls` |
-| --- | --- | --- |
-| 1 | 0 | 0 |
 
 ::::{dropdown} Example response
 ```text
@@ -257,16 +259,14 @@ Refer to [unmapped fields](esql-unmapped-fields.md) and [`SET unmapped_fields`](
 
 A multivalued field is not the same as `NULL`. A multivalued field has more than one value; `NULL` means no known value.
 
-Some scalar comparisons and functions return `NULL` when a multivalued value cannot be reduced to a single value. Also, `MV_APPEND` currently returns `NULL` when either input is `NULL`:
+Some scalar comparisons and functions return `NULL` when a multivalued value cannot be reduced to a single value. Also, `MV_APPEND` currently returns `NULL` when either input is `NULL`.
+
+The following query appends a `NULL` value to a multivalued value:
 
 ```esql
 ROW values = MV_APPEND(1, 2)
 | EVAL append_null = MV_APPEND(values, NULL)
 ```
-
-| `values` | `append_null` |
-| --- | --- |
-| `[1, 2]` | `NULL` |
 
 ::::{dropdown} Example response
 ```text
