@@ -165,8 +165,12 @@ The following settings are available for `s3` data sources:
 
 | Setting | Required | Description |
 |---|---|---|
-| `region` | No | The bucket region. |
+| `region` | No | The bucket's AWS region, for example `us-east-1`. Defaults to `us-east-1` if omitted. Set it to match the bucket's region, otherwise requests to the bucket fail. |
 | `endpoint` | No | An explicit endpoint, for an S3-compatible store. |
+
+:::{tip}
+A data source connects to a single region. To query buckets in more than one region, create a separate data source for each region.
+:::
 
 **Authentication settings:**
 
