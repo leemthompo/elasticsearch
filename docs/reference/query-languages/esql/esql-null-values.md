@@ -20,12 +20,12 @@ Use these patterns to avoid unexpected behavior:
 
 | ❌ | ✅ | Why |
 | --- | --- | --- |
-| `field == NULL` | `field IS NULL` | Comparisons with `NULL` return `NULL`, not `true`. |
-| `field != NULL` | `field IS NOT NULL` | Comparisons with `NULL` return `NULL`, not `false`. |
-| `WHERE field != "x"` when you also want missing values | `WHERE field != "x" OR field IS NULL` | `WHERE` drops rows where the comparison returns `NULL`. |
-| `WHERE NOT field == "x"` when you also want missing values | `WHERE field != "x" OR field IS NULL` | `NOT NULL` is still `NULL`. |
-| `WHERE optional_field > 0` when null rows should remain | `WHERE optional_field > 0 OR optional_field IS NULL` | `WHERE` keeps only `true`, not `NULL`. |
-| `COUNT(condition OR NULL)` | `COUNT(*) WHERE condition` | Filtered aggregates are clearer and avoid relying on three-valued logic. |
+| `field == NULL` | `field IS NULL` | Comparisons with `NULL` return `NULL`, not `true`. **Learn more:** [Test for NULL values](#esql-test-for-null). |
+| `field != NULL` | `field IS NOT NULL` | Comparisons with `NULL` return `NULL`, not `false`. **Learn more:** [Test for NULL values](#esql-test-for-null). |
+| `WHERE field != "x"` when you also want missing values | `WHERE field != "x" OR field IS NULL` | `WHERE` drops rows where the comparison returns `NULL`. **Learn more:** [Comparisons and NULL](#esql-null-comparisons). |
+| `WHERE NOT field == "x"` when you also want missing values | `WHERE field != "x" OR field IS NULL` | `NOT NULL` is still `NULL`. **Learn more:** [Boolean logic with NULL](#esql-null-boolean-logic). |
+| `WHERE optional_field > 0` when null rows should remain | `WHERE optional_field > 0 OR optional_field IS NULL` | `WHERE` keeps only `true`, not `NULL`. **Learn more:** [WHERE and NULL](#esql-where-null). |
+| `COUNT(condition OR NULL)` | `COUNT(*) WHERE condition` | Filtered aggregates are clearer and avoid relying on three-valued logic. **Learn more:** [Aggregates and NULL](#esql-null-aggregates). |
 
 :::{warning}
 Rows can disappear when a `WHERE` condition evaluates to `NULL`. `WHERE` keeps only rows where the condition is `true`; it drops both `false` and `NULL`.
