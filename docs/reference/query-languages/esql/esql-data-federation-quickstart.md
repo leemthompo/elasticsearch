@@ -44,7 +44,7 @@ PUT /_query/data_source/ookla_speedtest
   "type": "s3",
   "settings": {
     "region": "us-east-1",
-    "auth": "none" <1>
+    "auth": "anonymous" <1>
   }
 }
 ```
@@ -61,7 +61,7 @@ curl -X PUT "${ELASTICSEARCH_URL}/_query/data_source/ookla_speedtest" \
   "type": "s3",
   "settings": {
     "region": "us-east-1",
-    "auth": "none"
+    "auth": "anonymous"
   }
 }'
 ```
@@ -109,7 +109,7 @@ The response includes all data source settings:
       "type": "s3",
       "settings": {
         "region": "us-east-1",
-        "auth": "none"
+        "auth": "anonymous"
       }
     }
   ]

@@ -10,7 +10,7 @@ products:
 
 # Configure cluster settings for {{esql}} Data Federation
 
-The data sources feature adds the cluster settings below. All are node-scoped. Most are dynamic. The cache size and cache TTLs are applied at node startup only. The object-count limits and the workload-identity gate are operator-managed.
+The data sources feature adds the cluster settings below. All are node-scoped. Most are dynamic. The cache size and cache TTLs are applied at node startup only. The object-count limits and the managed-identity gate are operator-managed.
 
 ## Object limits
 
@@ -45,7 +45,11 @@ These settings control which authentication modes data sources can use.
 
 | Setting | Default | Description |
 |---|---|---|
-| `esql.datasource.workload_identity.enabled` | false | Enables `auth: "workload_identity"` (the node's own cloud identity via IMDS / metadata server). Operator-only. Intended for single-cloud, single-tenant deployments. Never enable in serverless or multi-tenant clusters. |
+| `esql.datasource.managed_identity.enabled` | false | Enables `auth: "managed_identity"` (the node's own cloud identity via IMDS / metadata server). Operator-only. Intended for single-cloud, single-tenant deployments. Never enable in serverless or multi-tenant clusters. |
+
+<!-- TODO: If federated identity auth is confirmed in scope for the 9.5 technical preview, add its gate here:
+     esql.datasource.federated_identity.enabled (false, operator-only). -->
+
 
 ## Caching
 

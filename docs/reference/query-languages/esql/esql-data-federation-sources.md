@@ -175,23 +175,27 @@ The following settings are available for `s3` data sources:
 | `access_key` | No | AWS access key ID. |
 | `secret_key` | No | AWS secret access key. |
 | `session_token` | No | Session token, when using temporary credentials. Use with `access_key` and `secret_key`. |
-| `auth` | No | Set to `"none"` for anonymous access to public buckets, or `"workload_identity"` to use the node's cloud identity. |
+| `auth` | No | Authentication mode. Defaults to `auto`, which infers the mode from the other settings you provide. Set it explicitly to `anonymous`, `static_credentials`, or `managed_identity`. |
 
-<!-- NOTE: The scope doc uses "workload_identity" but the code shipped "ambient".
-     Reconcile with eng before GA. The cluster setting is esql.datasource.ambient_credentials.enabled. -->
+<!-- TODO: Confirm whether federated identity auth is in scope for the 9.5 technical preview.
+     It is present in code but operator-gated by esql.datasource.federated_identity.enabled, and
+     gated off by default in the Kibana UI (enableFederatedIdentityAuth). If in scope, document the
+     `federated_identity` auth value and its S3 settings: role_arn (required), jwt_audience,
+     role_session_name, sts_endpoint, sts_region. -->
 
 ## Authentication
 
 A data source authenticates to its store with one of the models below. The models are mutually exclusive on a data source.
 
-| Model | Description |
-|---|---|
-| Static credentials | A fixed access key and secret key, supplied in the data source settings. The common form for a service account. |
-| Anonymous | `auth: "none"`. For public data that needs no credentials. |
-| Workload identity | `auth: "workload_identity"`. Keyless, using the node's own cloud identity. Requires `esql.datasource.workload_identity.enabled: true`, an operator-only setting. Not available in serverless. API-only. |
+| Model | `auth` value | Description |
+|---|---|---|
+| Auto | `auto` (default) | Infers the authentication mode from the settings you provide. |
+| Static credentials | `static_credentials` | A fixed access key and secret key, optionally with a session token for temporary credentials. The common form for a service account. |
+| Anonymous | `anonymous` | For public data that needs no credentials. |
+| Managed identity | `managed_identity` | Keyless, using the node's own cloud identity. Requires `esql.datasource.managed_identity.enabled: true`, an operator-only setting. Not available in serverless. API-only. |
 
 :::{warning}
-Workload identity authentication uses the cloud identity attached to each {{es}} node (for example, an IAM role on EC2 or a service account on GKE). Different nodes may have different identities, and the node that performs the connection is not guaranteed. You are responsible for configuring cloud IAM so that every node's identity has the required permissions on the target bucket. This model is best suited for single-cloud, single-tenant deployments where node identities are uniform.
+Managed identity authentication uses the cloud identity attached to each {{es}} node (for example, an IAM role on EC2 or a service account on GKE). Different nodes may have different identities, and the node that performs the connection is not guaranteed. You are responsible for configuring cloud IAM so that every node's identity has the required permissions on the target bucket. This model is best suited for single-cloud, single-tenant deployments where node identities are uniform.
 :::
 
-When `access_key` and `secret_key` are omitted and `auth` is not set, {{es}} uses the default AWS credential chain: IAM roles, environment variables, or instance profiles.
+When `access_key` and `secret_key` are omitted and `auth` is left as `auto`, {{es}} uses the default AWS credential chain: IAM roles, environment variables, or instance profiles.
