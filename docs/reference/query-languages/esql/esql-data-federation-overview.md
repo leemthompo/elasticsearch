@@ -24,10 +24,7 @@ Many organizations store large volumes of data in cloud object storage for cost 
 
 ## How it works
 
-Federated data requires two objects: a data source, which defines the connection, and one or more datasets, which define what to read. The following steps use the REST API workflow to walk through the setup.
-
-<!-- TODO: Add link to Kibana UI docs for creating data sources and datasets once available.
-     You can also create data sources and datasets in Kibana. -->
+Federated data requires two objects: a data source, which defines the connection, and one or more datasets, which define what to read. These steps walk through the model. For the setup procedures, refer to [data sources](esql-data-federation-sources.md) and [datasets](esql-data-federation-datasets.md).
 
 :::::::{stepper}
 
@@ -37,36 +34,16 @@ You have Parquet files, CSVs, or NDJSON sitting in a bucket. The data is not ing
 
 ::::::{step} You create a data source (the connection)
 A [data source](esql-data-federation-sources.md) tells {{es}} where the storage is and how to authenticate. It stores the connection type, region, endpoint, and credentials. You set it up once.
-
-```console
-PUT /_query/data_source/my_s3_bucket
-{
-  "type": "s3",
-  "settings": {
-    "region": "us-east-1",
-    "access_key": "<AWS_ACCESS_KEY_ID>",
-    "secret_key": "<AWS_SECRET_ACCESS_KEY>"
-  }
-}
-```
 ::::::
 
 ::::::{step} You create datasets (what to read)
 Each [dataset](esql-data-federation-datasets.md) points at specific files in that storage. One data source can serve many datasets. When credentials rotate, you update the data source in one place without touching the datasets that reference it.
 
-```console
-PUT /_query/dataset/my_s3_bucket_logs
-{
-  "data_source": "my_s3_bucket",
-  "resource": "s3://my-logs-bucket/access/**/*.parquet"
-}
-```
-
 Datasets share the same namespace as indices, aliases, and views. A dataset cannot have the same name as an existing index, which is why `FROM` works the same way for both.
 ::::::
 
 ::::::{step} You query with FROM, just like a regular index
-Once a dataset exists, you query it the same way you query any {{es}} index. There is no special syntax for federated data. Use `FROM` with the dataset name, and {{es}} handles file discovery, format detection, compression, and schema inference automatically. For example, to return the first 10 rows from the `my_s3_bucket_logs` dataset created in the previous step:
+Once a dataset exists, you query it the same way you query any {{es}} index. There is no special syntax for federated data. Use `FROM` with the dataset name, and {{es}} handles file discovery, format detection, compression, and schema inference automatically. For example, to return the first 10 rows from a dataset named `my_s3_bucket_logs`:
 
 ```esql
 FROM my_s3_bucket_logs
