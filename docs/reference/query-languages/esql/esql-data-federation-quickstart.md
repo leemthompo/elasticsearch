@@ -29,12 +29,30 @@ These steps walk you through registering a data source, creating a dataset, and 
 :::::::{stepper}
 
 ::::::{step} Register a data source
-A data source defines the connection to an external storage system, including its type, region, and credentials. Once registered, any number of datasets can reference it. Create one by sending a `PUT` request.
+A data source defines the connection to an external storage system, including its type, region, and credentials. Once registered, any number of datasets can reference it.
 
-This example registers a data source pointing at a public S3 bucket with anonymous access:
+This example registers a data source that points at a public S3 bucket with anonymous access.
 
 ::::{tab-set}
-:group: api-examples
+:group: surface
+
+:::{tab-item} UI
+:sync: ui
+1. Go to **Data management** > **{{esql}} Data Federation**.
+2. On the **Data sources** tab, click **Connect data source**.
+3. Set **Data source type** to **Amazon S3**.
+4. Enter `ookla_speedtest` as the **Name**.
+5. Set **Region** to `us-east-1`.
+6. Under **Authentication**, select **Anonymous** from the **Preferred method** dropdown.
+7. Click **Connect**.
+
+:::{dropdown} Show the completed Connect data source flyout
+:::{image} images/data-federation/connect-data-source-anonymous.png
+:alt: Connect data source flyout configured for Amazon S3 with anonymous authentication
+:width: 450px
+:::
+:::
+:::
 
 :::{tab-item} Console
 :sync: console
@@ -49,6 +67,8 @@ PUT /_query/data_source/ookla_speedtest
 }
 ```
 1. Enables anonymous access for public buckets. For private data, supply `access_key` and `secret_key` instead.
+
+A successful request returns `{"acknowledged": true}`.
 :::
 
 :::{tab-item} curl
@@ -65,22 +85,26 @@ curl -X PUT "${ELASTICSEARCH_URL}/_query/data_source/ookla_speedtest" \
   }
 }'
 ```
+
+A successful request returns `{"acknowledged": true}`.
 :::
 
 ::::
 
-A successful request returns:
-
-```json
-{
-  "acknowledged": true
-}
-```
-
-Confirm that the data source was created by retrieving it:
+Confirm the data source was created:
 
 ::::{tab-set}
-:group: api-examples
+:group: surface
+
+:::{tab-item} UI
+:sync: ui
+The new data source appears on the **Data sources** tab, showing its type and region:
+
+:::{image} images/data-federation/data-sources-list.png
+:alt: The Data sources tab listing the ookla_speedtest data source
+:width: 600px
+:::
+:::
 
 :::{tab-item} Console
 :sync: console
@@ -99,23 +123,6 @@ curl -X GET "${ELASTICSEARCH_URL}/_query/data_source/ookla_speedtest" \
 
 ::::
 
-The response includes all data source settings:
-
-```json
-{
-  "data_sources": [
-    {
-      "name": "ookla_speedtest",
-      "type": "s3",
-      "settings": {
-        "region": "us-east-1",
-        "auth": "anonymous"
-      }
-    }
-  ]
-}
-```
-
 :::{note}
 Creating a data source does not validate connectivity to the external system. To verify that a data source is working, create a dataset that references it and run a query. If the credentials or endpoint are incorrect, the query will return an error.
 :::
@@ -131,7 +138,24 @@ This example creates a dataset over one quarter of Ookla's fixed-broadband perfo
 - `tests`, `devices`: number of speedtests and unique devices per tile
 
 ::::{tab-set}
-:group: api-examples
+:group: surface
+
+:::{tab-item} UI
+:sync: ui
+1. Select the **Datasets** tab, then click **Add dataset**.
+2. Select `ookla_speedtest` as the **Data source**.
+3. Enter `speedtest_fixed` as the **Name**.
+4. In **Resource**, enter `s3://ookla-open-data/parquet/performance/type=fixed/year=2024/quarter=1/*.parquet`.
+5. Set **Format** to **Parquet**.
+6. Click **Add**.
+
+:::{dropdown} Show the completed Add dataset flyout
+:::{image} images/data-federation/add-dataset.png
+:alt: Add dataset flyout configured for the Ookla Q1 2024 fixed-broadband Parquet files
+:width: 450px
+:::
+:::
+:::
 
 :::{tab-item} Console
 :sync: console
@@ -144,6 +168,8 @@ PUT /_query/dataset/speedtest_fixed
 ```
 1. The name of the data source to connect through.
 2. A glob pattern matching all Parquet files for Q1 2024 fixed-broadband tests. The `*` wildcard matches any filename in that directory.
+
+A successful request returns `{"acknowledged": true}`.
 :::
 
 :::{tab-item} curl
@@ -157,22 +183,26 @@ curl -X PUT "${ELASTICSEARCH_URL}/_query/dataset/speedtest_fixed" \
   "resource": "s3://ookla-open-data/parquet/performance/type=fixed/year=2024/quarter=1/*.parquet"
 }'
 ```
+
+A successful request returns `{"acknowledged": true}`.
 :::
 
 ::::
 
-A successful request returns:
-
-```json
-{
-  "acknowledged": true
-}
-```
-
-Confirm that the dataset was created:
+Confirm the dataset was created:
 
 ::::{tab-set}
-:group: api-examples
+:group: surface
+
+:::{tab-item} UI
+:sync: ui
+The new dataset appears on the **Datasets** tab, showing its data source and resource:
+
+:::{image} images/data-federation/datasets-list.png
+:alt: The Datasets tab listing the speedtest_fixed dataset
+:width: 600px
+:::
+:::
 
 :::{tab-item} Console
 :sync: console
@@ -191,26 +221,13 @@ curl -X GET "${ELASTICSEARCH_URL}/_query/dataset/speedtest_fixed" \
 
 ::::
 
-The response includes the full dataset definition:
-
-```json
-{
-  "datasets": [
-    {
-      "name": "speedtest_fixed",
-      "data_source": "ookla_speedtest",
-      "resource": "s3://ookla-open-data/parquet/performance/type=fixed/year=2024/quarter=1/*.parquet"
-    }
-  ]
-}
-```
 ::::::
 
 ::::::{step} Query the dataset
 Once a dataset exists, query it with `FROM` just like any {{es}} index. This query summarizes the Q1 2024 fixed-broadband data across all geographic tiles:
 
 ::::{tab-set}
-:group: query-examples
+:group: surface
 
 :::{tab-item} {{esql}}
 :sync: esql
@@ -310,7 +327,7 @@ POST /_bulk
 Now query both sources together. `FROM` resolves each name independently, whether it is an index, an index abstraction such as a data stream or alias, or a dataset. Use `METADATA _index` to see where each row came from:
 
 ::::{tab-set}
-:group: query-examples
+:group: surface
 
 :::{tab-item} {{esql}}
 :sync: esql
@@ -398,7 +415,7 @@ Credential values are never returned in API responses. When you retrieve a data 
 To remove the resources created in this guide, delete the dataset first because a data source cannot be deleted while datasets reference it. Then delete the data source and the sample index:
 
 ::::{tab-set}
-:group: api-examples
+:group: surface
 
 :::{tab-item} Console
 :sync: console
