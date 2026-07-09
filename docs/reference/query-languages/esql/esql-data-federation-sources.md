@@ -19,11 +19,47 @@ The following data source types are supported:
 :::{include} _snippets/federated-data/supported-data-source-types.md
 :::
 
+## Manage data sources in the UI
+
+In {{kib}}, you connect and manage data sources from the **Data sources** tab under **Data management** > **{{esql}} Data Federation**.
+
+The **Data sources** tab lists each registered data source including:
+-  its type
+-  its description
+-  the number of datasets that reference it
+
+From this tab you can search your data sources, connect a new one, and edit or delete an existing one.
+
+:::{image} images/data-federation/data-sources-tab.png
+:alt: The Data sources tab listing several registered Amazon S3 data sources with their dataset counts, descriptions, and edit and delete row actions
+:width: 800px
+:::
+
+### Connect a new data source
+
+Click **Connect data source** to open a flyout where you define the connection:
+
+- **Data source type**: the storage system to connect to, such as **Amazon S3**.
+- **Name**: a unique name for the data source.
+- **Description**: an optional description.
+- **Region**: the storage region.
+- **Endpoint**: an optional endpoint for an S3-compatible store.
+- **Authentication**: a **Preferred method** and its credentials. For example, **Access and Secret Keys** takes an **Access key** and **Secret key**.
+
+For the full set of authentication methods, refer to [authentication models](#authentication).
+
+:::{dropdown} Show the Connect data source flyout
+:::{image} images/data-federation/connect-data-source-anonymous.png
+:alt: The Connect external data source flyout for an Amazon S3 data source
+:width: 450px
+:::
+:::
+
 <!-- TODO: Once the data source and dataset APIs are defined in elasticsearch-specification,
 replace the inline examples below with a summary table linking to the generated
 API reference at https://www.elastic.co/docs/api/doc/elasticsearch/ -->
 
-## Data source API
+## Manage data sources using the API
 
 Data sources are managed under the `/_query/data_source` endpoint. All data source operations require the cluster `manage` privilege or a `global.data_source` privilege (refer to [manage credentials and privileges](esql-data-federation-security.md)).
 

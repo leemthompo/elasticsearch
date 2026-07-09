@@ -54,11 +54,46 @@ Parquet declares its compression internally, per column chunk, so Parquet resour
 
 SNAPPY, ZSTD, and GZIP account for the overwhelming majority of Parquet in practice, so the supported set covers nearly all real files.
 
+## Manage datasets in the UI
+
+In {{kib}}, you create and manage datasets from the **Datasets** tab under **Data management** > **{{esql}} Data Federation**.
+
+The **Datasets** tab lists each dataset including:
+- its data source and data source type
+- its resource
+- its description
+
+From this tab you can search your datasets, filter by data source, add a new one, and edit or delete an existing one.
+
+:::{image} images/data-federation/datasets-tab.png
+:alt: The Datasets tab listing several datasets with their data sources, resources, and edit and delete row actions
+:width: 800px
+:::
+
+### Add a new dataset
+
+Click **Add dataset** to open a flyout where you define the dataset:
+
+- **Data source**: the connected data source to read through.
+- **Name**: a unique name for use in queries.
+- **Description**: an optional description.
+- **Resource**: the URI and glob pattern that selects the files to read.
+- **Format**: the file format. Leave it to auto-detect from the file extension, or set it explicitly. Refer to [supported file formats](#supported-file-formats).
+
+To configure how the format is read, expand **Advanced settings**. Refer to [dataset settings](#dataset-settings).
+
+:::{dropdown} Show the Add dataset flyout
+:::{image} images/data-federation/add-dataset.png
+:alt: The Add dataset flyout configured for a Parquet dataset over an Amazon S3 data source
+:width: 450px
+:::
+:::
+
 <!-- TODO: Once the data source and dataset APIs are defined in elasticsearch-specification,
 replace the inline examples below with a summary table linking to the generated
 API reference at https://www.elastic.co/docs/api/doc/elasticsearch/ -->
 
-## Dataset API
+## Manage datasets using the API
 
 Datasets are managed under the `/_query/dataset` endpoint. All dataset operations require the index `manage` privilege on the dataset name, or a fine-grained dataset privilege (refer to [manage credentials and privileges](esql-data-federation-security.md)).
 
