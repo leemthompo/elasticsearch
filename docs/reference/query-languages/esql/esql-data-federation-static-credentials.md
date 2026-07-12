@@ -21,6 +21,8 @@ Refer to the [AWS IAM documentation](https://docs.aws.amazon.com/IAM/latest/User
 
 ## Requirements
 
+To follow this guide, you need:
+
 - An Elastic project or deployment with {{esql}} Data Federation available.
 - An AWS account with permissions to create IAM policies, users, and access keys.
 - An S3 bucket containing the file or files you want to query.

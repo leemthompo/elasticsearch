@@ -29,6 +29,8 @@ Metadata columns are available through `METADATA`:
 | `_score` | null |
 | `_ignored` | null |
 
+For example, this query returns file-level metadata for each matching row:
+
 ```esql
 FROM access_logs METADATA _file.path, _file.name, _file.size
 | KEEP _file.path, _file.name, _file.size, status_code

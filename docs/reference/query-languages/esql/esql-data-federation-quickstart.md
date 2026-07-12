@@ -314,6 +314,8 @@ PUT /network_incidents
 }
 ```
 
+Then index a few documents:
+
 ```console
 POST /_bulk
 {"index":{"_index":"network_incidents"}}
@@ -443,8 +445,6 @@ curl -X DELETE "${ELASTICSEARCH_URL}/network_incidents" \
 ::::
 
 ## Next steps
-
-Explore these resources to go further:
 
 - To set up connections and authentication, refer to [connect external data sources](esql-data-federation-sources.md).
 - For file formats, dataset settings, and schema inference, refer to [select external datasets](esql-data-federation-datasets.md).
