@@ -103,6 +103,11 @@ Back in Elastic, connect the S3 data source with the **Access and Secret Keys** 
 :::{tab-item} UI
 :sync: ui
 In the **Connect data source** flyout, select **Access and Secret Keys** as the authentication method and enter the **access key** and **secret key** from the previous step. For the full field reference, see [Connect external data sources](esql-data-federation-sources.md).
+
+:::{image} images/data-federation/access-and-secret-keys.png
+:alt: The Authentication section of the Connect data source flyout with Access and Secret Keys selected, showing the access key and secret key fields
+:width: 450px
+:::
 :::
 
 :::{tab-item} Console
