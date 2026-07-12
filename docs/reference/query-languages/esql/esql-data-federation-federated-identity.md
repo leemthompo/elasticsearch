@@ -312,10 +312,6 @@ echo "${ROLE_ARN}"
 
 ## Next steps
 
-- [Query a dataset](esql-data-federation-querying.md) with `FROM`, including metadata columns and limitations.
-
-## Related pages
-
-- [Connect external data sources](esql-data-federation-sources.md)
-- [Create and manage datasets](esql-data-federation-datasets.md)
-- [Manage credentials and privileges](esql-data-federation-security.md)
+- [Query your data](esql-data-federation-querying.md) with `FROM`, including metadata columns and current limitations.
+- [Create and manage datasets](esql-data-federation-datasets.md) to add more datasets over this data source, and configure file formats and settings.
+- [Manage credentials and privileges](esql-data-federation-security.md) to control who can access your data sources and datasets.

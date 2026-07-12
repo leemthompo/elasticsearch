@@ -49,8 +49,8 @@ Click **Connect data source** to open a flyout where you define the connection:
 For the full set of authentication methods, refer to [authentication models](#authentication).
 
 :::{dropdown} Show the Connect data source flyout
-:::{image} images/data-federation/connect-data-source-anonymous.png
-:alt: The Connect external data source flyout for an Amazon S3 data source
+:::{image} images/data-federation/connect-data-source-static-credentials.png
+:alt: The Connect external data source flyout for an Amazon S3 data source, with the Access and Secret Keys authentication method selected
 :width: 450px
 :::
 :::
