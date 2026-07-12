@@ -10,7 +10,7 @@ products:
 
 # Manage credentials and privileges for {{esql}} Data Federation
 
-Federated data sources store credentials in the cluster state and use {{es}} privileges to control who can manage connections and query external data. This page covers credential encryption and masking, and the privilege model for data sources and datasets.
+Because federated data lives outside {{es}}, connecting to a private store means {{es}} holds that data source's credentials and must control who can manage connections and read external data. This page covers credential encryption and masking, and the privilege model for data sources and datasets.
 
 ## Credentials
 

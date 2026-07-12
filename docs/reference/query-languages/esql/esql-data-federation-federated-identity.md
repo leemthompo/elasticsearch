@@ -1,0 +1,321 @@
+---
+navigation_title: "Federated identity setup"
+description: "Set up Amazon S3 federated identity for {{esql}} Data Federation so {{es}} reads your bucket without stored credentials."
+applies_to:
+  stack: preview =9.5
+  deployment:
+    self: unavailable
+  serverless: preview
+products:
+  - id: elasticsearch
+---
+
+# Connect to Amazon S3 with federated identity
+
+Federated identity lets {{es}} read an Amazon S3 data source without you storing any static AWS credentials. You configure AWS to trust the identities that Elastic Cloud issues for your project or deployment, and AWS grants {{es}} temporary, scoped read access to your bucket.
+
+You can use this page in two ways:
+
+- Work through the steps below to understand each AWS resource and how the pieces fit together.
+- Jump to the [complete AWS CLI example](#complete-aws-cli-example) to set it up hands-on and learn it by doing.
+
+Refer to the [AWS IAM documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html) as the authoritative reference for the commands shown here.
+
+## Requirements
+
+- An Elastic project or deployment with {{esql}} Data Federation available.
+- An AWS account with permissions to create IAM OpenID Connect identity providers, roles, and policies.
+- An S3 bucket containing the file or files you want to query.
+
+:::::::{stepper}
+
+::::::{step} Get the trust values from Elastic
+Federated identity works by having AWS trust the tokens that Elastic issues for your project or deployment. Before you configure AWS, collect the values that identify those tokens from Elastic.
+
+In {{kib}}, go to **Data management** > **{{esql}} Data Federation**, click **Connect data source**, set **Data source type** to **Amazon S3**, and select **Federated Identity** under **Authentication**. The flyout then shows the values you need:
+
+:::{dropdown} Show the Federated Identity authentication fields
+:::{image} images/data-federation/connect-data-source-federated-identity.png
+:alt: The Connect data source flyout with Federated Identity selected, showing the read-only JWT issuer and project ID and the role ARN field
+:width: 450px
+:::
+:::
+
+Collect these three values:
+
+| Value | Where it comes from | Used in AWS as |
+|---|---|---|
+| JWT issuer | Shown read-only in the flyout. The Elastic Cloud workload identity service URL for your org and region. | The identity provider URL |
+| Project ID or Deployment ID | Shown read-only in the flyout. | The `sub` (subject) condition |
+| Audience | You choose it, for example `federated-search`. | The client ID (`aud` condition) |
+
+You use the issuer and subject to configure AWS in the next steps, and enter the audience back in Elastic at the end.
+::::::
+
+::::::{step} Create an OpenID Connect identity provider
+Create an IAM identity provider that trusts the tokens Elastic issues. Set its URL to the JWT issuer and its client ID to the audience from the previous step.
+
+:::{dropdown} Example: create the provider with the AWS CLI
+Refer to the AWS IAM documentation for the authoritative steps and for console-based setup.
+
+```shell
+aws iam create-open-id-connect-provider \
+  --url "<elastic-jwt-issuer>" \
+  --client-id-list "federated-search" <1>
+```
+1. The audience you chose. Use the same value here, in the role's trust policy, and in the Elastic data source.
+:::
+
+Note the provider ARN that AWS returns. You reference it in the role's trust policy next.
+::::::
+
+::::::{step} Create an IAM role
+Create an IAM role that the identity provider can assume through `sts:AssumeRoleWithWebIdentity`. Its trust policy is the integration-specific part.
+
+The following trust policy lets your identity provider assume the role, but only when the token's audience and subject match your values. Replace the placeholders with your own:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::<account-id>:oidc-provider/<issuer-host>/<path>" <1>
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "<issuer-host>/<path>:aud": "federated-search", <2>
+          "<issuer-host>/<path>:sub": "project:<project-id>" <3>
+        }
+      }
+    }
+  ]
+}
+```
+1. The ARN of the identity provider you created in the previous step.
+2. The condition key is the JWT issuer with the `https://` scheme removed, followed by `:aud`. The value must match the audience you set on the provider and enter in Elastic.
+3. The same issuer prefix followed by `:sub`. Use the subject exactly as shown in the **Connect data source** flyout, including its prefix: `project:<project-id>` on serverless or `deployment:<deployment-id>` on Elastic Cloud Hosted. This restricts the role to your project or deployment.
+
+:::{dropdown} Example: create the role with the AWS CLI
+Save the trust policy above to a file, then create the role:
+
+```shell
+aws iam create-role \
+  --role-name parquet-sample-role \
+  --assume-role-policy-document file://trust-policy.json <1>
+```
+1. A local file holding the trust policy shown above. `create-role` returns the role ARN.
+:::
+
+Note the role ARN that AWS returns. You enter it, along with the audience, in Elastic in the final step.
+::::::
+
+::::::{step} Grant the role read access
+Attach a permissions policy to the role that grants the minimum access {{es}} needs to read your data.
+
+The following policy allows reading your objects with `s3:GetObject`, and listing the bucket with `s3:ListBucket` and `s3:GetBucketLocation` for prefix or glob queries:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [ "s3:GetObject" ],
+      "Resource": [ "arn:aws:s3:::<bucket-name>/<path>/*" ] <1>
+    },
+    {
+      "Effect": "Allow",
+      "Action": [ "s3:ListBucket", "s3:GetBucketLocation" ],
+      "Resource": [ "arn:aws:s3:::<bucket-name>" ] <2>
+    }
+  ]
+}
+```
+1. Object-level actions apply to object ARNs. Narrow this to a prefix or a single file to grant the least access needed.
+2. Bucket-level actions apply to the bucket ARN, not object ARNs. Include this statement only if you query by prefix or glob rather than a single fixed file.
+
+:::{dropdown} Example: create and attach the policy with the AWS CLI
+Save the permissions policy above to a file, then create it and attach it to the role:
+
+```shell
+# Create the permissions policy
+POLICY_ARN=$(aws iam create-policy \
+  --policy-name parquet-sample-policy \
+  --policy-document file://permissions-policy.json \
+  --query 'Policy.Arn' --output text)
+
+# Attach it to the role
+aws iam attach-role-policy \
+  --role-name parquet-sample-role \
+  --policy-arn "${POLICY_ARN}" <1>
+```
+1. The policy ARN returned by `create-policy`. Attaching the policy authorizes the role to read your data.
+:::
+::::::
+
+::::::{step} Connect the data source and create a dataset
+Back in Elastic, connect the S3 data source with the **Federated Identity** method:
+
+::::{tab-set}
+:group: surface
+
+:::{tab-item} UI
+:sync: ui
+In the **Connect data source** flyout from the first step, enter the **role ARN** you created and the **audience** from the previous steps. For the full field reference, see [Connect external data sources](esql-data-federation-sources.md).
+:::
+
+:::{tab-item} Console
+:sync: console
+```console
+PUT /_query/data_source/prod_s3_federated
+{
+  "type": "s3",
+  "settings": {
+    "region": "eu-north-1",
+    "auth": "federated_identity",
+    "role_arn": "arn:aws:iam::112233445566:role/parquet-sample-role", <1>
+    "jwt_audience": "federated-search" <2>
+  }
+}
+```
+1. The ARN of the role you created in AWS.
+2. The audience. `jwt_audience` is optional in general, but set it here so it matches the `aud` condition in the role's trust policy.
+:::
+
+:::{tab-item} curl
+:sync: curl
+```bash
+curl -X PUT "${ELASTICSEARCH_URL}/_query/data_source/prod_s3_federated" \
+  -H "Authorization: ApiKey ${API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "type": "s3",
+  "settings": {
+    "region": "eu-north-1",
+    "auth": "federated_identity",
+    "role_arn": "arn:aws:iam::112233445566:role/parquet-sample-role",
+    "jwt_audience": "federated-search"
+  }
+}'
+```
+:::
+
+::::
+
+Then [create a dataset](esql-data-federation-datasets.md) that points at your files, for example `s3://private-bucket/some/sample.parquet` in **Parquet** format.
+
+You can now query the remote data with {{esql}}.
+::::::
+
+:::::::
+
+## Complete AWS CLI example
+
+The steps above explain each AWS resource on its own. The following is a worked example of that setup end to end, using sample values for one scenario. It is illustrative, not a script to run as-is: replace the example values with your own before you run it. As with the individual steps, AWS is the authoritative reference for these commands.
+
+:::{dropdown} Show the complete AWS CLI example
+This example sets up federated identity for reading a single Parquet file at `s3://private-bucket/some/sample.parquet`. Run the commands in order in [AWS CloudShell](https://docs.aws.amazon.com/cloudshell/latest/userguide/welcome.html) or any shell with the AWS CLI configured.
+
+Set the variables for your environment. Copy the JWT issuer, audience, and subject from the Elastic **Connect data source** flyout. Use the `project:` prefix for a serverless project or `deployment:` for {{ech}}:
+
+```shell
+export JWT_ISSUER="https://<your-jwt-issuer>"
+export AUDIENCE="federated-search"
+export SUBJECT="project:<your-project-id>"
+export BUCKET_NAME="private-bucket"
+export FILE_NAME="some/sample.parquet"
+export ROLE_NAME="parquet-sample-role"
+export POLICY_NAME="parquet-sample-policy"
+```
+
+Create the OpenID Connect identity provider, then capture its ARN and the issuer host that the trust policy needs (the issuer without its `https://` scheme):
+
+```shell
+PROVIDER_ARN=$(aws iam create-open-id-connect-provider \
+  --url "${JWT_ISSUER}" \
+  --client-id-list "${AUDIENCE}" \
+  --query 'OpenIDConnectProviderArn' --output text)
+
+ISSUER_HOST="${JWT_ISSUER#https://}"
+```
+
+Create the IAM role with a trust policy that lets only your provider, audience, and subject assume it, and capture the role ARN it returns:
+
+```shell
+ROLE_ARN=$(aws iam create-role \
+  --role-name "${ROLE_NAME}" \
+  --assume-role-policy-document "$(cat <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": { "Federated": "${PROVIDER_ARN}" },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "${ISSUER_HOST}:aud": "${AUDIENCE}",
+          "${ISSUER_HOST}:sub": "${SUBJECT}"
+        }
+      }
+    }
+  ]
+}
+EOF
+)" \
+  --query 'Role.Arn' --output text)
+```
+
+Create the permissions policy that grants read access to your file, and capture its ARN:
+
+```shell
+POLICY_ARN=$(aws iam create-policy \
+  --policy-name "${POLICY_NAME}" \
+  --policy-document "$(cat <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [ "s3:GetObject" ],
+      "Resource": [ "arn:aws:s3:::${BUCKET_NAME}/${FILE_NAME}" ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [ "s3:ListBucket", "s3:GetBucketLocation" ],
+      "Resource": [ "arn:aws:s3:::${BUCKET_NAME}" ]
+    }
+  ]
+}
+EOF
+)" \
+  --query 'Policy.Arn' --output text)
+```
+
+Attach the policy to the role:
+
+```shell
+aws iam attach-role-policy \
+  --role-name "${ROLE_NAME}" \
+  --policy-arn "${POLICY_ARN}"
+```
+
+Print the role ARN. Enter it, along with the audience, when you connect the data source in Elastic:
+
+```shell
+echo "${ROLE_ARN}"
+```
+:::
+
+## Next steps
+
+- [Query a dataset](esql-data-federation-querying.md) with `FROM`, including metadata columns and limitations.
+
+## Related pages
+
+- [Connect external data sources](esql-data-federation-sources.md)
+- [Create and manage datasets](esql-data-federation-datasets.md)
+- [Manage credentials and privileges](esql-data-federation-security.md)
