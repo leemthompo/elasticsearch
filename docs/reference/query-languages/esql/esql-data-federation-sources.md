@@ -1,5 +1,5 @@
 ---
-navigation_title: "Connect external data sources"
+navigation_title: "Connect data sources"
 description: "Create and manage {{esql}} federated data sources, including S3 connection settings and authentication models."
 applies_to:
   stack: preview =9.5

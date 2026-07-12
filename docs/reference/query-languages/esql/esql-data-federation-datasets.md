@@ -1,5 +1,5 @@
 ---
-navigation_title: "Select datasets to query"
+navigation_title: "Add datasets"
 description: "Create and manage {{esql}} federated datasets, including supported file formats, dataset settings, and schema inference."
 applies_to:
   stack: preview =9.5

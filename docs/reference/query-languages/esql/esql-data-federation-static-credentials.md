@@ -1,5 +1,5 @@
 ---
-navigation_title: "Static credentials setup"
+navigation_title: "AWS static credentials"
 description: "Set up Amazon S3 static credentials for {{esql}} Data Federation so {{es}} can read your private bucket with an access key and secret key."
 applies_to:
   stack: preview =9.5
@@ -8,7 +8,7 @@ products:
   - id: elasticsearch
 ---
 
-# Connect to Amazon S3 with static credentials
+# Connect to Amazon S3 with static credentials for {{esql}} Data Federation
 
 Static credentials let {{es}} read a private Amazon S3 data source using an AWS access key and secret key. You grant an IAM identity read-only access to your objects, generate a long-lived access key for it, and enter that key when you connect the data source.
 

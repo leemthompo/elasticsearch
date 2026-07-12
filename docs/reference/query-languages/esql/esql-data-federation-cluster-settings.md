@@ -1,5 +1,5 @@
 ---
-navigation_title: "Configure cluster settings"
+navigation_title: "Cluster settings"
 description: "Cluster settings for {{esql}} federated data sources and datasets."
 applies_to:
   stack: preview =9.5

@@ -1,5 +1,5 @@
 ---
-navigation_title: "Federated identity setup"
+navigation_title: "AWS federated identity"
 description: "Set up Amazon S3 federated identity for {{esql}} Data Federation so {{es}} reads your bucket without stored credentials."
 applies_to:
   stack: preview =9.5
@@ -10,7 +10,7 @@ products:
   - id: elasticsearch
 ---
 
-# Connect to Amazon S3 with federated identity
+# Connect to Amazon S3 with federated identity for {{esql}} Data Federation
 
 Federated identity lets {{es}} read an Amazon S3 data source without you storing any static AWS credentials. You configure AWS to trust the identities that Elastic Cloud issues for your project or deployment, and AWS grants {{es}} temporary, scoped read access to your bucket.
 
