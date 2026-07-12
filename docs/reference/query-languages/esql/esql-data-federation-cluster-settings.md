@@ -47,9 +47,6 @@ These settings control which authentication modes data sources can use.
 |---|---|---|
 | `esql.datasource.managed_identity.enabled` | false | Enables `auth: "managed_identity"` (the node's own cloud identity via IMDS / metadata server). Operator-only. Intended for single-cloud, single-tenant deployments. Never enable in serverless or multi-tenant clusters. |
 
-<!-- TODO: If federated identity auth is confirmed in scope for the 9.5 technical preview, add its gate here:
-     esql.datasource.federated_identity.enabled (false, operator-only). -->
-
 
 ## Caching
 

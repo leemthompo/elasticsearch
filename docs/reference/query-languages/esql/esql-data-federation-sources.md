@@ -165,10 +165,6 @@ curl -X GET "${ELASTICSEARCH_URL}/_query/data_source" \
 
 Deletes a data source by name.
 
-:::{important}
-A data source cannot be deleted while datasets still reference it. Delete the dependent datasets first, or the request returns a `409 Conflict` error.
-:::
-
 ::::{tab-set}
 :group: api-ref
 
@@ -188,6 +184,10 @@ curl -X DELETE "${ELASTICSEARCH_URL}/_query/data_source/prod_s3_logs" \
 :::
 
 ::::
+
+:::{important}
+A data source cannot be deleted while datasets still reference it. Delete the dependent datasets first, or the request returns a `409 Conflict` error.
+:::
 
 ## Data source settings
 
@@ -217,25 +217,17 @@ A data source connects to a single region. To query buckets in more than one reg
 | `session_token` | No | Session token, when using temporary credentials. Use with `access_key` and `secret_key`. |
 | `auth` | No | Authentication mode. Defaults to `auto`, which infers the mode from the other settings you provide. Set it explicitly to `anonymous`, `static_credentials`, or `managed_identity`. |
 
-<!-- TODO: Confirm whether federated identity auth is in scope for the 9.5 technical preview.
-     It is present in code but operator-gated by esql.datasource.federated_identity.enabled, and
-     gated off by default in the Kibana UI (enableFederatedIdentityAuth). If in scope, document the
-     `federated_identity` auth value and its S3 settings: role_arn (required), jwt_audience,
-     role_session_name, sts_endpoint, sts_region. -->
-
 ## Authentication
 
 A data source authenticates to its store with one of the models below. The models are mutually exclusive on a data source.
 
 | Model | `auth` value | Description |
 |---|---|---|
-| Auto | `auto` (default) | Infers the authentication mode from the settings you provide. |
-| Static credentials | `static_credentials` | A fixed access key and secret key, optionally with a session token for temporary credentials. The common form for a service account. |
-| Anonymous | `anonymous` | For public data that needs no credentials. |
-| Managed identity | `managed_identity` | Keyless, using the node's own cloud identity. Requires `esql.datasource.managed_identity.enabled: true`, an operator-only setting. Not available in serverless. API-only. |
+| Static credentials | `static_credentials` | A fixed access key and secret key, optionally with a session token for temporary credentials. The common form for a service account. To set one up, refer to [connect with static credentials](esql-data-federation-static-credentials.md). |
+| Anonymous | `anonymous` | For public data that needs no credentials. The [quickstart](esql-data-federation-quickstart.md) walks through this method. |
+| Managed identity | `managed_identity` | Keyless. Uses the {{es}} node's own cloud identity, for example an EC2 instance IAM role. Operator-only and API-only, and not available in serverless. Requires `esql.datasource.managed_identity.enabled`. |
+| Auto (API-only) | `auto` (default) | Infers the authentication mode from the settings you provide. When you supply no keys, it falls back to the default AWS credential chain (IAM roles, environment variables, or instance profiles). API-only. |
 
 :::{warning}
-Managed identity authentication uses the cloud identity attached to each {{es}} node (for example, an IAM role on EC2 or a service account on GKE). Different nodes may have different identities, and the node that performs the connection is not guaranteed. You are responsible for configuring cloud IAM so that every node's identity has the required permissions on the target bucket. This model is best suited for single-cloud, single-tenant deployments where node identities are uniform.
+Managed identity uses the cloud identity attached to each {{es}} node (for example, an IAM role on EC2 or a service account on GKE). Different nodes may have different identities, and the node that performs the connection is not guaranteed. You are responsible for configuring cloud IAM so that every node's identity has the required permissions on the target bucket. This model is best suited for single-cloud, single-tenant deployments where node identities are uniform.
 :::
-
-When `access_key` and `secret_key` are omitted and `auth` is left as `auto`, {{es}} uses the default AWS credential chain: IAM roles, environment variables, or instance profiles.
