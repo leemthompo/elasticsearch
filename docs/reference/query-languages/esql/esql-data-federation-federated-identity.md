@@ -43,7 +43,14 @@ To follow this guide, you need:
 ::::::{step} Get the trust values from Elastic
 Federated identity works by having AWS trust the tokens that Elastic issues for your project or deployment. Before you configure AWS, collect the values that identify those tokens from Elastic.
 
-In {{kib}}, go to **Data management** > **{{esql}} Data Federation**, click **Connect data source**, set **Data source type** to **Amazon S3**, and select **Federated Identity** under **Authentication**. The flyout then shows the values you need:
+In {{kib}}:
+
+1. Go to **Data management** > **{{esql}} Data Federation**.
+2. Click **Connect data source**.
+3. Set **Data source type** to **Amazon S3**.
+4. Under **Authentication**, select **Federated Identity**.
+
+The flyout shows the values you need:
 
 :::{dropdown} Show the Federated Identity authentication fields
 :::{image} images/data-federation/connect-data-source-federated-identity.png
