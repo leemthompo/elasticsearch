@@ -12,6 +12,10 @@ products:
 
 Static credentials let {{es}} read a private Amazon S3 data source using an AWS access key and secret key. You grant an IAM identity read-only access to your objects, generate a long-lived access key for it, and enter that key when you connect the data source.
 
+:::{tip}
+Setup involves steps in both AWS and Elastic: create the IAM identity and access key in AWS, then enter the key when connecting the data source in Elastic.
+:::
+
 You can use this page in two ways:
 
 - Work through the steps below to understand each AWS resource and how the pieces fit together.

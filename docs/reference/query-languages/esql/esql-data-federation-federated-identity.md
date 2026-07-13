@@ -19,6 +19,10 @@ and restore the federated-identity references on the sources page. See the plan'
 
 Federated identity lets {{es}} read an Amazon S3 data source without you storing any static AWS credentials. You configure AWS to trust the identities that Elastic Cloud issues for your project or deployment, and AWS grants {{es}} temporary, scoped read access to your bucket.
 
+:::{tip}
+Setup involves steps in both AWS and Elastic: collect values from Elastic, configure AWS to trust them, then register the data source back in Elastic.
+:::
+
 You can use this page in two ways:
 
 - Work through the steps below to understand each AWS resource and how the pieces fit together.
@@ -226,17 +230,20 @@ The steps above explain each AWS resource on its own. The following is a worked 
 :::{dropdown} Show the complete AWS CLI example
 This example sets up federated identity for reading a single Parquet file at `s3://private-bucket/some/sample.parquet`. Run the commands in order in [AWS CloudShell](https://docs.aws.amazon.com/cloudshell/latest/userguide/welcome.html) or any shell with the AWS CLI configured.
 
-Set the variables for your environment. Copy the JWT issuer, audience, and subject from the Elastic **Connect data source** flyout. Use the `project:` prefix for a serverless project or `deployment:` for {{ech}}:
+Set the variables for your environment:
 
 ```shell
-export JWT_ISSUER="https://<your-jwt-issuer>"
-export AUDIENCE="federated-search"
-export SUBJECT="project:<your-project-id>"
+export JWT_ISSUER="https://<your-jwt-issuer>" # <1>
+export AUDIENCE="federated-search" # <2>
+export SUBJECT="project:<your-project-id>" # <3>
 export BUCKET_NAME="private-bucket"
 export FILE_NAME="some/sample.parquet"
 export ROLE_NAME="parquet-sample-role"
 export POLICY_NAME="parquet-sample-policy"
 ```
+1. Copy from the **Connect data source** flyout.
+2. Copy from the **Connect data source** flyout.
+3. Copy from the flyout. Use `project:<id>` for serverless or `deployment:<id>` for {{ech}}.
 
 Create the OpenID Connect identity provider, then capture its ARN and the issuer host that the trust policy needs (the issuer without its `https://` scheme):
 
