@@ -1,6 +1,6 @@
 ---
 navigation_title: "Quickstart"
-description: "Register a data source, create a dataset, and run your first federated data query using {{esql}}."
+description: "Register a data source, create a dataset, and run your first federated data query using ES|QL."
 applies_to:
   stack: preview =9.5
   serverless: preview

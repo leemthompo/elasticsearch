@@ -1,6 +1,6 @@
 ---
 navigation_title: "Query datasets"
-description: "Query {{esql}} federated datasets with FROM, including metadata columns and unsupported operations."
+description: "Query ES|QL federated datasets with FROM, including metadata columns and unsupported operations."
 applies_to:
   stack: preview =9.5
   serverless: preview

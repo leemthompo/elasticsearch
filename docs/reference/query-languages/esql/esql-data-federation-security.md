@@ -1,6 +1,6 @@
 ---
 navigation_title: "Manage access"
-description: "Credential encryption, credential masking, and privileges for {{esql}} federated data sources and datasets."
+description: "Credential encryption, credential masking, and privileges for ES|QL federated data sources and datasets."
 applies_to:
   stack: preview =9.5
   serverless: preview

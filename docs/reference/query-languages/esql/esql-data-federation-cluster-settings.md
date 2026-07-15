@@ -1,6 +1,6 @@
 ---
 navigation_title: "Cluster settings"
-description: "Cluster settings for {{esql}} federated data sources and datasets."
+description: "Cluster settings for ES|QL federated data sources and datasets."
 applies_to:
   stack: preview =9.5
   serverless: unavailable

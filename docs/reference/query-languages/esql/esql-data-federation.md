@@ -1,6 +1,6 @@
 ---
 navigation_title: "Data Federation"
-description: "Query data stored in external cloud storage using {{esql}} without ingesting it into Elasticsearch."
+description: "Query data stored in external cloud storage using ES|QL without ingesting it into Elasticsearch."
 applies_to:
   stack: preview =9.5
   serverless: preview

@@ -1,6 +1,6 @@
 ---
 navigation_title: "AWS static credentials"
-description: "Set up Amazon S3 static credentials for {{esql}} Data Federation so {{es}} can read your private bucket with an access key and secret key."
+description: "Set up Amazon S3 static credentials for ES|QL Data Federation so Elasticsearch can read your private bucket with an access key and secret key."
 applies_to:
   stack: preview =9.5
   serverless: preview
