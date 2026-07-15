@@ -391,7 +391,7 @@ The `_index` column shows where each row came from. Columns that do not exist in
 
 ## Use your own data
 
-To connect to a private S3 bucket, supply credentials when registering the data source:
+The quickstart uses a public bucket with anonymous access. To connect to a private bucket, supply credentials when registering the data source. Several [authentication methods](esql-data-federation-sources.md#authentication) are available. For example, using static credentials:
 
 ```console
 PUT /_query/data_source/my_s3_logs
