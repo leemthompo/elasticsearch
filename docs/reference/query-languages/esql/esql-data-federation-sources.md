@@ -212,10 +212,15 @@ A data source connects to a single region. To query buckets in more than one reg
 
 | Setting | Required | Description |
 |---|---|---|
-| `access_key` | No | AWS access key ID. |
-| `secret_key` | No | AWS secret access key. |
+| `access_key` | No | AWS access key ID. Used with `auth: static_credentials`. |
+| `secret_key` | No | AWS secret access key. Used with `auth: static_credentials`. |
 | `session_token` | No | Session token, when using temporary credentials. Use with `access_key` and `secret_key`. |
-| `auth` | No | Authentication mode. Defaults to `auto`, which infers the mode from the other settings you provide. Set it explicitly to `anonymous`, `static_credentials`, or `managed_identity`. |
+| `role_arn` | Yes (federated identity) | The ARN of the IAM role {{es}} assumes via STS. Used with `auth: federated_identity`. |
+| `jwt_audience` | No | Overrides the JWT audience claim sent to STS. Used with `auth: federated_identity`. |
+| `role_session_name` | No | A label for the assumed-role session. Used with `auth: federated_identity`. |
+| `sts_endpoint` | No | A custom STS endpoint URL. Used with `auth: federated_identity`. |
+| `sts_region` | No | The AWS region of the STS endpoint. Used with `auth: federated_identity`. |
+| `auth` | No | Authentication mode. Defaults to `auto`, which infers the mode from the other settings you provide. Set it explicitly to `anonymous`, `static_credentials`, `managed_identity`, or `federated_identity`. |
 
 ## Authentication
 
@@ -225,6 +230,7 @@ A data source authenticates to its store with one of the models below. The model
 |---|---|---|
 | Static credentials | `static_credentials` | A fixed access key and secret key, optionally with a session token for temporary credentials. The common form for a service account. To set one up, refer to [connect with static credentials](esql-data-federation-static-credentials.md). |
 | Anonymous | `anonymous` | For public data that needs no credentials. The [quickstart](esql-data-federation-quickstart.md) walks through this method. |
+| Federated identity | `federated_identity` | Keyless. {{es}} exchanges a short-lived OIDC token for temporary AWS credentials via STS, so no static keys are stored. Available on Elastic Cloud Hosted and serverless only. Operator-gated (`esql.datasource.federated_identity.enabled`). To set it up, refer to [connect with federated identity](esql-data-federation-federated-identity.md). |
 | Managed identity | `managed_identity` | Keyless. Uses the {{es}} node's own cloud identity, for example an EC2 instance IAM role. Operator-only and API-only, and not available in serverless. Requires `esql.datasource.managed_identity.enabled`. |
 | Auto (API-only) | `auto` (default) | Infers the authentication mode from the settings you provide. When you supply no keys, it falls back to the default AWS credential chain (IAM roles, environment variables, or instance profiles). API-only. |
 

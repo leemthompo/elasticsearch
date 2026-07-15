@@ -4,16 +4,14 @@ description: "Set up Amazon S3 federated identity for {{esql}} Data Federation s
 applies_to:
   stack: preview =9.5
   deployment:
+    ech: preview
+    ece: unavailable
+    eck: unavailable
     self: unavailable
   serverless: preview
 products:
   - id: elasticsearch
 ---
-
-<!-- TODO: Federated identity's 9.5 scope is unconfirmed. The product scope doc (June 2026) lists it
-as GA (9.6), but it appears in the Cloud Hosted and serverless QA UI. This page is published for now.
-If eng confirms FI is NOT in the 9.5 TP: hide this page in toc.yml (`hidden:`) or set applies_to to GA,
-and restore the federated-identity references on the sources page. See the plan's eng/product questions. -->
 
 # Connect to Amazon S3 with federated identity for {{esql}} Data Federation
 
