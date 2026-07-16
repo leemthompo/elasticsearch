@@ -11,7 +11,7 @@ applies_to:
 The `semantic` field mapping can be added regardless of license state. However, it calls the [{{infer-cap}} API](https://www.elastic.co/docs/api/doc/elasticsearch/group/endpoint-inference), which requires an [appropriate license](https://www.elastic.co/subscriptions). Using a `semantic` field without the appropriate license causes operations such as indexing and reindexing to fail.
 :::::
 
-The `semantic` field type simplifies vector search over text and other types of content, such as images, audio, video, and PDF files. It automatically:
+The `semantic` field type simplifies semantic and multimodal search across text, images, audio, video, and PDF files. With a compatible multimodal embedding model, you can search across content types—for example, use natural-language text to find images, or use an image to find related text and images. The field automatically:
 
 - Generates embeddings when you index field values, without an ingest pipeline or {{infer}} processor.
 - Splits long text into smaller passages, called chunks.
@@ -224,6 +224,8 @@ At query time, Elasticsearch searches the individual embeddings and uses the bes
 Because chunks are stored as nested documents, the `docs.count` value from the [`_cat/indices`](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-cat-indices) API can be higher than the number of documents you indexed. Use the Count API or `_cat/count` to count only top-level documents.
 
 ## Query a `semantic` field [query-semantic-field]
+
+With a compatible multimodal endpoint, indexed content and query input can use different modalities. For example, a text query can find images, or an image query can find related text and images.
 
 The supported query mechanism depends on the type of query input:
 
