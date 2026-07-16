@@ -225,7 +225,7 @@ Because chunks are stored as nested documents, the `docs.count` value from the [
 
 ## Query a `semantic` field [query-semantic-field]
 
-With a compatible multimodal endpoint, indexed content and query input can use different modalities. For example, a text query can find images, or an image query can find related text and images.
+A compatible multimodal endpoint enables cross-modal search. For example, you can use a text query to find images, or an image query to find related text and images.
 
 The supported query mechanism depends on the type of query input:
 
