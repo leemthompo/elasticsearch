@@ -19,6 +19,9 @@ The `semantic_text` field type simplifies [semantic search](docs-content://solut
 - Generates embeddings during indexing: Automatically generates embeddings when you index documents, without requiring ingestion pipelines or {{infer}} processors.
 - Handles chunking: Automatically chunks long text documents during indexing.
 
+:::{include} _snippets/semantic-field-type-comparison.md
+:::
+
 ## Basic `semantic_text` mapping example
 
 The following example creates an index mapping with a `semantic_text` field, using default values:
@@ -103,5 +106,4 @@ The [How-to guides](./semantic-text-how-tos.md) section organizes procedure desc
 - [Ingest data with `semantic_text` fields](./semantic-text-ingestions.md): Learn how to index pre-chunked content, use `copy_to` and multi-fields to collect values from multiple fields, and perform updates and partial updates to optimize ingestion costs.
 
 - [Search and retrieve `semantic_text` fields](./semantic-text-search-retrieval.md): Learn how to query `semantic_text` fields, retrieve indexed chunks, return field embeddings, and highlight the most relevant fragments from search results.
-
 
