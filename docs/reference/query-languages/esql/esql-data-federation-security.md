@@ -21,10 +21,7 @@ When a data source connects to a private bucket, its credentials are stored in t
 <!-- TODO: restore the link to the project encryption key page once PR #152731 (docs/reference/elasticsearch/project-encryption-key.md) merges. Linking now breaks the build because the target does not exist on this branch. Link markup: [project encryption key](../../elasticsearch/project-encryption-key.md) -->
 When a data source includes credentials, {{es}} encrypts them using cluster state encryption.
 
-The project encryption key is available automatically in most deployments:
-
-* On {{ech}}, {{ece}}, {{eck}}, and {{serverless-short}}, the platform provides the key's password for you.
-* On self-managed deployments, the password is generated automatically the first time a node starts with security auto-configuration, the same process that configures TLS. You configure it yourself only if security auto-configuration did not run.
+The cluster state key is available automatically in most environments, including {{ech}}, {{ece}}, {{eck}}, and {{serverless-short}}.
 
 <!-- TODO: restore this line once PR #152731 (docs/reference/elasticsearch/project-encryption-key.md) merges. It links to a page not yet on this branch and would break the build.
 For how to set the password, rotate the key, and check its health, refer to [project encryption key](../../elasticsearch/project-encryption-key.md). -->
