@@ -63,7 +63,6 @@ Collect these three values:
 |---|---|---|
 | JWT issuer | Shown read-only in the flyout. The Elastic Cloud workload identity service URL for your org and region. | The identity provider URL |
 | Project ID or Deployment ID | Shown read-only in the flyout. | The `sub` (subject) condition |
-| Audience | You choose it, for example `federated-search`. | The client ID (`aud` condition) |
 
 You use the issuer and subject to configure AWS in the next steps, and enter the audience back in Elastic at the end.
 ::::::
