@@ -19,7 +19,7 @@ When a data source connects to a private bucket, its credentials are stored in t
 ### Credential encryption
 
 <!-- TODO: restore the link to the project encryption key page once PR #152731 (docs/reference/elasticsearch/project-encryption-key.md) merges. Linking now breaks the build because the target does not exist on this branch. Link markup: [project encryption key](../../elasticsearch/project-encryption-key.md) -->
-When a data source includes credentials, {{es}} encrypts them before writing them to the cluster state. It uses the cluster's project encryption key, a single key that {{es}} manages on your behalf. Federated data is the first feature to rely on this key.
+When a data source includes credentials, {{es}} encrypts them using cluster state encryption.
 
 The project encryption key is available automatically in most deployments:
 
@@ -31,7 +31,7 @@ For how to set the password, rotate the key, and check its health, refer to [pro
 
 For how to set the password, rotate the key, and check its health, refer to your deployment's encryption documentation.
 
-By default, if the project encryption key is not available when you create a data source, a `PUT /_query/data_source` request that includes credentials returns a `503` error. Retry once the key is available, or configure the key first.
+By default, if the cluster state encryption key is not available when you create a data source, a `PUT /_query/data_source` request that includes credentials returns a `503` error. Retry once the key is available, or configure the key first.
 
 ### Credential masking
 

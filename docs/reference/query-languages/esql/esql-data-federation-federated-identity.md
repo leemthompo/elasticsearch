@@ -77,9 +77,9 @@ Refer to the AWS IAM documentation for the authoritative steps and for console-b
 ```shell
 aws iam create-open-id-connect-provider \
   --url "<elastic-jwt-issuer>" \
-  --client-id-list "federated-search" <1>
+  --client-id-list "sts.amazonaws.com" <1>
 ```
-1. The audience you chose. Use the same value here, in the role's trust policy, and in the Elastic data source.
+1. If you choose a different value, you must use the same here, in the role's trust policy, and in the Elastic data source audience fields.
 :::
 
 Note the provider ARN that AWS returns. You reference it in the role's trust policy next.
@@ -102,7 +102,7 @@ The following trust policy lets your identity provider assume the role, but only
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "<issuer-host>/<path>:aud": "federated-search", <2>
+          "<issuer-host>/<path>:aud": "sts.amazonaws.com", <2>
           "<issuer-host>/<path>:sub": "project:<project-id>" <3>
         }
       }
@@ -180,7 +180,7 @@ Back in Elastic, connect the S3 data source with the **Federated Identity** meth
 
 :::{tab-item} UI
 :sync: ui
-In the **Connect data source** flyout from the first step, enter the **role ARN** you created and the **audience** from the previous steps. For the full field reference, see [Connect external data sources](esql-data-federation-sources.md).
+In the **Connect data source** flyout from the first step, enter the **role ARN** you created. For the full field reference, see [Connect external data sources](esql-data-federation-sources.md).
 :::
 
 :::{tab-item} Console
@@ -193,7 +193,7 @@ PUT /_query/data_source/prod_s3_federated
     "region": "eu-north-1",
     "auth": "federated_identity",
     "role_arn": "arn:aws:iam::112233445566:role/parquet-sample-role", <1>
-    "jwt_audience": "federated-search" <2>
+    "jwt_audience": "sts.amazonaws.com" <2>
   }
 }
 ```
@@ -213,7 +213,7 @@ curl -X PUT "${ELASTICSEARCH_URL}/_query/data_source/prod_s3_federated" \
     "region": "eu-north-1",
     "auth": "federated_identity",
     "role_arn": "arn:aws:iam::112233445566:role/parquet-sample-role",
-    "jwt_audience": "federated-search"
+    "jwt_audience": "sts.amazonaws.com"
   }
 }'
 ```
@@ -239,23 +239,21 @@ Set the variables for your environment:
 
 ```shell
 export JWT_ISSUER="https://<your-jwt-issuer>" # <1>
-export AUDIENCE="federated-search" # <2>
-export SUBJECT="project:<your-project-id>" # <3>
+export SUBJECT="project:<your-project-id>" # <2>
 export BUCKET_NAME="private-bucket"
 export FILE_NAME="some/sample.parquet"
 export ROLE_NAME="parquet-sample-role"
 export POLICY_NAME="parquet-sample-policy"
 ```
 1. Copy from the **Connect data source** flyout.
-2. Copy from the **Connect data source** flyout.
-3. Copy from the flyout. Use `project:<id>` for serverless or `deployment:<id>` for {{ech}}.
+2. Copy from the flyout. Use `project:<id>` for serverless or `deployment:<id>` for {{ech}}.
 
 Create the OpenID Connect identity provider, then capture its ARN and the issuer host that the trust policy needs (the issuer without its `https://` scheme):
 
 ```shell
 PROVIDER_ARN=$(aws iam create-open-id-connect-provider \
   --url "${JWT_ISSUER}" \
-  --client-id-list "${AUDIENCE}" \
+  --client-id-list "sts.amazonaws.com" \
   --query 'OpenIDConnectProviderArn' --output text)
 
 ISSUER_HOST="${JWT_ISSUER#https://}"
@@ -276,7 +274,7 @@ ROLE_ARN=$(aws iam create-role \
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${ISSUER_HOST}:aud": "${AUDIENCE}",
+          "${ISSUER_HOST}:aud": "sts.amazonaws.com",
           "${ISSUER_HOST}:sub": "${SUBJECT}"
         }
       }
