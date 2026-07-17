@@ -198,7 +198,7 @@ PUT /_query/data_source/prod_s3_federated
 }
 ```
 1. The ARN of the role you created in AWS.
-2. The audience. `jwt_audience` is optional in general, but set it here so it matches the `aud` condition in the role's trust policy.
+2. If you use a custom audience, set `jwt_audience` to match the `aud` condition in the role's trust policy.
 :::
 
 :::{tab-item} curl
