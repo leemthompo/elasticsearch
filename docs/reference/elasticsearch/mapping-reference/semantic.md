@@ -173,7 +173,7 @@ Provide non-text input as an object with the following properties:
 :   (Required, string) Type of input. Valid values are `image`, `audio`, `video`, and `pdf`.
 
 `value`
-:   (Required, string) Input encoded as a [data URL](https://www.rfc-editor.org/rfc/rfc2397). The value must include its media type and Base64 encoding, for example `data:image/jpeg;base64,...`.
+:   (Required, string) Input encoded as a [data URL](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/data). The value must include its media type and Base64 encoding, for example `data:image/jpeg;base64,...`.
 
 `format`
 :   (Optional, string) Input format. The only supported format for non-text input is `base64`, which is also the default.
@@ -304,7 +304,7 @@ The response returns the embeddings under `_inference_fields`.
 The [`semantic` highlighter](/reference/elasticsearch/rest-apis/highlighting.md) is the default highlighter for `semantic` fields. It returns the field values or text passages whose embeddings best match the query:
 
 - For text, it returns the most relevant text chunks.
-- For non-text input, it returns the complete data URL of each matching value.
+- For non-text input, it returns the complete [data URL](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/data) of each matching value.
 
 Use `number_of_fragments` to limit the number of matches and `order: score` to return the most relevant matches first.
 
