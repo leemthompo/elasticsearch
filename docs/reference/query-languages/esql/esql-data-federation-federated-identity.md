@@ -111,7 +111,7 @@ The following trust policy lets your identity provider assume the role, but only
 }
 ```
 1. The ARN of the identity provider you created in the previous step.
-2. The condition key is the JWT issuer with the `https://` scheme removed, followed by `:aud`. The value must match the audience you set on the provider and enter in Elastic.
+2. The condition key is the JWT issuer with the `https://` scheme removed, followed by `:aud`. The value must match the `client-id` you set on the provider and the `audience` set in Elastic.
 3. The same issuer prefix followed by `:sub`. Use the subject exactly as shown in the **Connect data source** flyout, including its prefix: `project:<project-id>` on serverless or `deployment:<deployment-id>` on Elastic Cloud Hosted. This restricts the role to your project or deployment.
 
 :::{dropdown} Example: create the role with the AWS CLI
