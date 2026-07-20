@@ -120,6 +120,10 @@ A `semantic` field accepts one or more values. Values can be text, images, audio
 
 ### Text input [semantic-text-input]
 
+:::{tip}
+If you're working exclusively with text, consider using [`semantic_text`](./semantic-text.md), which is designed for text-only semantic search.
+:::
+
 Provide text directly as a JSON string:
 
 ```console
