@@ -316,6 +316,8 @@ Automatic pre-filtering does not apply when you use a `knn` query directly. Use 
 
 The original text and non-text values are returned in `_source`. The generated embeddings are excluded by default.
 
+Non-text values can make `_source` responses large because they include complete data URLs. Use [source filtering](/reference/elasticsearch/rest-apis/retrieve-selected-fields.md#source-filtering) to exclude `semantic` fields or return only the metadata fields your application needs.
+
 To retrieve the values as they were processed for {{infer}}, use the `fields` parameter with the `chunks` format:
 
 ```console
