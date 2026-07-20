@@ -43,7 +43,14 @@ A text resource is read uncompressed, or compressed with a codec identified from
 
 ### Parquet
 
-Parquet declares its compression internally, per column chunk, so Parquet resources are not externally compressed. They are recognized by the `.parquet` and `.parq` extensions. Supported internal codecs are UNCOMPRESSED, SNAPPY, ZSTD, GZIP, LZ4_RAW, and legacy Hadoop-framed LZ4. The legacy LZ4 codec is supported for reading only.
+Parquet declares its compression internally, per column chunk, so Parquet resources are not externally compressed. They are recognized by the `.parquet` and `.parq` extensions. The following internal codecs are supported:
+
+- `UNCOMPRESSED`
+- `SNAPPY`
+- `ZSTD`
+- `GZIP`
+- `LZ4_RAW`
+- `LZ4` (legacy Hadoop-framed format, supported for reading only)
 
 ## Manage datasets in the UI
 
