@@ -19,7 +19,7 @@ The `semantic` field type simplifies semantic and multimodal search across text,
 - Searches the embeddings generated for each value or text chunk.
 
 :::{tip}
-The `semantic` field type shares many capabilities with `semantic_text`. To learn more, refer to [Should I use `semantic_text` or `semantic`?](#should-i-use-semantictext-or-semantic).
+The `semantic` field type shares many capabilities with `semantic_text`. If you're working exclusively with text, consider using [`semantic_text`](./semantic-text.md). For a comparison table, refer to [Should I use `semantic_text` or `semantic`?](#should-i-use-semantictext-or-semantic).
 :::
 
 ## `semantic` field quickstart [semantic-quickstart]
