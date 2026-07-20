@@ -39,7 +39,7 @@ A [data source](esql-data-federation-sources.md) tells {{es}} where the storage 
 ::::::{step} You create datasets (what to read)
 Each [dataset](esql-data-federation-datasets.md) points at specific files in that storage. One data source can serve many datasets. When credentials rotate, you update the data source in one place without touching the datasets that reference it.
 
-Datasets share the same namespace as indices, aliases, and views. A dataset cannot have the same name as an existing index, which is why `FROM` works the same way for both.
+Datasets share the same namespace as indices, aliases, and [{{esql}} views](esql-views.md). A dataset cannot have the same name as an existing index, which is why `FROM` works the same way for both.
 ::::::
 
 ::::::{step} You query with FROM, just like a regular index

@@ -326,7 +326,7 @@ POST /_bulk
 {"category":"outage","severity":"low","duration_min":8}
 ```
 
-Now query both sources together. `FROM` resolves each name independently, whether it is an index, an index abstraction such as a data stream or alias, or a dataset. Use `METADATA _index` to see where each row came from:
+Now query both sources together. `FROM` resolves each name independently, whether it is an index, data stream, alias, [{{esql}} view](esql-views.md), or dataset. Use `METADATA _index` to see where each row came from:
 
 ::::{tab-set}
 :group: surface

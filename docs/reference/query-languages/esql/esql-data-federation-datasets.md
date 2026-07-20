@@ -10,7 +10,7 @@ products:
 
 # Select external datasets for {{esql}} Data Federation
 
-A dataset points at specific files within a [data source](esql-data-federation-sources.md) and makes them queryable as a virtual index. It references a data source by name and specifies a resource path that identifies the files to read. Datasets share the same namespace as indices, aliases, and views. A dataset cannot have the same name as an existing index.
+A dataset points at specific files within a [data source](esql-data-federation-sources.md) and makes them queryable as a virtual index. It references a data source by name and specifies a resource path that identifies the files to read. Datasets share the same namespace as indices, aliases, and [{{esql}} views](esql-views.md). A dataset cannot have the same name as an existing index.
 
 ## Supported file formats
 
