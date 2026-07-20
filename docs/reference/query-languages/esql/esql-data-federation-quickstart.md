@@ -408,7 +408,7 @@ PUT /_query/data_source/my_s3_logs
 ```
 
 :::{important}
-When a data source includes credentials, {{es}} encrypts them before storing them in the cluster state, using the cluster's project encryption key. This key is available automatically in most deployments. If it is not available, a request that includes credentials returns a `503` error. Refer to [credential encryption](esql-data-federation-security.md#credential-encryption) for details.
+When a data source includes credentials, {{es}} encrypts them before storing them in the cluster state, using the cluster state encryption key. This key is available automatically in most deployments. If it is not available, a request that includes credentials returns a `503` error. Refer to [credential encryption](esql-data-federation-security.md#credential-encryption) for details.
 :::
 
 Credential values are never returned in API responses. When you retrieve a data source, secrets are replaced by `::es_redacted::`.
