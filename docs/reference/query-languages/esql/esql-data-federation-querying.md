@@ -28,6 +28,7 @@ Metadata columns are available through `METADATA`:
 | `_file.path`, `_file.name`, `_file.directory`, `_file.size`, `_file.modified` | The object each row was read from. |
 | `_score` | null |
 | `_ignored` | null |
+| `_index_mode`, `_tsid`, `_size` | null |
 
 For example, this query returns file-level metadata for each matching row:
 
