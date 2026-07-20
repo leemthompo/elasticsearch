@@ -297,6 +297,7 @@ The following settings apply to all file-based data sources:
 | `column_prefix` | `col` | Prefix for generated column names when `header_row` is `false`. |
 | `schema_sample_size` | `20000` | Rows sampled to infer column types. |
 | `datetime_format` | ISO-8601 | The pattern used to parse date and time values. |
+| `trim_spaces` | `false` | Whether to remove surrounding ASCII whitespace from string field values. |
 | `multi_value_syntax` | `none` | Whether bracketed multi-values are recognized. Valid values: `"none"`, `"brackets"`. |
 | `max_field_size` | `10485760` (10 MB) | The maximum size of a single field. `0` is unlimited. |
 | `error_mode` | `fail_fast` | How a malformed row is handled. Valid values: `"fail_fast"`, `"skip_row"`, `"null_field"`. |
