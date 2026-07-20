@@ -16,7 +16,7 @@ A dataset points at specific files within a [data source](esql-data-federation-s
 
 Federated data sources can read the following file formats:
 
-:::{include} _snippets/federated-data/supported-file-formats.md
+:::{include} _snippets/data-federation/supported-file-formats.md
 :::
 
 The format is detected automatically from the file extension. You can override this in the [dataset settings](#common-settings).

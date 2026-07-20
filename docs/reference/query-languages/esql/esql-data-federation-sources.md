@@ -16,7 +16,7 @@ A data source defines the connection to an external storage system. It stores th
 
 The following data source types are supported:
 
-:::{include} _snippets/federated-data/supported-data-source-types.md
+:::{include} _snippets/data-federation/supported-data-source-types.md
 :::
 
 :::{note}

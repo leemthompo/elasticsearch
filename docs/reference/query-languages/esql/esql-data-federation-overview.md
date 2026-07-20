@@ -61,14 +61,14 @@ For a full worked example, refer to [get started with {{esql}} Data Federation](
 
 The following data source types are supported:
 
-:::{include} _snippets/federated-data/supported-data-source-types.md
+:::{include} _snippets/data-federation/supported-data-source-types.md
 :::
 
 ## Supported file formats
 
 Federated data sources can read the following file formats:
 
-:::{include} _snippets/federated-data/supported-file-formats.md
+:::{include} _snippets/data-federation/supported-file-formats.md
 :::
 
 The format is detected automatically from the file extension. You can override this in the dataset settings if needed.
