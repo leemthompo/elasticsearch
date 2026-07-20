@@ -227,11 +227,11 @@ The endpoint embeds the text query in the same vector space as the indexed image
 :::{include} _snippets/semantic-field-type-comparison.md
 :::
 
-## Reference [semantic-reference]
+## Reference documentation [semantic-reference]
 
 Refer to the [`semantic` field reference](./semantic-field-reference.md) for the complete technical details, including:
 
-- Mapping parameters and {{infer}} endpoint requirements.
-- Supported input formats and chunking behavior.
-- Query DSL and retriever support.
-- Retrieval, highlighting, and current limitations.
+- [Parameters for `semantic` fields](./semantic-field-reference.md#semantic-params)
+- [{{infer-cap}} endpoint requirements](./semantic-field-reference.md#semantic-inference-endpoint)
+- [Accepted input](./semantic-field-reference.md#semantic-input)
+- [Limitations](./semantic-field-reference.md#semantic-limitations)
