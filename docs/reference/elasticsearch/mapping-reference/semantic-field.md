@@ -30,7 +30,7 @@ This quickstart maps a `semantic` field, indexes an image, and searches for the 
 
 To run the curl examples, set your Elasticsearch URL and API key as environment variables:
 
-```sh
+```bash
 export ELASTICSEARCH_URL="https://<DEPLOYMENT_URL>"
 export ELASTICSEARCH_API_KEY="<ELASTICSEARCH_API_KEY>"
 ```
@@ -71,7 +71,7 @@ PUT image-search
 
 ::::{tab-item} curl
 
-```sh
+```bash
 curl --fail-with-body --silent --show-error \
   --request PUT \
   --url "$ELASTICSEARCH_URL/image-search" \
@@ -109,7 +109,7 @@ Unlike [`semantic_text`](./semantic-text.md), a `semantic` field has no default 
 
 This example uses [*Cat on windowsill*](https://commons.wikimedia.org/wiki/File:Cat_on_windowsill_-_geograph.org.uk_-_435478.jpg) by ceridwen, licensed under [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/). Download the image:
 
-```sh
+```bash
 curl --fail-with-body --silent --show-error --location \
   --output cat-on-windowsill.jpg \
   "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cat_on_windowsill_-_geograph.org.uk_-_435478.jpg"
@@ -117,7 +117,7 @@ curl --fail-with-body --silent --show-error --location \
 
 Encode the image as Base64 for the [data URL](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/data). The curl example uses the resulting shell variable. For Console, replace `<BASE64_ENCODED_IMAGE>` with its value:
 
-```sh
+```bash
 image_data=$(base64 < cat-on-windowsill.jpg | tr -d '\n')
 ```
 
@@ -142,7 +142,7 @@ PUT image-search/_doc/cat-on-windowsill?refresh=wait_for
 
 ::::{tab-item} curl
 
-```sh
+```bash
 curl --fail-with-body --silent --show-error \
   --request PUT \
   --url "$ELASTICSEARCH_URL/image-search/_doc/cat-on-windowsill?refresh=wait_for" \
@@ -196,7 +196,7 @@ GET image-search/_search
 
 ::::{tab-item} curl
 
-```sh
+```bash
 curl --fail-with-body --silent --show-error \
   --request POST \
   --url "$ELASTICSEARCH_URL/image-search/_search" \
