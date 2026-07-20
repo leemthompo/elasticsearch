@@ -59,10 +59,6 @@ For the full set of authentication methods, refer to [authentication models](#au
 :::
 :::
 
-<!-- TODO: Once the data source and dataset APIs are defined in elasticsearch-specification,
-replace the inline examples below with a summary table linking to the generated
-API reference at https://www.elastic.co/docs/api/doc/elasticsearch/ -->
-
 ## Manage data sources using the API
 
 Data sources are managed under the `/_query/data_source` endpoint. All data source operations require the cluster `manage` privilege or a `global.data_source` privilege (refer to [manage credentials and privileges](esql-data-federation-security.md)).

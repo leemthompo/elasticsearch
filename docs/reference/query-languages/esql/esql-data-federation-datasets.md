@@ -87,10 +87,6 @@ To configure how the format is read, expand **Advanced settings**. Refer to [dat
 :::
 :::
 
-<!-- TODO: Once the data source and dataset APIs are defined in elasticsearch-specification,
-replace the inline examples below with a summary table linking to the generated
-API reference at https://www.elastic.co/docs/api/doc/elasticsearch/ -->
-
 ## Manage datasets using the API
 
 Datasets are managed under the `/_query/dataset` endpoint. All dataset operations require the index `manage` privilege on the dataset name, or a fine-grained dataset privilege (refer to [manage credentials and privileges](esql-data-federation-security.md)).
@@ -329,9 +325,6 @@ Parquet is self-describing and is read with no settings in the common case. Its 
 | `late_materialization` | `true` | When a filter can be pushed to the reader, reads predicate columns first and materializes other projected columns only for surviving rows. This is most useful for selective queries over wide files. Leave enabled unless you are troubleshooting filter or read-path behavior. |
 
 ## How schemas are inferred
-
-<!-- TODO: Confirm whether the schema discovery API (GET /_query/data_source/{name}/_schema) is public.
-     Tracked in https://github.com/elastic/esql-planning/issues/288 -->
 
 Because federated data does not live in {{es}}, the system discovers schemas before queries can run. How this works depends on the file format.
 
