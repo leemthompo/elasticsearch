@@ -94,14 +94,9 @@ The endpoint embeds the text query in the same vector space as the indexed image
 
 ## Reference [semantic-reference]
 
-Refer to the [`semantic` field reference](./semantic-field-reference.md) for complete technical details:
+Refer to the [`semantic` field reference](./semantic-field-reference.md) for the complete technical details, including:
 
-- [Parameters](./semantic-field-reference.md#semantic-params): Mapping parameters for `semantic` fields.
-- [{{infer-cap}} endpoint requirements](./semantic-field-reference.md#semantic-inference-endpoint): Supported endpoint task type, model settings, and modalities.
-- [Accepted input](./semantic-field-reference.md#semantic-input): Text, non-text, and mixed input formats.
-- [Chunking behavior](./semantic-field-reference.md#semantic-chunking): How field values are divided and stored.
-- [Querying](./semantic-field-reference.md#query-semantic-field): Query DSL, retriever API, and ES|QL support.
-- [Automatic pre-filtering](./semantic-field-reference.md#semantic-automatic-prefiltering): How filters are applied to semantic vector search.
-- [Retrieval](./semantic-field-reference.md#retrieve-semantic-field): Retrieve original values, chunks, and embeddings.
-- [Highlighting](./semantic-field-reference.md#highlight-semantic-field): Return the most relevant values or text passages.
-- [Limitations](./semantic-field-reference.md#semantic-limitations): Current limitations of `semantic` fields.
+- Mapping parameters and {{infer}} endpoint requirements.
+- Supported input formats and chunking behavior.
+- Query DSL and retriever support.
+- Retrieval, highlighting, and current limitations.
