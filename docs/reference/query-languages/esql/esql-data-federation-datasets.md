@@ -78,7 +78,7 @@ Click **Add dataset** to open a flyout where you define the dataset:
 - **Name**: a unique name for use in queries.
 - **Description**: an optional description.
 - **Resource**: the URI and glob pattern that selects the files to read.
-- **Format**: the file format. Leave it to auto-detect from the file extension, or set it explicitly. Refer to [supported file formats](#supported-file-formats).
+- **Format**: the file format. This selection is required in the {{kib}} UI. The API can omit `settings.format` to auto-detect it from the file extension. Refer to [supported file formats](#supported-file-formats).
 
 To configure how the format is read, expand **Advanced settings**. Refer to [dataset settings](#dataset-settings).
 
