@@ -316,6 +316,7 @@ The following settings apply to all file-based data sources:
 | Setting | Default | Description |
 |---|---|---|
 | `segment_size` | `4mb` | The unit a file is divided into for parallel reading. Minimum 64 KiB. |
+| `datetime_format` | `strict_date_optional_time` | The pattern used to infer and parse date and time values. |
 
 ### Parquet
 
