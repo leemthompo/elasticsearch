@@ -11,12 +11,14 @@ applies_to:
 The `semantic` field mapping can be added regardless of license state. However, it calls the [{{infer-cap}} API](https://www.elastic.co/docs/api/doc/elasticsearch/group/endpoint-inference), which requires an [appropriate license](https://www.elastic.co/subscriptions). Using a `semantic` field without the appropriate license causes operations such as indexing and reindexing to fail.
 :::::
 
-The `semantic` field type simplifies semantic and multimodal search across text, images, audio, video, and PDF files. With a compatible multimodal embedding model, you can search across content types—for example, use natural-language text to find images, or use an image to find related text and images. The field automatically:
+The `semantic` field type simplifies semantic and multimodal search across text, images, audio, video, and PDF files. Compatible multimodal embedding models place supported input types in a shared vector space. This enables text-to-image, image-to-image, image-to-text, and text-to-text search. The field automatically:
 
 - Generates embeddings when you index field values, without an ingest pipeline or {{infer}} processor.
 - Splits long text into smaller passages, called chunks.
 - Configures and stores the underlying dense vectors based on the field's {{infer}} endpoint.
 - Searches the embeddings generated for each value or text chunk.
+
+Multiple `semantic` fields can use the same {{infer}} endpoint. For example, an index can use one field for image embeddings and another for description embeddings, then search either field or both.
 
 :::{tip}
 The `semantic` field type shares many capabilities with `semantic_text`. If you're working exclusively with text, consider using [`semantic_text`](./semantic-text.md).
