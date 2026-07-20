@@ -18,43 +18,117 @@ The `semantic` field type simplifies semantic and multimodal search across text,
 - Configures and stores the underlying dense vectors based on the field's {{infer}} endpoint.
 - Searches the embeddings generated for each value or text chunk.
 
+:::{tip}
+The `semantic` field type shares many capabilities with `semantic_text`. Refer to [Should I use `semantic_text` or `semantic`?](#semantic_text-or-semantic) to choose between them.
+:::
+
 ## `semantic` field quickstart [semantic-quickstart]
 
-This quickstart maps a `semantic` field, indexes an image, and searches for the image using natural-language text. Before you start, configure an {{infer}} endpoint with the `embedding` task type that supports both text and image input.
+This quickstart maps a `semantic` field, indexes an image, and searches for the image using natural-language text. It uses the preconfigured `.jina-embeddings-v5-omni-small` endpoint through the [Elastic {{infer-cap}} Service (EIS)](docs-content://explore-analyze/elastic-inference/eis.md).
 
-:::::{stepper}
+To run the curl examples, set your Elasticsearch URL and API key as environment variables:
 
-::::{step} Create an index
+```sh
+export ELASTICSEARCH_URL="https://<DEPLOYMENT_URL>"
+export ELASTICSEARCH_API_KEY="<ELASTICSEARCH_API_KEY>"
+```
 
-Map `content` as a `semantic` field. Replace `my-embedding-endpoint` with the ID of your {{infer}} endpoint:
+:::::::{stepper}
+
+::::::{step} Create an image search index
+
+Create an index with metadata fields and a `semantic` field named `image`:
+
+:::::{tab-set}
+
+::::{tab-item} Console
 
 ```console
-PUT my-semantic-index
+PUT image-search
 {
   "mappings": {
     "properties": {
-      "content": {
+      "title": {
+        "type": "keyword"
+      },
+      "source_url": {
+        "type": "keyword",
+        "index": false
+      },
+      "image": {
         "type": "semantic",
-        "inference_id": "my-embedding-endpoint"
+        "inference_id": ".jina-embeddings-v5-omni-small"
       }
     }
   }
 }
 ```
-% TEST[skip:Requires an embedding {{infer}} endpoint]
-
-Unlike [`semantic_text`](./semantic-text.md), a `semantic` field has no default {{infer}} endpoint. You must configure an endpoint that uses the `embedding` task type and specify its ID in the field mapping.
+% TEST[skip:Requires access to the preconfigured EIS endpoint]
 
 ::::
 
-::::{step} Index an image
+::::{tab-item} curl
 
-Encode an image as a Base64 [data URL](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/data), then index it in the `content` field:
+```sh
+curl --fail-with-body --silent --show-error \
+  --request PUT \
+  --url "$ELASTICSEARCH_URL/image-search" \
+  --header "Authorization: ApiKey $ELASTICSEARCH_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '
+{
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "keyword"
+      },
+      "source_url": {
+        "type": "keyword",
+        "index": false
+      },
+      "image": {
+        "type": "semantic",
+        "inference_id": ".jina-embeddings-v5-omni-small"
+      }
+    }
+  }
+}'
+```
+
+::::
+
+:::::
+
+Unlike [`semantic_text`](./semantic-text.md), a `semantic` field has no default {{infer}} endpoint. You must configure an endpoint that uses the `embedding` task type and specify its ID in the field mapping.
+
+::::::
+
+::::::{step} Index an image
+
+This example uses [*Cat on windowsill*](https://commons.wikimedia.org/wiki/File:Cat_on_windowsill_-_geograph.org.uk_-_435478.jpg) by ceridwen, licensed under [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/). Download the image:
+
+```sh
+curl --fail-with-body --silent --show-error --location \
+  --output cat-on-windowsill.jpg \
+  "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cat_on_windowsill_-_geograph.org.uk_-_435478.jpg"
+```
+
+Encode the image as Base64 for the [data URL](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/data). The curl example uses the resulting shell variable. For Console, replace `<BASE64_ENCODED_IMAGE>` with its value:
+
+```sh
+image_data=$(base64 < cat-on-windowsill.jpg | tr -d '\n')
+```
+
+:::::{tab-set}
+
+::::{tab-item} Console
 
 ```console
-PUT my-semantic-index/_doc/1
+PUT image-search/_doc/cat-on-windowsill?refresh=wait_for
 {
-  "content": {
+  "title": "Cat on windowsill",
+  "source_url": "https://commons.wikimedia.org/wiki/File:Cat_on_windowsill_-_geograph.org.uk_-_435478.jpg",
+  "image": {
     "type": "image",
     "value": "data:image/jpeg;base64,<BASE64_ENCODED_IMAGE>"
   }
@@ -62,32 +136,93 @@ PUT my-semantic-index/_doc/1
 ```
 % TEST[skip:Requires a Base64-encoded image and a multimodal embedding endpoint]
 
-Elasticsearch uses the field's {{infer}} endpoint to generate and index an embedding for the image.
+::::
+
+::::{tab-item} curl
+
+```sh
+curl --fail-with-body --silent --show-error \
+  --request PUT \
+  --url "$ELASTICSEARCH_URL/image-search/_doc/cat-on-windowsill?refresh=wait_for" \
+  --header "Authorization: ApiKey $ELASTICSEARCH_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data-binary @- <<JSON
+{
+  "title": "Cat on windowsill",
+  "source_url": "https://commons.wikimedia.org/wiki/File:Cat_on_windowsill_-_geograph.org.uk_-_435478.jpg",
+  "image": {
+    "type": "image",
+    "value": "data:image/jpeg;base64,$image_data"
+  }
+}
+JSON
+```
 
 ::::
 
-::::{step} Search for the image using text
+:::::
 
-Run a `match` query against the `content` field. For example, if the indexed image shows a cat on a windowsill:
+Elasticsearch uses the field's {{infer}} endpoint to generate and index an embedding for the image.
+
+::::::
+
+::::::{step} Search for the image using text
+
+Run a `match` query against the `image` field. The response excludes the image data URL from `_source`:
+
+:::::{tab-set}
+
+::::{tab-item} Console
 
 ```console
-GET my-semantic-index/_search
+GET image-search/_search
 {
-  "_source": false,
+  "_source": [
+    "title",
+    "source_url"
+  ],
   "query": {
     "match": {
-      "content": "a cat sitting on a windowsill"
+      "image": "a cat sitting on a windowsill"
     }
   }
 }
 ```
 % TEST[skip:Requires an indexed image and a multimodal embedding endpoint]
 
-The endpoint embeds the text query in the same vector space as the indexed image and returns the most semantically similar results.
+::::
+
+::::{tab-item} curl
+
+```sh
+curl --fail-with-body --silent --show-error \
+  --request POST \
+  --url "$ELASTICSEARCH_URL/image-search/_search" \
+  --header "Authorization: ApiKey $ELASTICSEARCH_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '
+{
+  "_source": [
+    "title",
+    "source_url"
+  ],
+  "query": {
+    "match": {
+      "image": "a cat sitting on a windowsill"
+    }
+  }
+}'
+```
 
 ::::
 
 :::::
+
+The endpoint embeds the text query in the same vector space as the indexed image and returns the most semantically similar results.
+
+::::::
+
+:::::::
 
 :::{include} _snippets/semantic-field-type-comparison.md
 :::
