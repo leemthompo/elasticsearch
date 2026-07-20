@@ -275,6 +275,7 @@ The following settings apply to all file-based data sources:
 |---|---|---|
 | `format` | Auto-detect from extension | Override format detection. Valid values: `"parquet"`, `"csv"`, `"tsv"`, `"ndjson"`. |
 | `partition_detection` | `auto` | Partition detection mode. Valid values: `"auto"`, `"hive"`, `"none"`. |
+| `schema_resolution` | `union_by_name` | How schemas are reconciled across multiple files. Valid values: `"first_file_wins"`, `"strict"`, `"union_by_name"`. Refer to [schema merge strategies](#schema-merge-strategies). |
 
 ### CSV and TSV settings
 
@@ -342,7 +343,8 @@ For **CSV and NDJSON**, schemas are inferred by sampling rows from the data file
 
 ### Schema merge strategies
 
-When a dataset spans multiple files, the files may have different schemas. Two merge strategies are available:
+When a dataset spans multiple files, the files may have different schemas. Set `schema_resolution` in the dataset's `settings` object to choose a strategy:
 
-- **First file wins.** The first file alphabetically defines the schema. All other files are assumed to match.
-- **Union by name.** Schemas from all files are merged. Lossless type widening is applied where possible. Lossy promotions such as integer to keyword cause an error.
+- `union_by_name` (default): Merges schemas from all files by column name. Lossless type widening is applied where possible; incompatible types cause an error. This is safer when files can vary, at the cost of reading and merging more file metadata.
+- `first_file_wins`: Uses the first file alphabetically to define the schema and assumes later files match it. This is typically faster, but schema differences in later files can cause query errors or values to be read under the wrong assumptions.
+- `strict`: Requires every file to have the same schema, apart from nullability, and returns an error when they differ. Use this when schema drift must fail explicitly.
