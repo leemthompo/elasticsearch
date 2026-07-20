@@ -256,6 +256,25 @@ For kNN search through the retriever API, place a `knn` query inside a `standard
 
 You can use the `standard` retriever as a child of a compound retriever, such as [RRF](/reference/elasticsearch/rest-apis/retrievers/rrf-retriever.md) or the [`linear` retriever](/reference/elasticsearch/rest-apis/retrievers/linear-retriever.md), to combine semantic search with other retrieval strategies.
 
+The `linear` and RRF retrievers also support the [multi-field query format](/reference/elasticsearch/rest-apis/retrievers.md#multi-field-query-format). This format automatically creates the inner retrievers needed to search lexical and inference fields together. The following example searches a lexical `title` field and a `semantic` field named `content`:
+
+```console
+POST my-semantic-index/_search
+{
+  "retriever": {
+    "linear": {
+      "query": "lunar exploration",
+      "fields": [
+        "title",
+        "content"
+      ],
+      "normalizer": "minmax"
+    }
+  }
+}
+```
+% TEST[skip:Requires a configured semantic field]
+
 ### ES|QL [semantic-esql]
 
 ES|QL does not currently support querying `semantic` fields. Use Query DSL or a retriever instead.
