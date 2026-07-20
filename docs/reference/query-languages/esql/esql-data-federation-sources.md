@@ -43,7 +43,7 @@ Click **Connect data source** to open a flyout where you define the connection:
 - **Name**: a unique name for the data source.
 - **Description**: an optional description.
 - **Region**: the storage region.
-- **Endpoint**: an optional endpoint for an S3-compatible store.
+- **Endpoint**: an optional Amazon S3 endpoint override.
 - **Authentication**: a **Preferred method** and its credentials. For example, **Access and Secret Keys** takes an **Access key** and **Secret key**.
 
 For the full set of authentication methods, refer to [authentication models](#authentication).
@@ -202,7 +202,7 @@ The following settings are available for `s3` data sources:
 | Setting | Required | Description |
 |---|---|---|
 | `region` | No | The bucket's AWS region, for example `us-east-1`. Defaults to `us-east-1` if omitted. Set it to match the bucket's region, otherwise requests to the bucket fail. |
-| `endpoint` | No | An explicit endpoint, for an S3-compatible store. |
+| `endpoint` | No | An explicit Amazon S3 endpoint override. Other S3-compatible services are not supported for this technical preview. |
 
 :::{tip}
 A data source connects to a single region. To query buckets in more than one region, create a separate data source for each region.
