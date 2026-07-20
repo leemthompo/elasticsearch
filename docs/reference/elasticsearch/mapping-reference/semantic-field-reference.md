@@ -141,7 +141,7 @@ If you're working exclusively with text, consider using [`semantic_text`](./sema
 Provide non-text input as an object with the following properties:
 
 `type`
-:   (Required, string) Type of input. Valid values are `image`, `audio`, `video`, and `pdf`.
+:   (Required, string) Type of non-text input. Valid values are `image`, `audio`, `video`, and `pdf`. Text input is provided directly as a JSON string and does not use this property.
 
 `value`
 :   (Required, string) Input encoded as a [data URL](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/data). The value must include its media type and Base64 encoding, for example `data:image/jpeg;base64,...`.
