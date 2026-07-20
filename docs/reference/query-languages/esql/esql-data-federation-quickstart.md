@@ -400,6 +400,7 @@ PUT /_query/data_source/my_s3_logs
   "description": "Production logs bucket",
   "settings": {
     "region": "us-east-1",
+    "auth": "static_credentials",
     "access_key": "<AWS_ACCESS_KEY_ID>",
     "secret_key": "<AWS_SECRET_ACCESS_KEY>"
   }

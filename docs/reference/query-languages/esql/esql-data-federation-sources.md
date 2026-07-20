@@ -86,6 +86,7 @@ PUT /_query/data_source/prod_s3_logs
   "description": "Production S3 logs bucket, us-east-1",
   "settings": {
     "region": "us-east-1",
+    "auth": "static_credentials",
     "access_key": "<AWS_ACCESS_KEY_ID>",
     "secret_key": "<AWS_SECRET_ACCESS_KEY>"
   }
@@ -104,6 +105,7 @@ curl -X PUT "${ELASTICSEARCH_URL}/_query/data_source/prod_s3_logs" \
   "description": "Production S3 logs bucket, us-east-1",
   "settings": {
     "region": "us-east-1",
+    "auth": "static_credentials",
     "access_key": "<AWS_ACCESS_KEY_ID>",
     "secret_key": "<AWS_SECRET_ACCESS_KEY>"
   }
@@ -220,7 +222,7 @@ A data source connects to a single region. To query buckets in more than one reg
 | `role_session_name` | No | A label for the assumed-role session. Used with `auth: federated_identity`. |
 | `sts_endpoint` | No | A custom STS endpoint URL. Used with `auth: federated_identity`. |
 | `sts_region` | No | The AWS region of the STS endpoint. Used with `auth: federated_identity`. |
-| `auth` | No | Authentication mode. Defaults to `auto`, which infers the mode from the other settings you provide. Set it explicitly to `anonymous`, `static_credentials`, `managed_identity`, or `federated_identity`. |
+| `auth` | Yes | Authentication mode. Set it to `anonymous`, `static_credentials`, `managed_identity`, or `federated_identity`. |
 
 ## Authentication
 
