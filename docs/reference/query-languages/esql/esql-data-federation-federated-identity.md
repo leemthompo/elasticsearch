@@ -57,18 +57,18 @@ The flyout shows the values you need:
 :::
 :::
 
-Collect these three values:
+Collect these two values:
 
 | Value | Where it comes from | Used in AWS as |
 |---|---|---|
 | JWT issuer | Shown read-only in the flyout. The Elastic Cloud workload identity service URL for your org and region. | The identity provider URL |
 | Project ID or Deployment ID | Shown read-only in the flyout. | The `sub` (subject) condition |
 
-You use the issuer and subject to configure AWS in the next steps, and enter the audience back in Elastic at the end.
+You use the issuer and subject to configure AWS in the next steps. After AWS creates the role, you enter its role ARN back in Elastic.
 ::::::
 
 ::::::{step} Create an OpenID Connect identity provider
-Create an IAM identity provider that trusts the tokens Elastic issues. Set its URL to the JWT issuer and its client ID to the audience from the previous step.
+Create an IAM identity provider that trusts the tokens Elastic issues. Set its URL to the JWT issuer and its client ID to `sts.amazonaws.com`. If you choose a custom audience instead, use the same value in AWS and in the Elastic data source's `jwt_audience` setting.
 
 :::{dropdown} Example: create the provider with the AWS CLI
 Refer to the AWS IAM documentation for the authoritative steps and for console-based setup.
