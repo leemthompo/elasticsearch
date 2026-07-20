@@ -19,6 +19,10 @@ The following data source types are supported:
 :::{include} _snippets/federated-data/supported-data-source-types.md
 :::
 
+:::{note}
+Other S3-compatible services have not been validated and are not supported for this technical preview.
+:::
+
 ## Manage data sources in the UI
 
 In {{kib}}, you connect and manage data sources from the **Data sources** tab under **Data management** > **{{esql}} Data Federation**.
@@ -204,7 +208,7 @@ The following settings are available for `s3` data sources:
 | Setting | Required | Description |
 |---|---|---|
 | `region` | No | The bucket's AWS region, for example `us-east-1`. Defaults to `us-east-1` if omitted. Set it to match the bucket's region, otherwise requests to the bucket fail. |
-| `endpoint` | No | An explicit Amazon S3 endpoint override. Other S3-compatible services are not supported for this technical preview. |
+| `endpoint` | No | An explicit Amazon S3 endpoint override. |
 
 :::{tip}
 A data source connects to a single region. To query buckets in more than one region, create a separate data source for each region.
