@@ -149,6 +149,48 @@ curl -X PUT "${ELASTICSEARCH_URL}/_query/dataset/access_logs" \
 
 ::::
 
+### Declare a dataset mapping
+
+By default, {{es}} infers a dataset's schema from its files. You can instead add an optional `mappings` block to the create or update request to control column names and types. Dataset mappings are currently available only through the API; the {{kib}} **Add dataset** flyout does not expose them.
+
+The following example declares the complete schema, renames the physical `event_time` column to `@timestamp`, supplies its date format, and uses `request_id` as the row's `_id`:
+
+```console
+PUT /_query/dataset/access_logs
+{
+  "data_source": "prod_s3_logs",
+  "resource": "s3://logs-bucket/access/**/*.csv",
+  "mappings": {
+    "dynamic": "false",
+    "properties": {
+      "@timestamp": {
+        "type": "date",
+        "path": "event_time",
+        "format": "yyyy-MM-dd HH:mm:ss"
+      },
+      "request_id": { "type": "keyword" },
+      "service": { "type": "keyword" },
+      "status_code": { "type": "integer" }
+    },
+    "_id": {
+      "path": "request_id"
+    }
+  }
+}
+```
+
+The `mappings` block supports:
+
+- `properties`: Columns keyed by their logical name. Each column requires a `type`.
+  - `path`: Optional physical column name. Use it to expose a file column under a different logical name, including renaming a timestamp column to `@timestamp`.
+  - `format`: Optional date parsing pattern for a column with type `date`.
+- `_id.path`: Optional source column whose value becomes the row's `_id`.
+- `dynamic`: Controls undeclared columns. The default, `true`, overlays the declared columns on the inferred schema. Set it to `false` to treat the declaration as the complete schema, skip schema inference for text formats, and leave undeclared columns unavailable to queries.
+
+:::{note}
+With `dynamic: false`, declared columns in CSV and TSV files bind by position. For self-describing columnar formats such as Parquet, declared column names and types must match the file schema unless you use `path` to rename a column.
+:::
+
 ### Get a dataset
 
 Retrieves a dataset by name.
