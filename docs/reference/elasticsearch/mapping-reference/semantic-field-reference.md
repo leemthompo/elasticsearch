@@ -145,6 +145,8 @@ Provide non-text input as an object with the following properties:
 `format`
 :   (Optional, string) Input format. The only supported format for non-text input is `base64`, which is also the default.
 
+Each non-text value has a default maximum decoded size of 1 MB. Elasticsearch rejects larger values with an HTTP `400` response. On self-managed deployments and Elastic Cloud Hosted, you can change the limit with the dynamic [`indices.inference.max_binary_input_size`](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-cluster-put-settings) cluster setting, up to 20 MB. In Elasticsearch Serverless, the limit is fixed at 1 MB.
+
 The following example indexes an image:
 
 ```console
