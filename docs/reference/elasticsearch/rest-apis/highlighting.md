@@ -48,7 +48,7 @@ This is the default highlighter for all `text` and `keyword` fields.
 
 ### Semantic Highlighter [semantic-highlighter]
 
-The `semantic` highlighter is designed for use with [`semantic`](/reference/elasticsearch/mapping-reference/semantic.md) and [`semantic_text`](/reference/elasticsearch/mapping-reference/semantic-text.md) fields. It identifies and extracts the most relevant field values or text fragments based on their semantic similarity to the query. For non-text values in a `semantic` field, it returns the complete data URL of each matching value.
+The `semantic` highlighter is designed for use with [`semantic`](/reference/elasticsearch/mapping-reference/semantic-field.md) and [`semantic_text`](/reference/elasticsearch/mapping-reference/semantic-text.md) fields. It identifies and extracts the most relevant field values or text fragments based on their semantic similarity to the query. For non-text values in a `semantic` field, it returns the complete data URL of each matching value.
 
 By default, `semantic` and `semantic_text` fields use the semantic highlighter.
 

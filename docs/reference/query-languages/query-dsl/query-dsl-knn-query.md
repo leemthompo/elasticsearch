@@ -10,7 +10,7 @@ applies_to:
 # Knn query [query-dsl-knn-query]
 
 
-Finds the *k* nearest vectors to a query vector, as measured by a similarity metric. The `knn` query finds nearest vectors through approximate search on indexed [`dense_vector`](/reference/elasticsearch/mapping-reference/dense-vector.md), [`semantic`](/reference/elasticsearch/mapping-reference/semantic.md), or [`semantic_text`](/reference/elasticsearch/mapping-reference/semantic-text.md) fields that use dense vectors. For `dense_vector` fields, you can also use the [top-level `knn` section](docs-content://solutions/search/vector/knn.md) of a search request.
+Finds the *k* nearest vectors to a query vector, as measured by a similarity metric. The `knn` query finds nearest vectors through approximate search on indexed [`dense_vector`](/reference/elasticsearch/mapping-reference/dense-vector.md), [`semantic`](/reference/elasticsearch/mapping-reference/semantic-field.md), or [`semantic_text`](/reference/elasticsearch/mapping-reference/semantic-text.md) fields that use dense vectors. For `dense_vector` fields, you can also use the [top-level `knn` section](docs-content://solutions/search/vector/knn.md) of a search request.
 
 ::::{note}
 The top-level `knn` option does not support `semantic` or `semantic_text` fields. To run a kNN search on either field type, use the `knn` query described on this page. For text query input, you can also use a [`match` query](/reference/query-languages/query-dsl/query-dsl-match-query.md), which is the simplest approach.
@@ -108,7 +108,7 @@ PUT my-image-index
 ## Top-level parameters for `knn` [knn-query-top-level-parameters]
 
 `field`
-:   (Required, string) The name of the vector field to search against. Must be a [`dense_vector` field with indexing enabled](/reference/elasticsearch/mapping-reference/dense-vector.md#index-vectors-knn-search), a [`semantic` field](/reference/elasticsearch/mapping-reference/semantic.md), or a [`semantic_text` field](/reference/elasticsearch/mapping-reference/semantic-text.md) with a compatible dense vector {{infer}} model.
+:   (Required, string) The name of the vector field to search against. Must be a [`dense_vector` field with indexing enabled](/reference/elasticsearch/mapping-reference/dense-vector.md#index-vectors-knn-search), a [`semantic` field](/reference/elasticsearch/mapping-reference/semantic-field.md), or a [`semantic_text` field](/reference/elasticsearch/mapping-reference/semantic-text.md) with a compatible dense vector {{infer}} model.
 
 $$$knn-query-query-vector$$$ `query_vector`
 :   (Optional, array of floats or string) Query vector. Must have the same number of dimensions as the vector field you are searching against.
@@ -358,7 +358,7 @@ Note that nested `knn` only supports `score_mode=max`.
 The top-level `knn` search option does not support `semantic` or `semantic_text` fields. Use the `knn` query shown below to run a kNN search on an inference field that uses dense vectors. For text query input, you can also use a [`match` query](/reference/query-languages/query-dsl/query-dsl-match-query.md) directly on the field.
 ::::
 
-Elasticsearch supports `knn` queries over [`semantic`](/reference/elasticsearch/mapping-reference/semantic.md) fields and [`semantic_text`](/reference/elasticsearch/mapping-reference/semantic-text.md) fields that use dense vectors.
+Elasticsearch supports `knn` queries over [`semantic`](/reference/elasticsearch/mapping-reference/semantic-field.md) fields and [`semantic_text`](/reference/elasticsearch/mapping-reference/semantic-text.md) fields that use dense vectors.
 
 Here is an example using the `query_vector_builder`:
 
@@ -386,7 +386,7 @@ provided as it can be inferred from the `semantic_text` field mapping.
 Knn search using query vectors over `semantic_text` fields is also supported,
 with no change to the API.
 
-For `semantic` fields, use the [`embedding`](#knn-query-builder-embedding) query vector builder for text or multimodal input, or provide a compatible raw `query_vector`. The `inference_id` can be inferred from the field mapping. Refer to [Query a `semantic` field](/reference/elasticsearch/mapping-reference/semantic.md#query-semantic-field) for an example.
+For `semantic` fields, use the [`embedding`](#knn-query-builder-embedding) query vector builder for text or multimodal input, or provide a compatible raw `query_vector`. The `inference_id` can be inferred from the field mapping. Refer to [Query a `semantic` field](/reference/elasticsearch/mapping-reference/semantic-field-reference.md#query-semantic-field) for an example.
 
 ## Build query vectors for knn search
 

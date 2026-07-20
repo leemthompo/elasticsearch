@@ -1,44 +1,13 @@
 ---
-navigation_title: "Semantic"
+navigation_title: "Reference"
 applies_to:
   stack: preview 9.5
   serverless: preview
 ---
 
-# Semantic field type [semantic-field]
+# Semantic field type reference [semantic-field-reference]
 
-:::::{warning}
-The `semantic` field mapping can be added regardless of license state. However, it calls the [{{infer-cap}} API](https://www.elastic.co/docs/api/doc/elasticsearch/group/endpoint-inference), which requires an [appropriate license](https://www.elastic.co/subscriptions). Using a `semantic` field without the appropriate license causes operations such as indexing and reindexing to fail.
-:::::
-
-The `semantic` field type simplifies semantic and multimodal search across text, images, audio, video, and PDF files. With a compatible multimodal embedding model, you can search across content types—for example, use natural-language text to find images, or use an image to find related text and images. The field automatically:
-
-- Generates embeddings when you index field values, without an ingest pipeline or {{infer}} processor.
-- Splits long text into smaller passages, called chunks.
-- Configures and stores the underlying dense vectors based on the field's {{infer}} endpoint.
-- Searches the embeddings generated for each value or text chunk.
-
-:::{include} _snippets/semantic-field-type-comparison.md
-:::
-
-The following example maps `content` as a `semantic` field:
-
-```console
-PUT my-semantic-index
-{
-  "mappings": {
-    "properties": {
-      "content": {
-        "type": "semantic",
-        "inference_id": "my-embedding-endpoint"
-      }
-    }
-  }
-}
-```
-% TEST[skip:Requires an embedding {{infer}} endpoint]
-
-Unlike [`semantic_text`](./semantic-text.md), a `semantic` field has no default {{infer}} endpoint. You must configure an endpoint that uses the `embedding` task type and specify its ID in the field mapping.
+This page provides technical reference information for the `semantic` field type, including mapping parameters, {{infer}} endpoint requirements, accepted input, chunking, querying, retrieval, highlighting, and limitations.
 
 ## Parameters for `semantic` fields [semantic-params]
 
@@ -128,24 +97,22 @@ A `semantic` field requires an {{infer}} endpoint with the `embedding` task type
 - The vector dimensions, similarity measure, and element type.
 - The default text chunking settings.
 
-The following example creates a Jina AI endpoint for a multimodal embedding model:
+The following example creates an endpoint for a Jina multimodal embedding model through the [Elastic {{infer-cap}} Service (EIS)](docs-content://explore-analyze/elastic-inference/eis.md). This configuration does not require a separate Jina API key:
 
 ```console
 PUT _inference/embedding/my-embedding-endpoint
 {
-  "service": "jinaai",
+  "service": "elastic",
   "service_settings": {
-    "model_id": "jina-embeddings-v4",
-    "api_key": "JinaAI-API-key",
-    "multimodal_model": true
+    "model_id": "jina-embeddings-v5-omni-small"
   }
 }
 ```
-% TEST[skip:Requires a Jina AI account and API key]
+% TEST[skip:Requires access to EIS]
 
 The `embedding` task type does not guarantee that every endpoint supports every modality. Check the model and service documentation before indexing non-text input.
 
-Removing an endpoint causes indexing and semantic queries to fail for fields that reference it. Elasticsearch prevents you from deleting an endpoint that is referenced by an inference field.
+If a referenced endpoint is unavailable, indexing and searches against the field fail. Elasticsearch prevents you from deleting an endpoint that is referenced by an inference field.
 
 ## Accepted input [semantic-input]
 
@@ -227,12 +194,15 @@ Because chunks are stored as nested documents, the `docs.count` value from the [
 
 A compatible multimodal endpoint enables cross-modal search. For example, you can use a text query to find images, or an image query to find related text and images.
 
-The supported query mechanism depends on the type of query input:
+You can query `semantic` fields with Query DSL or the retriever API. ES|QL does not currently support `semantic` fields.
+
+### Query DSL [semantic-query-dsl]
+
+Query DSL supports the following queries:
 
 - Use a [`match` query](/reference/query-languages/query-dsl/query-dsl-match-query.md) for text query input. Elasticsearch uses the field's search {{infer}} endpoint to generate the query embedding.
 - Use a [`knn` query](/reference/query-languages/query-dsl/query-dsl-knn-query.md) with the `embedding` query vector builder for text or non-text input.
 - Use a `knn` query with `query_vector` if you already have a vector compatible with the field's endpoint.
-- In ES|QL, use [`KNN`](/reference/query-languages/esql/functions-operators/dense-vector-functions/knn.md) with [`EMBEDDING`](/reference/query-languages/esql/functions-operators/dense-vector-functions/embedding.md).
 
 The following example searches for images using image input:
 
@@ -259,6 +229,63 @@ POST my-semantic-index/_search
 % TEST[skip:Requires a configured semantic field]
 
 When all targeted fields are inference fields with the same endpoint, Elasticsearch obtains `inference_id` from the field mapping. Specify `inference_id` in the query vector builder when querying a `semantic` field together with a `dense_vector` field or fields that use different endpoints.
+
+### Retrievers [semantic-retrievers]
+
+Use a [`standard` retriever](/reference/elasticsearch/rest-apis/retrievers/standard-retriever.md) to run a supported Query DSL query against a `semantic` field. The following example uses a `match` query with text input:
+
+```console
+POST my-semantic-index/_search
+{
+  "retriever": {
+    "standard": {
+      "query": {
+        "match": {
+          "content": "lunar exploration"
+        }
+      }
+    }
+  }
+}
+```
+% TEST[skip:Requires a configured semantic field]
+
+For kNN search through the retriever API, place a `knn` query inside a `standard` retriever. The dedicated [`knn` retriever](/reference/elasticsearch/rest-apis/retrievers/knn-retriever.md) targets `dense_vector` fields and cannot target a `semantic` field directly.
+
+You can use the `standard` retriever as a child of a compound retriever, such as [RRF](/reference/elasticsearch/rest-apis/retrievers/rrf-retriever.md) or the [`linear` retriever](/reference/elasticsearch/rest-apis/retrievers/linear-retriever.md), to combine semantic search with other retrieval strategies.
+
+### ES|QL [semantic-esql]
+
+ES|QL does not currently support querying `semantic` fields. Use Query DSL or a retriever instead.
+
+## Automatic pre-filtering [semantic-automatic-prefiltering]
+
+When a `match` query searches a `semantic` field inside a Query DSL `bool` query, Elasticsearch automatically applies the other `must`, `filter`, and `must_not` clauses as [pre-filters](/reference/query-languages/query-dsl/query-dsl-knn-query.md#knn-query-filtering) to the vector search. The vector search finds the most semantically relevant results within the filtered set of documents.
+
+The following example searches for semantically relevant content while limiting the results to published documents:
+
+```console
+POST my-semantic-index/_search
+{
+  "query": {
+    "bool": {
+      "must": {
+        "match": {
+          "content": "lunar exploration"
+        }
+      },
+      "filter": {
+        "term": {
+          "status": "published"
+        }
+      }
+    }
+  }
+}
+```
+% TEST[skip:Requires a configured semantic field]
+
+Automatic pre-filtering does not apply when you use a `knn` query directly. Use the `knn` query's `filter` parameter to define pre-filters explicitly.
 
 ## Retrieve values, chunks, and embeddings [retrieve-semantic-field]
 
@@ -317,4 +344,5 @@ The `semantic` field has the following limitations:
 - It cannot be created by a [dynamic template](docs-content://manage-data/data-store/mapping/dynamic-templates.md).
 - It cannot be placed in an object that has `subobjects` disabled.
 - It does not support term-level queries, sorting, scripting, or aggregations.
+- ES|QL does not support querying `semantic` fields.
 - It supports only endpoints with the `embedding` task type and dense-vector embeddings. For sparse embeddings, use [`semantic_text`](./semantic-text.md).

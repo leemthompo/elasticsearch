@@ -98,7 +98,7 @@ Dates
 [`search_as_you_type`](/reference/elasticsearch/mapping-reference/search-as-you-type.md)
 :   `text`-like type for as-you-type completion.
 
-[`semantic`](/reference/elasticsearch/mapping-reference/semantic.md) {applies_to}`stack: preview 9.5` {applies_to}`serverless: preview`
+[`semantic`](/reference/elasticsearch/mapping-reference/semantic-field.md) {applies_to}`stack: preview 9.5` {applies_to}`serverless: preview`
 :   Generates and searches embeddings for text and multimodal content.
 
 [`semantic_text`](/reference/elasticsearch/mapping-reference/semantic-text.md)
