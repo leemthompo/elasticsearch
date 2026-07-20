@@ -14,21 +14,21 @@ Because federated data lives outside {{es}}, connecting to a private store means
 
 ## Credentials
 
-When a data source connects to a private bucket, its credentials are stored in the cluster state. {{es}} protects these credentials with encryption at rest and redaction in API responses.
+When a data source connects to a private bucket, its encrypted credentials are stored in the cluster state. {{es}} protects these credentials with encryption at rest and redaction in API responses.
 
 ### Credential encryption
 
 <!-- TODO: restore the link to the project encryption key page once PR #152731 (docs/reference/elasticsearch/project-encryption-key.md) merges. Linking now breaks the build because the target does not exist on this branch. Link markup: [project encryption key](../../elasticsearch/project-encryption-key.md) -->
-When a data source includes credentials, {{es}} encrypts them using cluster state encryption.
+When a data source includes credentials, {{es}} encrypts them using the project encryption key before storing them in the cluster state.
 
-The cluster state key is available automatically in most environments, including {{ech}}, {{ece}}, {{eck}}, and {{serverless-short}}.
+The project encryption key is available automatically in most environments, including {{ech}}, {{ece}}, {{eck}}, and {{serverless-short}}.
 
 <!-- TODO: restore this line once PR #152731 (docs/reference/elasticsearch/project-encryption-key.md) merges. It links to a page not yet on this branch and would break the build.
 For how to set the password, rotate the key, and check its health, refer to [project encryption key](../../elasticsearch/project-encryption-key.md). -->
 
 For how to set the password, rotate the key, and check its health, refer to your deployment's encryption documentation.
 
-By default, if the cluster state encryption key is not available when you create a data source, a `PUT /_query/data_source` request that includes credentials returns a `503` error. Retry once the key is available, or configure the key first.
+By default, if the project encryption key is not available when you create a data source, a `PUT /_query/data_source` request that includes credentials returns a `503` error. Retry once the key is available, or configure the key first.
 
 ### Credential masking
 
