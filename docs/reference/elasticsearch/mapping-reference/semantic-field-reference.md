@@ -120,10 +120,6 @@ A `semantic` field accepts one or more values. Values can be text, images, audio
 
 ### Text input [semantic-text-input]
 
-:::{tip}
-If you're working exclusively with text, consider using [`semantic_text`](./semantic-text.md), which is designed for text-only semantic search.
-:::
-
 Provide text directly as a JSON string:
 
 ```console
@@ -135,6 +131,10 @@ POST my-semantic-index/_doc
 % TEST[skip:Requires a configured semantic field]
 
 Long text is divided according to the field's `chunking_settings`. To provide text that is already chunked, set the chunking strategy to `none` and index an array of strings.
+
+:::{tip}
+If you're working exclusively with text, consider using [`semantic_text`](./semantic-text.md).
+:::
 
 ### Non-text input [semantic-non-text-input]
 
