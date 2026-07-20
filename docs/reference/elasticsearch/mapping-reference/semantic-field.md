@@ -233,5 +233,5 @@ Refer to the [`semantic` field reference](./semantic-field-reference.md) for the
 
 - [Parameters for `semantic` fields](./semantic-field-reference.md#semantic-params)
 - [{{infer-cap}} endpoint requirements](./semantic-field-reference.md#semantic-inference-endpoint)
-- [Accepted input](./semantic-field-reference.md#semantic-input)
+- [Supported input types](./semantic-field-reference.md#semantic-input)
 - [Limitations](./semantic-field-reference.md#semantic-limitations)

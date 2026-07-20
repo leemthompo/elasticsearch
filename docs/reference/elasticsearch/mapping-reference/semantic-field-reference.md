@@ -114,9 +114,9 @@ The `embedding` task type does not guarantee that every endpoint supports every 
 
 If a referenced endpoint is unavailable, indexing and searches against the field fail. Elasticsearch prevents you from deleting an endpoint that is referenced by an inference field.
 
-## Accepted input [semantic-input]
+## Supported input types [semantic-input]
 
-A `semantic` field accepts a single value or an array of values. An array can contain a mix of text and non-text values.
+A `semantic` field accepts one or more values. Values can be text, images, audio, video, or PDFs, and an array can mix input types.
 
 ### Text input [semantic-text-input]
 
