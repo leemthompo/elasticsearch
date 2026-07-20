@@ -1,4 +1,4 @@
-## `semantic_text` or `semantic`
+## Should I use [`semantic_text`](/reference/elasticsearch/mapping-reference/semantic-text.md) or [`semantic`](/reference/elasticsearch/mapping-reference/semantic-field.md)? [semantic_text-or-semantic]
 
 Elasticsearch provides two field types that generate and store embeddings automatically. Choose the field type based on the content and embedding model you want to use.
 

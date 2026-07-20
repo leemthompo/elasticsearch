@@ -18,12 +18,15 @@ The `semantic` field type simplifies semantic and multimodal search across text,
 - Configures and stores the underlying dense vectors based on the field's {{infer}} endpoint.
 - Searches the embeddings generated for each value or text chunk.
 
-:::{include} _snippets/semantic-field-type-comparison.md
-:::
+## `semantic` field quickstart [semantic-quickstart]
 
-## Basic `semantic` mapping example [semantic-basic-mapping]
+This quickstart maps a `semantic` field, indexes an image, and searches for the image using natural-language text. Before you start, configure an {{infer}} endpoint with the `embedding` task type that supports both text and image input.
 
-The following example maps `content` as a `semantic` field:
+:::::{stepper}
+
+::::{step} Create an index
+
+Map `content` as a `semantic` field. Replace `my-embedding-endpoint` with the ID of your {{infer}} endpoint:
 
 ```console
 PUT my-semantic-index
@@ -41,6 +44,53 @@ PUT my-semantic-index
 % TEST[skip:Requires an embedding {{infer}} endpoint]
 
 Unlike [`semantic_text`](./semantic-text.md), a `semantic` field has no default {{infer}} endpoint. You must configure an endpoint that uses the `embedding` task type and specify its ID in the field mapping.
+
+::::
+
+::::{step} Index an image
+
+Encode an image as a Base64 [data URL](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/data), then index it in the `content` field:
+
+```console
+PUT my-semantic-index/_doc/1
+{
+  "content": {
+    "type": "image",
+    "value": "data:image/jpeg;base64,<BASE64_ENCODED_IMAGE>"
+  }
+}
+```
+% TEST[skip:Requires a Base64-encoded image and a multimodal embedding endpoint]
+
+Elasticsearch uses the field's {{infer}} endpoint to generate and index an embedding for the image.
+
+::::
+
+::::{step} Search for the image using text
+
+Run a `match` query against the `content` field. For example, if the indexed image shows a cat on a windowsill:
+
+```console
+GET my-semantic-index/_search
+{
+  "_source": false,
+  "query": {
+    "match": {
+      "content": "a cat sitting on a windowsill"
+    }
+  }
+}
+```
+% TEST[skip:Requires an indexed image and a multimodal embedding endpoint]
+
+The endpoint embeds the text query in the same vector space as the indexed image and returns the most semantically similar results.
+
+::::
+
+:::::
+
+:::{include} _snippets/semantic-field-type-comparison.md
+:::
 
 ## Reference [semantic-reference]
 
