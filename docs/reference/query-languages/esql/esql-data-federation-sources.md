@@ -70,6 +70,10 @@ Data sources are managed under the `/_query/data_source` endpoint. All data sour
 | [List all](#list-all-data-sources) | `GET /_query/data_source` |
 | [Delete](#delete-a-data-source) | `DELETE /_query/data_source/{name}` |
 
+<!-- # https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-esql-put-data-source -->
+<!-- # https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-esql-get-data-source -->
+<!-- # https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-esql-delete-data-source -->
+
 ### Create or update a data source
 
 `PUT` creates a new data source or replaces an existing one entirely. The create call does not validate connectivity to the external system. To verify that credentials and endpoint are correct, create a dataset that references the data source and query it.

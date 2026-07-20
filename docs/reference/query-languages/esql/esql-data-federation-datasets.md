@@ -98,6 +98,10 @@ Datasets are managed under the `/_query/dataset` endpoint. All dataset operation
 | [List all](#list-all-datasets) | `GET /_query/dataset` |
 | [Delete](#delete-a-dataset) | `DELETE /_query/dataset/{name}` |
 
+<!-- # https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-esql-put-dataset -->
+<!-- # https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-esql-get-dataset -->
+<!-- # https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-esql-delete-dataset -->
+
 ### Create or update a dataset
 
 `PUT` creates a new dataset or replaces an existing one entirely.
