@@ -112,6 +112,7 @@ The operations below require structures that only exist in an {{es}} index, such
 | KNN | KNN requires a vector field from an index mapping, which a dataset does not have. | `… cannot operate on [<field>], which is not a field from an index mapping` |
 | KQL, QSTR | These query an {{es}} index. | `… cannot be used after [FROM <dataset>]` |
 | Document-level security (DLS) and field-level security (FLS) | A dataset's `read` grant cannot carry document- or field-level security. Queries where DLS or FLS applies to a dataset are rejected during authorization. | `Datasets with document or field level security restrictions are not supported` |
+| [Cross-cluster search](/reference/query-languages/esql/esql-cross-clusters.md) and [cross-project search](/reference/query-languages/esql/esql-cross-serverless-projects.md) | Datasets on a remote cluster or project cannot be queried. Only local datasets are supported. | `remote datasets are not supported` |
 | Snapshot and restore | Data sources and datasets cannot be snapshotted or restored. | |
 | Parquet MAP and nested LIST | These complex types are not currently supported and return null. STRUCT is supported and flattened to dot-notation column names (for example, `address.city`). | |
 
