@@ -61,7 +61,7 @@ A dataset's resource path can use glob patterns to match many files. Two cluster
 
 If your dataset exceeds these limits, narrow the resource path or adjust the settings. Refer to [cluster settings](esql-data-federation-cluster-settings.md) for details.
 
-## Combine datasets with indices
+## Query datasets and indices together
 
 Datasets share the same namespace as indices, aliases, and [{{esql}} views](esql-views.md), so `FROM` resolves each name independently. You can query a dataset and an index together in a single `FROM`:
 
