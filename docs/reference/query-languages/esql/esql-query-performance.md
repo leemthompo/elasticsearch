@@ -478,7 +478,7 @@ POST _tasks/<task_id>/_cancel
 ```
 
 
-## External datasets
+## Optimize queries for {{esql}} Data Federation
 
 ```{applies_to}
 stack: preview =9.5
