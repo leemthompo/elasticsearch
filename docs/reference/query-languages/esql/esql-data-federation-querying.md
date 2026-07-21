@@ -70,7 +70,7 @@ When sources have different schemas, columns that do not exist in a given source
 
 ## Metadata columns
 
-Metadata columns are available through `METADATA`:
+[Metadata columns](/reference/query-languages/esql/esql-metadata-fields.md) are available using the `METADATA` directive:
 
 | Column | Returned for a dataset |
 |---|---|
