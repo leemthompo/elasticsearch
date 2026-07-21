@@ -336,6 +336,8 @@ POST my-semantic-index/_search
 
 For text, the response contains the text of each indexed chunk. For non-text input, the response contains the corresponding input object.
 
+For a detailed text-only example, refer to [Retrieve indexed `semantic_text` chunks](./semantic-text-search-retrieval.md#retrieving-indexed-chunks).
+
 To include generated embeddings and their chunk metadata in `_source`, set `_source.exclude_vectors` to `false`:
 
 ```console
@@ -361,6 +363,8 @@ The [`semantic` highlighter](/reference/elasticsearch/rest-apis/highlighting.md)
 - For non-text input, it returns the complete [data URL](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/data) of each matching value.
 
 Use `number_of_fragments` to limit the number of matches and `order: score` to return the most relevant matches first.
+
+For text-specific options and examples, refer to [Highlight the most relevant `semantic_text` fragments](./semantic-text-search-retrieval.md#highlighting-fragments).
 
 ## Limitations [semantic-limitations]
 

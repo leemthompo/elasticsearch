@@ -109,7 +109,7 @@ Unlike [`semantic_text`](./semantic-text.md), a `semantic` field has no default 
 
 ::::::{step} Index an image
 
-This example uses [*Cat on windowsill*](https://commons.wikimedia.org/wiki/File:Cat_on_windowsill_-_geograph.org.uk_-_435478.jpg) by ceridwen, licensed under [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/). Download the image:
+This example uses [*Cat on windowsill*](https://commons.wikimedia.org/wiki/File:Cat_on_windowsill_-_geograph.org.uk_-_435478.jpg). Download the image using `curl` in your terminal:
 
 ```bash
 curl --fail-with-body --silent --show-error --location \
