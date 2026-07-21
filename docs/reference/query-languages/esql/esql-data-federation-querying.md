@@ -132,5 +132,17 @@ Complex Parquet types MAP and nested LIST are not currently supported and return
 **503 error when creating a data source with credentials**
 : {{es}} encrypts credentials before storing them. If the cluster state encryption key is not available, the request returns `503 SERVICE_UNAVAILABLE`. Refer to [credential encryption](esql-data-federation-security.md#credential-encryption) for details.
 
+**Discovering a dataset's columns**
+: To see what columns a dataset contains and their types, query it with `LIMIT 1`. This returns one row with all columns, which is enough to inspect the schema. There is no separate schema discovery command for datasets.
+
+**New files not appearing in query results**
+: {{es}} caches file listings for each dataset. If you recently added files to your bucket, they may not appear until the listing cache expires. The default listing cache TTL is 30 seconds. Refer to [cluster settings](esql-data-federation-cluster-settings.md) to adjust it.
+
+**Columns with unexpected types or missing values**
+: When {{es}} infers a dataset's schema from its files, it may infer types differently than you expect. For example, a date column may appear as a keyword if the values do not match the default datetime format. Use dataset [mappings](esql-data-federation-datasets.md#declare-a-dataset-mapping) to declare column types explicitly, or adjust the [`datetime_format`](esql-data-federation-datasets.md#csv-and-tsv-settings) setting. If some rows have null values for a column that exists in other files, check the dataset's [`schema_resolution`](esql-data-federation-datasets.md#schema-merge-strategies) setting.
+
+**Access denied or connection errors**
+: Credential and permission errors appear at query time, not when the data source is created. If a query returns an access denied error, verify that the credentials in the data source have the required permissions (such as `s3:ListBucket` and `s3:GetObject`) and that the region is correct.
+
 **Dataset names do not appear in autocomplete**
 : The {{kib}} ES|QL editor does not currently surface dataset names in autocomplete or `FROM` suggestions. Type the dataset name manually.
