@@ -1,6 +1,6 @@
 ---
 navigation_title: "Connect data sources"
-description: "Create and manage ES|QL federated data sources, including S3 connection settings and authentication models."
+description: "Connect Elasticsearch to external storage with ES|QL Data Federation: configure S3 data sources, regions, endpoints, and authentication."
 applies_to:
   stack: preview =9.5
   serverless: preview

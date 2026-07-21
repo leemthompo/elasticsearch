@@ -1,6 +1,6 @@
 ---
 navigation_title: "Add datasets"
-description: "Create and manage ES|QL federated datasets, including supported file formats, dataset settings, and schema inference."
+description: "Create ES|QL Data Federation datasets to query files in external storage: configure file formats, Parquet and CSV settings, and schema inference."
 applies_to:
   stack: preview =9.5
   serverless: preview

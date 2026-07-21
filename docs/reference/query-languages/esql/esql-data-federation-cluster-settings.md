@@ -1,6 +1,6 @@
 ---
 navigation_title: "Cluster settings"
-description: "Cluster settings for ES|QL federated data sources and datasets."
+description: "Configure ES|QL Data Federation cluster settings: object limits, request concurrency, file discovery, authentication gates, and caching."
 applies_to:
   stack: preview =9.5
   serverless: unavailable

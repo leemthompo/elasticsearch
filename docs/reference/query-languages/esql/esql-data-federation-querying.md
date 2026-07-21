@@ -1,6 +1,6 @@
 ---
 navigation_title: "Query datasets"
-description: "Learn how ES|QL queries external datasets in object storage, including filter pushdown, partition pruning, column selection, caching, and current limitations."
+description: "Query external data with ES|QL Data Federation: filter pushdown, partition pruning, column selection, caching, and troubleshooting."
 applies_to:
   stack: preview =9.5
   serverless: preview

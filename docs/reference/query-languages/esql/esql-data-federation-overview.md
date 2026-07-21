@@ -1,6 +1,6 @@
 ---
 navigation_title: "Overview"
-description: "Overview of querying data stored outside Elasticsearch using ES|QL, including key concepts, supported data sources, and file formats."
+description: "ES|QL Data Federation overview: query data in external storage from Elasticsearch, with supported data source types and file formats."
 applies_to:
   stack: preview =9.5
   serverless: preview
