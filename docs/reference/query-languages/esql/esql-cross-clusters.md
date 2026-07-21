@@ -452,7 +452,7 @@ For more information about upgrades, see [Upgrading {{es}}](docs-content://deplo
 
 ## Limitations
 
-### Datasets across clusters
+### Query datasets across clusters
 
 You can query datasets created through [{{esql}} Data Federation](/reference/query-languages/esql/esql-data-federation.md) on the local cluster only. Querying a dataset on a remote cluster returns an error.
 
