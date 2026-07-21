@@ -10,12 +10,7 @@ products:
 
 # Query external datasets with {{esql}} Data Federation
 
-A dataset is a read source for the standard {{esql}} pipeline. Every processing command operates on it as on an index. A single query can read more than one source:
-
-* **Several datasets:** `FROM sales, returns` reads both and combines the results.
-* **An index together with a dataset:** `FROM orders, sales` combines data held in {{es}} with data held in object storage.
-
-For a worked example, refer to [get started with {{esql}} Data Federation](esql-data-federation-quickstart.md).
+A dataset is a read source for the standard {{esql}} pipeline. You query it with `FROM` just like an index, and every processing command works the same way it does for an index. For a worked example, refer to [get started with {{esql}} Data Federation](esql-data-federation-quickstart.md).
 
 ## How queries read external data
 
