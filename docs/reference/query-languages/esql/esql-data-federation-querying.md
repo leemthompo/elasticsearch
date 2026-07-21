@@ -118,6 +118,8 @@ The operations below require structures that only exist in an {{es}} index, such
 
 ## Troubleshooting
 
+If a query against a dataset returns unexpected results or errors, check the following common causes.
+
 Unexpected nulls in query results
 :   If you query a dataset and an index together with `FROM`, columns that do not exist in one source return null for rows from that source. Use `METADATA _index` to check which source each row came from. Separately, complex Parquet types MAP and nested LIST return null because they are not currently supported.
 
