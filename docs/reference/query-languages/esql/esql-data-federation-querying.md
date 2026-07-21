@@ -1,6 +1,6 @@
 ---
 navigation_title: "Query datasets"
-description: "Query ES|QL federated datasets with FROM, including metadata columns and unsupported operations."
+description: "Learn how ES|QL queries external datasets in object storage, including filter pushdown, partition pruning, column selection, caching, and current limitations."
 applies_to:
   stack: preview =9.5
   serverless: preview
@@ -10,10 +10,68 @@ products:
 
 # Query external datasets with {{esql}} Data Federation
 
-A dataset is a read source for the standard {{esql}} pipeline. Every processing command operates on it as on an index. Filters and limits are applied during the file scan. A single query can read more than one source:
+A dataset is a read source for the standard {{esql}} pipeline. Every processing command operates on it as on an index. A single query can read more than one source:
 
 * **Several datasets:** `FROM sales, returns` reads both and combines the results.
 * **An index together with a dataset:** `FROM orders, sales` combines data held in {{es}} with data held in object storage.
+
+For a worked example, refer to [get started with {{esql}} Data Federation](esql-data-federation-quickstart.md).
+
+## How queries read external data
+
+When you query a dataset, {{es}} reads data from object storage (such as Amazon S3) rather than from a local index. This means every column and every row that a query touches results in network I/O. The query engine applies several optimizations automatically, and there are things you can do to help it read less data.
+
+### Column selection
+
+Use [`KEEP`](/reference/query-languages/esql/commands/keep.md) or [`DROP`](/reference/query-languages/esql/commands/drop.md) to select only the columns your query needs. For Parquet files, column selection pushes down to the reader so that unrequested columns are never fetched from storage. For CSV and NDJSON, the full row is read but unrequested columns are discarded early.
+
+In practice, this can make a significant difference. A filtered query over a Parquet dataset that selects three columns reads roughly a third of the bytes that the same query reads without column selection.
+
+### Partition pruning
+
+When a dataset's resource path uses Hive-style partitioning (for example, `year=2024/month=3/`), the engine detects partition keys automatically and promotes them to queryable columns. A `WHERE` condition on a partition column evaluates during file discovery, before any data is read. On a two-year monthly-partitioned dataset, `WHERE year = 2024 AND month = 3` skips 23 out of 24 partitions at zero I/O cost.
+
+For details on partition detection modes, refer to [dataset settings](esql-data-federation-datasets.md#common-settings).
+
+### Filter and limit pushdown
+
+[`WHERE`](/reference/query-languages/esql/commands/where.md) conditions and [`LIMIT`](/reference/query-languages/esql/commands/limit.md) push down to the file scan. For Parquet files, the engine uses row-group statistics and page indexes to skip data that cannot match the filter. Only row groups whose statistics overlap the filter condition are read, and within those row groups, late materialization reads predicate columns first and materializes other columns only for rows that survive the filter.
+
+For CSV and NDJSON, every row must be read and parsed, but rows that fail the filter are discarded before further processing.
+
+```esql
+FROM access_logs
+| WHERE status_code >= 500
+| KEEP @timestamp, status_code, request_path
+| LIMIT 100
+```
+
+The general query performance advice in [optimize {{esql}} query performance](esql-query-performance.md) applies to datasets too. In particular, adding a `WHERE`, a `KEEP`, and a `LIMIT` are the three most effective ways to reduce how much data a query reads from storage.
+
+### Caching
+
+{{es}} caches file metadata (schemas and file listings) so that repeated queries against the same dataset do not re-discover files each time. Cache TTLs are configurable through [cluster settings](esql-data-federation-cluster-settings.md). The default schema cache TTL is 5 minutes and the default listing cache TTL is 30 seconds.
+
+### File discovery limits
+
+A dataset's resource path can use glob patterns to match many files. Two cluster settings bound file discovery:
+
+- `esql.external.max_discovered_files` (default 10,000): the maximum number of files a single dataset can resolve to.
+- `esql.external.max_glob_expansion` (default 100): the maximum number of glob expansions per query.
+
+If your dataset exceeds these limits, narrow the resource path or adjust the settings. Refer to [cluster settings](esql-data-federation-cluster-settings.md) for details.
+
+## Combine datasets with indices
+
+Datasets share the same namespace as indices, aliases, and [{{esql}} views](esql-views.md), so `FROM` resolves each name independently. You can query a dataset and an index together in a single `FROM`:
+
+```esql
+FROM speedtest_data, network_incidents METADATA _index
+| KEEP _index, category, severity, avg_d_kbps, avg_lat_ms
+| LIMIT 10
+```
+
+When sources have different schemas, columns that do not exist in a given source return `null` for rows from that source. Use `METADATA _index` to see which source each row came from. The `_index` column returns the dataset name for dataset rows and the index name for index rows.
 
 ## Metadata columns
 
@@ -40,23 +98,39 @@ FROM access_logs METADATA _file.path, _file.name, _file.size
 
 ## Full-text search
 
-[`MATCH`](functions-operators/search-functions/match.md) can filter dataset rows by evaluating the query against values read from the files. This runtime search does not use an inverted index and does not contribute to `_score`; `_score` remains null for dataset rows.
+[`MATCH`](functions-operators/search-functions/match.md) can filter dataset rows by evaluating the query against values read from the files. This runtime search does not use an inverted index and does not contribute to `_score`. `_score` remains null for dataset rows.
 
-[`MATCH_PHRASE`](functions-operators/search-functions/match_phrase.md) is also available for runtime search on datasets in {applies_to}`stack: preview 9.6+` {applies_to}`serverless: preview`.
+Because there is no inverted index, `MATCH` on a dataset evaluates by scanning values row by row. For large datasets where full-text search is the primary access pattern, consider ingesting the data into {{es}} for indexed search performance.
+
+[`MATCH_PHRASE`](functions-operators/search-functions/match_phrase.md) is not currently available for datasets.
 
 ## Limitations
 
-A dataset is a file, not an {{es}} index, so the operations below are not available. Each fails with a clear error rather than wrong results.
+The operations below require structures that only exist in an {{es}} index, such as the inverted index, doc values, or time series metadata. Each fails with a clear error rather than wrong results.
 
 | Operation | Reason | Error |
 |---|---|---|
 | LOOKUP JOIN, with a dataset as the lookup target | A dataset works as the left (source) side of the join. The lookup target on the right must be an {{es}} index. | `LOOKUP JOIN against a dataset is not supported` |
 | TS (time series) | A time-series source must be an {{es}} index. | `TS command is not supported for datasets` |
 | LOGSDB and other non-standard index modes | These index modes apply only to {{es}} indices. | `LOGSDB index mode on FROM <dataset> is not supported` |
-| MATCH_PHRASE (Stack 9.5) | Runtime phrase search on datasets is available in Stack 9.6 and on serverless. | `… cannot operate on [<field>], which is not a field from an index mapping` |
+| MATCH_PHRASE | Runtime phrase search is not currently available for datasets. | `… cannot operate on [<field>], which is not a field from an index mapping` |
 | KNN | KNN requires a vector field from an index mapping, which a dataset does not have. | `… cannot operate on [<field>], which is not a field from an index mapping` |
 | KQL, QSTR | These query an {{es}} index. | `… cannot be used after [FROM <dataset>]` |
 | Document-level security (DLS) and field-level security (FLS) | A dataset's `read` grant cannot carry document- or field-level security. Queries where DLS or FLS applies to a dataset are rejected during authorization. | `Datasets with document or field level security restrictions are not supported` |
 | Snapshot and restore | Data sources and datasets cannot be snapshotted or restored. | |
 
 Complex Parquet types MAP and nested LIST are not currently supported and return null. STRUCT is supported and flattened to dot-notation column names (for example, `address.city`).
+
+## Troubleshooting
+
+**Unexpected nulls in query results**
+: If you query a dataset and an index together with `FROM`, columns that do not exist in one source return null for rows from that source. Use `METADATA _index` to check which source each row came from. Separately, complex Parquet types MAP and nested LIST return null because they are not currently supported.
+
+**Slow queries**
+: Add [`KEEP`](/reference/query-languages/esql/commands/keep.md) to select only the columns you need, add a [`WHERE`](/reference/query-languages/esql/commands/where.md) filter, and add a [`LIMIT`](/reference/query-languages/esql/commands/limit.md). For Parquet datasets, these push down to the reader and can significantly reduce the amount of data read from storage. Check the number of files your dataset's resource path resolves to. Large file counts increase query planning time.
+
+**503 error when creating a data source with credentials**
+: {{es}} encrypts credentials before storing them. If the cluster state encryption key is not available, the request returns `503 SERVICE_UNAVAILABLE`. Refer to [credential encryption](esql-data-federation-security.md#credential-encryption) for details.
+
+**Dataset names do not appear in autocomplete**
+: The {{kib}} ES|QL editor does not currently surface dataset names in autocomplete or `FROM` suggestions. Type the dataset name manually.

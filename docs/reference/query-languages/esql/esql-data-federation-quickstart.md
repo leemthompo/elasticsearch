@@ -447,6 +447,7 @@ curl -X DELETE "${ELASTICSEARCH_URL}/network_incidents" \
 
 ## Next steps
 
+- For query performance, pushdown behavior, and current limitations, refer to [query external datasets](esql-data-federation-querying.md).
 - To set up connections and authentication, refer to [connect external data sources](esql-data-federation-sources.md).
 - For file formats, dataset settings, and schema inference, refer to [select external datasets](esql-data-federation-datasets.md).
 - For a high-level overview of concepts and capabilities, refer to the [{{esql}} Data Federation overview](esql-data-federation-overview.md).
