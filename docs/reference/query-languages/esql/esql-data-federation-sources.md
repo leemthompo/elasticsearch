@@ -76,7 +76,7 @@ Data sources are managed under the `/_query/data_source` endpoint. All data sour
 
 ### Create or update a data source
 
-`PUT` creates a new data source or replaces an existing one entirely. The create call does not validate connectivity to the external system. To verify that credentials and endpoint are correct, create a dataset that references the data source and query it.
+`PUT` creates a new data source or replaces an existing one entirely. The create request does not validate connectivity to the external system. To verify that credentials and endpoint are correct, create a dataset that references the data source and query it.
 
 ::::{tab-set}
 :group: api-ref
@@ -240,7 +240,7 @@ A data source authenticates to its store with one of the models below. The model
 | Managed identity | `managed_identity` | Keyless. Uses the {{es}} node's own cloud identity, for example an EC2 instance IAM role. Operator-only and API-only, and not available in serverless. Requires `esql.datasource.managed_identity.enabled`. |
 
 :::{warning}
-Managed identity uses the cloud identity attached to each {{es}} node (for example, an IAM role on EC2 or a service account on GKE). Different nodes may have different identities, and the node that performs the connection is not guaranteed. You are responsible for configuring cloud IAM so that every node's identity has the required permissions on the target bucket. This model is best suited for single-cloud, single-tenant deployments where node identities are uniform.
+Managed identity uses the cloud identity attached to each {{es}} node (for example, an IAM role on EC2 or a service account on GKE). Different nodes might have different identities, and the node that performs the connection is not guaranteed. You are responsible for configuring cloud IAM so that every node's identity has the required permissions on the target bucket. This model is best suited for single-cloud, single-tenant deployments where node identities are uniform.
 :::
 
 ## Next steps

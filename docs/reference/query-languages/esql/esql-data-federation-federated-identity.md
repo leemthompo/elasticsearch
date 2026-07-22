@@ -23,7 +23,7 @@ Setup involves steps in both AWS and Elastic: collect values from Elastic, confi
 
 You can use this page in two ways:
 
-- Work through the steps below to understand each AWS resource and how the pieces fit together.
+- Work through the following steps to understand each AWS resource and how the pieces fit together.
 - Jump to the [complete AWS CLI example](#complete-aws-cli-example) to set it up hands-on and learn it by doing.
 
 Refer to the [AWS IAM documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html) as the authoritative reference for the commands shown here.
@@ -114,14 +114,14 @@ The following trust policy lets your identity provider assume the role, but only
 3. The same issuer prefix followed by `:sub`. Use the subject exactly as shown in the **Connect data source** flyout, including its prefix: `project:<project-id>` on serverless or `deployment:<deployment-id>` on Elastic Cloud Hosted. This restricts the role to your project or deployment.
 
 :::{dropdown} Example: create the role with the AWS CLI
-Save the trust policy above to a file, then create the role:
+Save the preceding trust policy to a file, then create the role:
 
 ```shell
 aws iam create-role \
   --role-name parquet-sample-role \
   --assume-role-policy-document file://trust-policy.json <1>
 ```
-1. A local file holding the trust policy shown above. `create-role` returns the role ARN.
+1. A local file holding the trust policy shown earlier. `create-role` returns the role ARN.
 :::
 
 Note the role ARN that AWS returns. You enter it, along with the audience, in Elastic in the final step.
@@ -153,7 +153,7 @@ The following policy allows reading your objects with `s3:GetObject`, and listin
 2. Bucket-level actions apply to the bucket ARN, not object ARNs. Include this statement only if you query by prefix or glob rather than a single fixed file.
 
 :::{dropdown} Example: create and attach the policy with the AWS CLI
-Save the permissions policy above to a file, then create it and attach it to the role:
+Save the preceding permissions policy to a file, then create it and attach it to the role:
 
 ```shell
 # Create the permissions policy
@@ -179,7 +179,7 @@ Back in Elastic, connect the S3 data source with the **Federated Identity** meth
 
 :::{tab-item} UI
 :sync: ui
-In the **Connect data source** flyout from the first step, enter the **role ARN** you created. For the full field reference, see [Connect external data sources](esql-data-federation-sources.md).
+In the **Connect data source** flyout from the first step, enter the **role ARN** you created. For the full field reference, refer to [Connect external data sources](esql-data-federation-sources.md).
 :::
 
 :::{tab-item} Console
@@ -229,7 +229,7 @@ You can now query the remote data with {{esql}}.
 
 ## Complete AWS CLI example
 
-The steps above explain each AWS resource on its own. The following is a worked example of that setup end to end, using sample values for one scenario. It is illustrative, not a script to run as-is: replace the example values with your own before you run it. As with the individual steps, AWS is the authoritative reference for these commands.
+The preceding steps explain each AWS resource on its own. The following is a worked example of that setup end to end, using sample values for one scenario. It is illustrative, not a script to run as-is: replace the example values with your own before you run it. As with the individual steps, AWS is the authoritative reference for these commands.
 
 :::{dropdown} Show the complete AWS CLI example
 This example sets up federated identity for reading a single Parquet file at `s3://private-bucket/some/sample.parquet`. Run the commands in order in [AWS CloudShell](https://docs.aws.amazon.com/cloudshell/latest/userguide/welcome.html) or any shell with the AWS CLI configured.

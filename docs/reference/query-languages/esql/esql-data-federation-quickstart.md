@@ -10,7 +10,7 @@ products:
 
 # Get started with {{esql}} Data Federation
 
-This guide walks you through connecting {{es}} to external data and querying it with {{esql}}. By the end, you will have a working data source, a dataset, and a query returning results from external storage.
+This guide walks you through connecting {{es}} to external data and querying it with {{esql}}. By the end, you have a working data source, a dataset, and a query returning results from external storage.
 
 The example uses the [Ookla Open Speedtest dataset](https://github.com/teamookla/ookla-open-data), a publicly accessible collection of internet performance metrics aggregated by geographic tile. Because the bucket allows anonymous access, you can follow along without AWS credentials.
 
@@ -43,7 +43,7 @@ This example registers a data source that points at a public S3 bucket with anon
 3. Set **Data source type** to **Amazon S3**.
 4. Enter `ookla_speedtest` as the **Name**.
 5. Set **Region** to `us-east-1`.
-6. Under **Authentication**, select **Anonymous** from the **Preferred method** dropdown.
+6. Under **Authentication**, from the **Preferred method** menu, select **Anonymous**.
 7. Click **Connect**.
 
 :::{dropdown} Show the completed Connect data source flyout
@@ -124,7 +124,7 @@ curl -X GET "${ELASTICSEARCH_URL}/_query/data_source/ookla_speedtest" \
 ::::
 
 :::{note}
-Creating a data source does not validate connectivity to the external system. To verify that a data source is working, create a dataset that references it and run a query. If the credentials or endpoint are incorrect, the query will return an error.
+Creating a data source does not validate connectivity to the external system. To verify that a data source is working, create a dataset that references it and run a query. If the credentials or endpoint are incorrect, the query returns an error.
 :::
 ::::::
 

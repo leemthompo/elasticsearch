@@ -149,7 +149,7 @@ curl -X PUT "${ELASTICSEARCH_URL}/_query/dataset/access_logs" \
 
 ### Declare a dataset mapping
 
-By default, {{es}} infers a dataset's schema from its files. You can instead add an optional `mappings` block to the create or update request to control column names and types. Dataset mappings are currently available only through the API; the {{kib}} **Add dataset** flyout does not expose them.
+By default, {{es}} infers a dataset's schema from its files. You can instead add an optional `mappings` block to the create or update request to control column names and types. Dataset mappings are currently available only through the API. The {{kib}} **Add dataset** flyout does not expose them.
 
 The following example declares the complete schema, renames the physical `event_time` column to `@timestamp`, supplies its date format, and uses `request_id` as the row's `_id`:
 
@@ -340,7 +340,7 @@ For **CSV and NDJSON**, schemas are inferred by sampling rows from the data file
 
 ### Schema merge strategies
 
-When a dataset spans multiple files, the files may have different schemas. Set `schema_resolution` in the dataset's `settings` object to choose a strategy:
+When a dataset spans multiple files, the files might have different schemas. Set `schema_resolution` in the dataset's `settings` object to choose a strategy:
 
 - `union_by_name` (default): Merges schemas from all files by column name. Lossless type widening is applied where possible; incompatible types cause an error. This is safer when files can vary, at the cost of reading and merging more file metadata.
 - `first_file_wins`: Uses the first file alphabetically to define the schema and assumes later files match it. This is typically faster, but schema differences in later files can cause query errors or values to be read under the wrong assumptions.

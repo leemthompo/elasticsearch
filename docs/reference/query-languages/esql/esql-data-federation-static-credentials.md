@@ -18,7 +18,7 @@ Setup involves steps in both AWS and Elastic: create the IAM identity and access
 
 You can use this page in two ways:
 
-- Work through the steps below to understand each AWS resource and how the pieces fit together.
+- Work through the following steps to understand each AWS resource and how the pieces fit together.
 - Jump to the [complete AWS CLI example](#complete-aws-cli-example) to set it up hands-on and learn it by doing.
 
 Refer to the [AWS IAM documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) as the authoritative reference for the commands shown here.
@@ -67,7 +67,7 @@ POLICY_ARN=$(aws iam create-policy \
   --policy-document file://permissions-policy.json \
   --query 'Policy.Arn' --output text) <1>
 ```
-1. A local file holding the permissions policy shown above. `create-policy` returns the policy ARN, which you attach to an identity in the next step.
+1. A local file holding the preceding permissions policy. `create-policy` returns the policy ARN, which you attach to an identity in the next step.
 :::
 ::::::
 
@@ -116,7 +116,7 @@ In {{kib}}:
 4. Under **Authentication**, select **Access and Secret Keys**.
 5. Enter the **access key** and **secret key** from the previous step.
 
-For the full field reference, see [Connect external data sources](esql-data-federation-sources.md).
+For the full field reference, refer to [Connect external data sources](esql-data-federation-sources.md).
 
 :::{image} images/data-federation/access-and-secret-keys.png
 :alt: The Authentication section of the Connect data source flyout with Access and Secret Keys selected, showing the access key and secret key fields
@@ -170,7 +170,7 @@ You can now query the remote data with {{esql}}.
 
 ## Complete AWS CLI example
 
-The steps above explain each AWS resource on its own. The following is a worked example of that setup end to end, using sample values for one scenario. It is illustrative, not a script to run as-is: replace the example bucket, file, and names with your own before you run it. As with the individual steps, AWS is the authoritative reference for these commands.
+The preceding steps explain each AWS resource on its own. The following is a worked example of that setup end to end, using sample values for one scenario. It is illustrative, not a script to run as-is: replace the example bucket, file, and names with your own before you run it. As with the individual steps, AWS is the authoritative reference for these commands.
 
 :::{dropdown} Show the complete AWS CLI example
 This example grants read access to a single Parquet file at `s3://private-bucket/some/sample.parquet` and creates a long-lived access key for a dedicated IAM user. Run the commands in order in [AWS CloudShell](https://docs.aws.amazon.com/cloudshell/latest/userguide/welcome.html) or any shell with the AWS CLI configured.
