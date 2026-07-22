@@ -15,6 +15,7 @@ data from multiple sources. Learn more in the following sections:
 * [Query across {{serverless-short}} projects](esql-cross-serverless-projects.md) {applies_to}`serverless: preview`
 * [Combine result sets with subqueries](esql-subquery.md) {applies_to}`stack: preview 9.4.0` {applies_to}`serverless: preview`
 * [Define virtual indices using ES|QL views](esql-views.md) {applies_to}`stack: preview 9.4.0` {applies_to}`serverless: unavailable`
+* [Query data in external storage using ES|QL Data Federation](esql-data-federation.md) {applies_to}`stack: preview 9.5` {applies_to}`serverless: preview`
 
 ::::{include} _snippets/common/query-performance-tip.md
 ::::
