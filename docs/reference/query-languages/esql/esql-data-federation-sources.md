@@ -242,3 +242,9 @@ A data source authenticates to its store with one of the models below. The model
 :::{warning}
 Managed identity uses the cloud identity attached to each {{es}} node (for example, an IAM role on EC2 or a service account on GKE). Different nodes may have different identities, and the node that performs the connection is not guaranteed. You are responsible for configuring cloud IAM so that every node's identity has the required permissions on the target bucket. This model is best suited for single-cloud, single-tenant deployments where node identities are uniform.
 :::
+
+## Next steps
+
+- [Create datasets](esql-data-federation-datasets.md) that point at specific files in your data source, and configure file formats, schema inference, and parsing settings.
+- [Query your datasets](esql-data-federation-querying.md) with `FROM` to learn how partition pruning, column selection, and filter pushdown reduce storage reads.
+- [Manage credentials and privileges](esql-data-federation-security.md) to control who can create data sources and read external data.

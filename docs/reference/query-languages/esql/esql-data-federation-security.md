@@ -71,3 +71,9 @@ A role configures these privileges as follows. The example grants querying `sale
   }
 }
 ```
+
+## Next steps
+
+- To set up credentials for a data source, refer to [connect with static credentials](esql-data-federation-static-credentials.md) or [connect with federated identity](esql-data-federation-federated-identity.md).
+- For the operator-level settings that gate managed identity and federated identity, refer to the [authentication cluster settings](esql-data-federation-cluster-settings.md#authentication).
+- For the full {{es}} privilege reference, refer to [security privileges](../../elasticsearch/security-privileges.md).

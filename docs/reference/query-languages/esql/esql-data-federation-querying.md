@@ -143,3 +143,9 @@ Access denied or connection errors
 
 Dataset names do not appear in autocomplete
 :   The {{kib}} ES|QL editor does not currently surface dataset names in autocomplete or `FROM` suggestions. Type the dataset name manually.
+
+## Next steps
+
+- To adjust caching TTLs, file-discovery limits, or request concurrency, refer to [cluster settings](esql-data-federation-cluster-settings.md).
+- To control column types or rename columns, declare [dataset mappings](esql-data-federation-datasets.md#declare-a-dataset-mapping).
+- For general {{esql}} tuning advice that also applies to datasets, refer to [optimize {{esql}} query performance](esql-query-performance.md).

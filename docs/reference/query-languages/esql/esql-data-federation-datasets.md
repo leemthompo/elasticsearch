@@ -345,3 +345,9 @@ When a dataset spans multiple files, the files may have different schemas. Set `
 - `union_by_name` (default): Merges schemas from all files by column name. Lossless type widening is applied where possible; incompatible types cause an error. This is safer when files can vary, at the cost of reading and merging more file metadata.
 - `first_file_wins`: Uses the first file alphabetically to define the schema and assumes later files match it. This is typically faster, but schema differences in later files can cause query errors or values to be read under the wrong assumptions.
 - `strict`: Requires every file to have the same schema, apart from nullability, and returns an error when they differ. Use this when schema drift must fail explicitly.
+
+## Next steps
+
+- [Query your datasets](esql-data-federation-querying.md) to learn how partition pruning, filter pushdown, and column selection reduce the amount of data read from storage.
+- If queries return unexpected types or missing values, check the [schema merge strategies](#schema-merge-strategies) or declare column types explicitly with [dataset mappings](#declare-a-dataset-mapping).
+- [Tune cluster settings](esql-data-federation-cluster-settings.md) to adjust file-discovery limits, caching TTLs, and request concurrency for your workload.

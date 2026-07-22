@@ -80,3 +80,9 @@ For details on type-specific settings and format options, refer to [select exter
 Most {{esql}} processing commands and functions work on datasets. The execution engine is the same one used for native indices. Some capabilities that depend on Lucene or specialized data structures are not currently available.
 
 For the full list of limitations, refer to [](esql-data-federation-querying.md#limitations).
+
+## Next steps
+
+- Follow the [quickstart](esql-data-federation-quickstart.md) to register a data source, create a dataset, and run your first federated query.
+- To connect to private storage, refer to [connect external data sources](esql-data-federation-sources.md) for authentication options including static credentials and federated identity.
+- To understand how the engine reduces storage reads, refer to [query external datasets](esql-data-federation-querying.md).

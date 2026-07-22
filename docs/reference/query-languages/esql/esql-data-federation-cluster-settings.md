@@ -59,3 +59,9 @@ These settings control the external-source cache, which stores inferred schemas 
 | `esql.source.cache.size` | 0.4% of heap | Memory budget for the cache. Applied at node startup only. |
 | `esql.source.cache.schema.ttl` | 5m | How long an inferred schema is cached. Applied at node startup only. |
 | `esql.source.cache.listing.ttl` | 30s | How long a file-listing result is cached. Applied at node startup only. |
+
+## Next steps
+
+- If queries are slow or reading more data than expected, refer to [how queries read external data](esql-data-federation-querying.md#how-queries-read-external-data) for guidance on column selection, partition pruning, and filter pushdown.
+- To enable federated identity or managed identity after setting the authentication gates on this page, refer to [connect external data sources](esql-data-federation-sources.md#authentication) for setup instructions.
+- For details on how credential encryption interacts with data source creation, refer to [manage credentials and privileges](esql-data-federation-security.md).
