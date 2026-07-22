@@ -2,11 +2,11 @@
 
 Elasticsearch provides two field types that generate and store embeddings automatically. Choose the field type based on the content and embedding model you want to use.
 
-`semantic_text` accepts text only. Configuring it with a multimodal embedding model does not enable image, audio, video, or PDF input. To index or search non-text content, use `semantic` with a compatible multimodal embedding endpoint.
+`semantic_text` accepts text only. To index or search images, audio, video, or PDF files, use `semantic` with a compatible multimodal embedding endpoint.
 
 | Aspect | [`semantic`](/reference/elasticsearch/mapping-reference/semantic-field.md) | [`semantic_text`](/reference/elasticsearch/mapping-reference/semantic-text.md) |
 |---|---|---|
-| Input | Text, images, audio, video, and PDF files | **Text only**. Multimodal models do not enable non-text input. |
+| Input | Text, images, audio, video, and PDF files | **Text only** |
 | Supported {{infer}} task types | `embedding` | `embedding`, `text_embedding`, and `sparse_embedding` |
 | Vector storage | Dense vectors only | Dense or sparse vectors |
 | `inference_id` | Required. No default endpoint is provided. | Optional. A default endpoint is used when you don't specify one. |

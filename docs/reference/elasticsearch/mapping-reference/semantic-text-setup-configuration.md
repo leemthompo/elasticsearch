@@ -11,7 +11,7 @@ applies_to:
 
 This page provides instructions for setting up and configuring `semantic_text` fields. Learn how to configure {{infer}} endpoints, including [default](#default-endpoints) and [preconfigured](#preconfigured-endpoints) options, ELSER on EIS, custom endpoints, and dedicated endpoints for ingestion and search operations.
 
-`semantic_text` accepts text only. Selecting a multimodal embedding endpoint does not enable image, audio, video, or PDF input. For non-text input, use [`semantic`](./semantic-field.md) with a compatible multimodal embedding endpoint.
+`semantic_text` accepts text only. For images, audio, video, or PDF files, use [`semantic`](./semantic-field.md) with a compatible multimodal embedding endpoint.
 
 ## Configure {{infer}} endpoints [configure-inference-endpoints]
 

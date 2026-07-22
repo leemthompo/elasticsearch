@@ -13,7 +13,7 @@ applies_to:
 The `semantic_text` field mapping can be added regardless of license state. However, it typically calls the [{{infer-cap}} API](https://www.elastic.co/docs/api/doc/elasticsearch/group/endpoint-inference), which requires an [appropriate license](https://www.elastic.co/subscriptions). In these cases, using `semantic_text` in a cluster without the appropriate license causes operations such as indexing and reindexing to fail.
 :::::
 
-The `semantic_text` field type is text-only. It does not accept images, audio, video, or PDF files, even if its {{infer}} endpoint uses a multimodal embedding model. To index or search non-text content, use [`semantic`](./semantic-field.md) with a compatible multimodal embedding endpoint.
+The `semantic_text` field type accepts text only. To index or search images, audio, video, or PDF files, use [`semantic`](./semantic-field.md) with a compatible multimodal embedding endpoint.
 
 For text-based [semantic search](docs-content://solutions/search/semantic-search.md), `semantic_text` provides sensible defaults that automate most of the manual work typically required for vector search. You don't have to manually configure mappings, set up ingestion pipelines, or handle chunking. The field type automatically:
 
