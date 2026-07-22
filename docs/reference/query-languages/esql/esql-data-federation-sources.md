@@ -1,6 +1,6 @@
 ---
 navigation_title: "Connect data sources"
-description: "Connect Elasticsearch to external storage with ES|QL Data Federation: set up S3 data sources, configure regions and endpoints, and authenticate access."
+description: "Connect Elasticsearch to external storage with ES|QL Data Federation by setting up S3 data sources, configuring regions and endpoints, and authenticating access."
 applies_to:
   stack: preview =9.5
   serverless: preview

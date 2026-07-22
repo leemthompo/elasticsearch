@@ -1,6 +1,6 @@
 ---
 navigation_title: "Overview"
-description: "ES|QL Data Federation overview: learn what federated queries are, when to use them, and which data source types and file formats are supported."
+description: "ES|QL Data Federation queries data in external cloud storage from Elasticsearch without ingestion. Covers use cases, supported data source types, and file formats."
 applies_to:
   stack: preview =9.5
   serverless: preview

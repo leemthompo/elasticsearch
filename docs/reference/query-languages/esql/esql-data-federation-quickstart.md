@@ -1,6 +1,6 @@
 ---
 navigation_title: "Quickstart"
-description: "Get started with ES|QL Data Federation: register an S3 data source, create a dataset, and run your first query against external data."
+description: "Step-by-step tutorial for setting up ES|QL Data Federation with a public S3 bucket, creating a dataset, and running your first federated query."
 applies_to:
   stack: preview =9.5
   serverless: preview
