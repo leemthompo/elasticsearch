@@ -21,7 +21,7 @@ The `semantic` field type simplifies semantic and multimodal search across text,
 Multiple `semantic` fields can use the same {{infer}} endpoint. For example, an index can use one field for image embeddings and another for description embeddings, then search either field or both.
 
 :::{tip}
-The `semantic` field type shares many capabilities with `semantic_text`. If you're working exclusively with text, consider using [`semantic_text`](./semantic-text.md).
+The `semantic` field type shares many capabilities with `semantic_text`, but `semantic_text` accepts text only. If you're working exclusively with text, consider using [`semantic_text`](./semantic-text.md).
 
 For a comparison table, refer to [Should I use `semantic_text` or `semantic`?](#should-i-use-semantictext-or-semantic).
 :::
