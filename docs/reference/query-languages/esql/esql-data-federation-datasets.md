@@ -1,6 +1,6 @@
 ---
 navigation_title: "Add datasets"
-description: "Create ES|QL Data Federation datasets to query files in external storage: configure file formats, Parquet and CSV settings, and schema inference."
+description: "Create ES|QL Data Federation datasets to query files in external storage: choose file formats, adjust Parquet and CSV parsing, and control schema inference."
 applies_to:
   stack: preview =9.5
   serverless: preview

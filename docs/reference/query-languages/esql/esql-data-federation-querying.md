@@ -1,6 +1,6 @@
 ---
 navigation_title: "Query datasets"
-description: "Query external data with ES|QL Data Federation: filter pushdown, partition pruning, column selection, caching, and troubleshooting."
+description: "Query external data with ES|QL Data Federation: learn how the engine reduces storage reads, combine datasets with indices, and troubleshoot common issues."
 applies_to:
   stack: preview =9.5
   serverless: preview

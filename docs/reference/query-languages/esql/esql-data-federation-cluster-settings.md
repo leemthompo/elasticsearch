@@ -1,6 +1,6 @@
 ---
 navigation_title: "Cluster settings"
-description: "Configure ES|QL Data Federation cluster settings: object limits, request concurrency, file discovery, authentication gates, and caching."
+description: "Configure ES|QL Data Federation cluster settings: tune object limits, control request concurrency, and adjust file discovery and caching behavior."
 applies_to:
   stack: preview =9.5
   serverless: unavailable

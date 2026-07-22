@@ -25,10 +25,10 @@ Query data stored in compatible external storage systems using the same {{esql}}
 : Select which files to query, configure format settings, and control schema inference.
 
 [Query datasets](esql-data-federation-querying.md)
-: Understand filter pushdown and column selection, combine external and indexed data, review current limitations, and troubleshoot common issues.
+: Learn how the engine reduces storage reads, combine external and indexed data, review current limitations, and troubleshoot common issues.
 
 [Manage access](esql-data-federation-security.md)
 : Control access to data sources and datasets, encrypt credentials, and configure privileges.
 
 [Cluster settings](esql-data-federation-cluster-settings.md)
-: Configure object limits, request concurrency, file discovery, authentication gates, and caching.
+: Tune object limits, control request concurrency, and adjust file discovery and caching behavior.
