@@ -130,7 +130,14 @@ Slow queries
 :   {{es}} encrypts credentials before storing them. If the cluster state encryption key is not available, the request returns `503 SERVICE_UNAVAILABLE`. Refer to [credential encryption](esql-data-federation-security.md#credential-encryption) for details.
 
 Discovering a dataset's columns
-:   To see what columns a dataset contains and their types, query it with `LIMIT 1`. This returns one row with all columns, which is enough to inspect the schema. There is no separate schema discovery command for datasets.
+:   To see what columns a dataset contains and their inferred types, query it with `LIMIT 1`:
+
+    ```esql
+    FROM my_dataset
+    | LIMIT 1
+    ```
+
+    This returns one row with all columns, which is enough to inspect the field mappings. There is no separate schema discovery command for datasets. For a worked example with sample output, refer to [check field mappings](esql-data-federation-quickstart.md#check-field-mappings) in the quickstart.
 
 New files not appearing in query results
 :   {{es}} caches file listings for each dataset. If you recently added files to your bucket, they might not appear until the listing cache expires. The default listing cache TTL is 30 seconds. Refer to [cluster settings](esql-data-federation-cluster-settings.md) to adjust it.

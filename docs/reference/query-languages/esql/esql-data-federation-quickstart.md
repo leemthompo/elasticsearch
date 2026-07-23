@@ -223,6 +223,44 @@ curl -X GET "${ELASTICSEARCH_URL}/_query/dataset/speedtest_fixed" \
 
 ::::::
 
+::::::{step} Check field mappings
+Before writing queries, check what field mappings {{es}} inferred from the Parquet files. Query the dataset with `LIMIT 1` to return a single row with all columns:
+
+```bash
+curl -s -X POST "${ELASTICSEARCH_URL}/_query" \
+  -H "Authorization: ApiKey ${API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "query": "FROM speedtest_fixed | LIMIT 1"
+}' | jq '.columns[] | {name, type}'
+```
+
+The response lists every column name and its inferred type:
+
+```json
+{ "name": "quadkey", "type": "keyword" }
+{ "name": "tile", "type": "keyword" }
+{ "name": "tile_x", "type": "double" }
+{ "name": "tile_y", "type": "double" }
+{ "name": "avg_d_kbps", "type": "long" }
+{ "name": "avg_u_kbps", "type": "long" }
+{ "name": "avg_lat_ms", "type": "long" }
+{ "name": "avg_lat_down_ms", "type": "integer" }
+{ "name": "avg_lat_up_ms", "type": "integer" }
+{ "name": "tests", "type": "long" }
+{ "name": "devices", "type": "long" }
+{ "name": "type", "type": "keyword" }
+{ "name": "year", "type": "integer" }
+{ "name": "quarter", "type": "integer" }
+```
+
+The `type`, `year`, and `quarter` columns come from Hive-style partition paths in the S3 bucket. {{es}} detects these automatically when `partition_detection` is set to `auto` (the default).
+
+:::{tip}
+If a column has an unexpected type, you can override it with a [dataset mapping](esql-data-federation-datasets.md#declare-a-dataset-mapping).
+:::
+::::::
+
 ::::::{step} Query the dataset
 Once a dataset exists, query it with `FROM` just like any {{es}} index. This query summarizes the Q1 2024 fixed-broadband data across all geographic tiles:
 

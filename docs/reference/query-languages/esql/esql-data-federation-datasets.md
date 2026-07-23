@@ -147,6 +147,10 @@ curl -X PUT "${ELASTICSEARCH_URL}/_query/dataset/access_logs" \
 
 ::::
 
+:::{tip}
+After creating a dataset, you can check the field mappings that {{es}} inferred from your files. Refer to [check field mappings](esql-data-federation-quickstart.md#check-field-mappings) in the quickstart for a worked example.
+:::
+
 ### Declare a dataset mapping
 
 By default, {{es}} infers a dataset's schema from its files. You can instead add an optional `mappings` block to the create or update request to control column names and types. Dataset mappings are currently available only through the API. The {{kib}} **Add dataset** flyout does not expose them.
