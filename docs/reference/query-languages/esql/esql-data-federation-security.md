@@ -22,10 +22,10 @@ When a data source includes credentials, {{es}} encrypts them using the cluster 
 
 The cluster state encryption key is available automatically in most environments, including {{ech}}, {{ece}}, {{eck}}, and {{serverless-short}}.
 
-# TODO: uncomment once https://github.com/elastic/elasticsearch/pull/152731 merges
-# Learn more about the [cluster state encryption key](/reference/elasticsearch/cluster-state-encryption-key.md).
-
 By default, if the cluster state encryption key is not available when you create a data source, a `PUT /_query/data_source` request that includes credentials returns a `503` error. Retry once the key is available, or configure the key first.
+
+<!-- TODO: uncomment once https://github.com/elastic/elasticsearch/pull/152731 merges
+Learn more about the [cluster state encryption key](/reference/elasticsearch/cluster-state-encryption-key.md). -->
 
 ### Credential masking
 
