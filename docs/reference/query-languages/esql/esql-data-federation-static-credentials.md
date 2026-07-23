@@ -30,6 +30,7 @@ To follow this guide, you need:
 - An Elastic project or deployment with {{esql}} Data Federation available.
 - An AWS account with permissions to create IAM policies, users, and access keys.
 - An S3 bucket containing the file or files you want to query.
+- A role with the cluster manage privilege, or a `global.data_source` privilege, to create the data source. Refer to [Manage access](esql-data-federation-security.md).
 
 :::::::{stepper}
 

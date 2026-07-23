@@ -105,12 +105,12 @@ The operations below require structures that only exist in an {{es}} index, such
 
 | Operation | Reason | Error |
 |---|---|---|
-| LOOKUP JOIN, with a dataset as the lookup target | A dataset works as the left (source) side of the join. The lookup target must be an {{es}} index. | `LOOKUP JOIN against a dataset is not supported` |
-| TS (time series) | A time-series source must be an {{es}} index. | `TS command is not supported for datasets` |
-| LOGSDB and other non-standard index modes | These index modes apply only to {{es}} indices. | `LOGSDB index mode on FROM <dataset> is not supported` |
-| MATCH_PHRASE | Runtime phrase search is not currently available for datasets. | `… cannot operate on [<field>], which is not a field from an index mapping` |
-| KNN | KNN requires a vector field from an index mapping, which a dataset does not have. | `… cannot operate on [<field>], which is not a field from an index mapping` |
-| KQL, QSTR | These query an {{es}} index. | `… cannot be used after [FROM <dataset>]` |
+| `LOOKUP JOIN`, with a dataset as the lookup target | A dataset works as the left (source) side of the join. The lookup target must be an {{es}} index. | `LOOKUP JOIN against a dataset is not supported` |
+| `TS` (time series) | A time-series source must be an {{es}} index. | `TS command is not supported for datasets` |
+| `LOGSDB` and other non-standard index modes | These index modes apply only to {{es}} indices. | `LOGSDB index mode on FROM <dataset> is not supported` |
+| `MATCH_PHRASE` | Runtime phrase search is not currently available for datasets. | `… cannot operate on [<field>], which is not a field from an index mapping` |
+| `KNN` | `KNN` requires a vector field from an index mapping, which a dataset does not have. | `… cannot operate on [<field>], which is not a field from an index mapping` |
+| `KQL`, `QSTR` | These query an {{es}} index. | `… cannot be used after [FROM <dataset>]` |
 | Document-level security (DLS) and field-level security (FLS) | A dataset's `read` grant cannot carry document- or field-level security. Queries where DLS or FLS applies to a dataset are rejected during authorization. | `Datasets with document or field level security restrictions are not supported` |
 | [Cross-cluster search](/reference/query-languages/esql/esql-cross-clusters.md) and [cross-project search](/reference/query-languages/esql/esql-cross-serverless-projects.md) | Datasets on a remote cluster or project cannot be queried. Only local datasets are supported. | `remote datasets are not supported` |
 | Snapshot and restore | Data sources and datasets cannot be snapshotted or restored. | |

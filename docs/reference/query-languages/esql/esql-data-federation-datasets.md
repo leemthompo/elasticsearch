@@ -80,12 +80,12 @@ Click **Add dataset** to open a flyout where you define the dataset:
 
 To configure how the format is read, expand **Advanced settings**. Refer to [dataset settings](#dataset-settings).
 
-:::{dropdown} Show the Add dataset flyout
+::::{dropdown} Show the Add dataset flyout
 :::{image} images/data-federation/add-dataset.png
 :alt: The Add dataset flyout configured for a Parquet dataset over an Amazon S3 data source
 :width: 450px
 :::
-:::
+::::
 
 ## Manage datasets using the API
 
@@ -334,9 +334,9 @@ Because federated data does not live in {{es}}, the system discovers schemas bef
 
 ### Schema sources by format
 
-For **Parquet**, schemas are read from file headers. These formats also provide metadata like column statistics and bloom filters that the engine uses to skip irrelevant data.
+Parquet reads its schema from file metadata, which also provides column statistics and bloom filters that the engine uses to skip irrelevant data.
 
-For **CSV and NDJSON**, schemas are inferred by sampling rows from the data files.
+For **CSV, TSV, and NDJSON**, schemas are inferred by sampling rows from the data files.
 
 ### Schema merge strategies
 

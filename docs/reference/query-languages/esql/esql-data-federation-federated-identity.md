@@ -121,7 +121,7 @@ aws iam create-role \
   --role-name parquet-sample-role \
   --assume-role-policy-document file://trust-policy.json <1>
 ```
-1. A local file holding the trust policy shown earlier. `create-role` returns the role ARN.
+1. A local file holding the preceding trust policy. `create-role` returns the role ARN.
 :::
 
 Note the role ARN that AWS returns. You enter it, along with the audience, in Elastic in the final step.
