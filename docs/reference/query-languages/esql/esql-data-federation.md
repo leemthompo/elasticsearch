@@ -12,6 +12,11 @@ products:
 
 Query data stored in compatible external storage systems using the same {{esql}} syntax you use for native indices, without any ingestion into {{es}}.
 
+::::{admonition} Requirements
+:applies_to: { ess:, ece:, eck:, self: }
+For {{ech}}, {{ece}}, and {{eck}} deployments or self-managed clusters, ES|QL Data Federation requires an [Enterprise subscription](https://www.elastic.co/subscriptions).
+::::
+
 [Overview](esql-data-federation-overview.md)
 : What federated data is, why you would use it, and what data source types and file formats are supported.
 
