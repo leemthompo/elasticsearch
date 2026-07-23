@@ -93,7 +93,7 @@ FROM access_logs METADATA _file.path, _file.name, _file.size
 
 ## Search functions
 
-[Search functions](functions-operators/search-functions/index.md) can filter dataset rows by evaluating the query against values read from the files. This runtime search does not use an inverted index and does not contribute to `_score`. `_score` remains null for dataset rows.
+[Search functions](/reference/query-languages/esql/functions-operators/search-functions.md) can filter dataset rows by evaluating the query against values read from the files. This runtime search does not use an inverted index and does not contribute to `_score`. `_score` remains null for dataset rows.
 
 Because there is no inverted index, search functions on a dataset evaluate by scanning values row by row. For large datasets where search is the primary access pattern, consider ingesting the data into {{es}} for indexed search performance.
 
