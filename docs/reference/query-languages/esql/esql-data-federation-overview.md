@@ -33,7 +33,7 @@ You have Parquet files, CSVs, or NDJSON sitting in a bucket. The data is not ing
 ::::::
 
 ::::::{step} You create a data source (the connection)
-A [data source](esql-data-federation-sources.md) tells {{es}} where the storage is and how to authenticate. It stores the connection type, region, endpoint, and credentials. You set it up once.
+A [data source](esql-data-federation-sources.md) tells {{es}} where the storage is and how to authenticate. It stores the connection type, region, endpoint, and credentials. You only need to set up a data source once per region, and any number of datasets can read from it.
 ::::::
 
 ::::::{step} You create datasets (what to read)
