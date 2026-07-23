@@ -117,7 +117,6 @@ The operations below require structures that only exist in an {{es}} index, such
 |---|---|---|
 | `LOOKUP JOIN`, with a dataset as the lookup target | A dataset works as the left (source) side of the join. The lookup target must be an {{es}} index. | `LOOKUP JOIN against a dataset is not supported` |
 | `TS` (time series) | A time-series source must be an {{es}} index. | `TS command is not supported for datasets` |
-| Non-standard index modes (`LOGSDB`, `COLUMNAR`, `VECTORDB_DOCUMENT`, and others) | Datasets only support the standard index mode. | `FROM <dataset> with index mode [<mode>] is not supported` |
 | Search functions | Not all search functions are available immediately on all deployment types. Refer to the [availability table](#search-functions). | `… cannot operate on [<field>], which is not a field from an index mapping` |
 | `KNN` | `KNN` requires a vector field from an index mapping, which a dataset does not have. | `… cannot operate on [<field>], which is not a field from an index mapping` |
 | `KQL`, `QSTR` | These query an {{es}} index. | `… cannot be used after [FROM <dataset>]` |
