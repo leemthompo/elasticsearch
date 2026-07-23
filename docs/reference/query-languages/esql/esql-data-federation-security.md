@@ -22,7 +22,7 @@ When a data source includes credentials, {{es}} encrypts them using the cluster 
 
 The cluster state encryption key is available automatically in most environments, including {{ech}}, {{ece}}, {{eck}}, and {{serverless-short}}.
 
-By default, if the cluster state encryption key is not available when you create a data source, a `PUT /_query/data_source` request that includes credentials returns a `503` error. Retry once the key is available, or configure the key first.
+By default, if the cluster state encryption key is not available when you create a data source, a `PUT /_query/data_source` request that includes credentials returns a `503` error. On upgraded self-managed clusters, the encryption password is not configured automatically. Add `cluster.state.encryption.password.<id>` and `cluster.state.encryption.active_password_id` to the keystore on every node, then call `POST /_nodes/reload_secure_settings`.
 
 <!-- TODO: uncomment once https://github.com/elastic/elasticsearch/pull/152731 merges
 Learn more about the [cluster state encryption key](/reference/elasticsearch/cluster-state-encryption-key.md). -->
