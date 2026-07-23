@@ -230,7 +230,7 @@ A data source connects to a single region. To query buckets in more than one reg
 
 ## Authentication
 
-A data source authenticates to its store with one of the models below. The models are mutually exclusive on a data source.
+A data source authenticates to its store with one of the following models. The models are mutually exclusive on a data source.
 
 | Model | `auth` value | Description |
 |---|---|---|
