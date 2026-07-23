@@ -18,15 +18,12 @@ When a data source connects to a private bucket, its encrypted credentials are s
 
 ### Credential encryption
 
-<!-- TODO: restore the link to the cluster state encryption key page once PR #152731 (docs/reference/elasticsearch/project-encryption-key.md) merges. Linking now breaks the build because the target does not exist on this branch. Link markup: [cluster state encryption key](../../elasticsearch/project-encryption-key.md) -->
 When a data source includes credentials, {{es}} encrypts them using the cluster state encryption key before storing them in the cluster state.
 
 The cluster state encryption key is available automatically in most environments, including {{ech}}, {{ece}}, {{eck}}, and {{serverless-short}}.
 
-<!-- TODO: restore this line once PR #152731 (docs/reference/elasticsearch/project-encryption-key.md) merges. It links to a page not yet on this branch and would break the build.
-For how to set the password, rotate the key, and check its health, refer to [cluster state encryption key](../../elasticsearch/project-encryption-key.md). -->
-
-For how to set the password, rotate the key, and check its health, refer to your deployment's encryption documentation.
+# TODO: uncomment once https://github.com/elastic/elasticsearch/pull/152731 merges
+# Learn more about the [cluster state encryption key](/reference/elasticsearch/cluster-state-encryption-key.md).
 
 By default, if the cluster state encryption key is not available when you create a data source, a `PUT /_query/data_source` request that includes credentials returns a `503` error. Retry once the key is available, or configure the key first.
 
