@@ -237,6 +237,7 @@ curl -s -X POST "${ELASTICSEARCH_URL}/_query" \
 
 The response lists every column name and its inferred type:
 
+:::{dropdown} View response
 ```json
 { "name": "quadkey", "type": "keyword" }
 { "name": "tile", "type": "keyword" }
@@ -255,6 +256,7 @@ The response lists every column name and its inferred type:
 ```
 
 The `type`, `year`, and `quarter` columns come from Hive-style partition paths in the S3 bucket. {{es}} detects these automatically when `partition_detection` is set to `auto` (the default).
+:::
 
 :::{tip}
 If a column has an unexpected type, you can override it with a [dataset mapping](esql-data-federation-datasets.md#declare-a-dataset-mapping).
