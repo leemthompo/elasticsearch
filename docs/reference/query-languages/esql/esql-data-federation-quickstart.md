@@ -226,14 +226,40 @@ curl -X GET "${ELASTICSEARCH_URL}/_query/dataset/speedtest_fixed" \
 ::::::{step} Check field mappings
 Before writing queries, check what field mappings {{es}} inferred from the Parquet files. Query the dataset with `LIMIT 1` to return a single row with all columns:
 
+::::{tab-set}
+:group: surface
+
+:::{tab-item} {{esql}}
+:sync: esql
+```esql
+FROM speedtest_fixed
+| LIMIT 1
+```
+:::
+
+:::{tab-item} Console
+:sync: console
+```console
+POST /_query
+{
+  "query": "FROM speedtest_fixed | LIMIT 1"
+}
+```
+:::
+
+:::{tab-item} curl
+:sync: curl
 ```bash
-curl -s -X POST "${ELASTICSEARCH_URL}/_query" \
+curl -X POST "${ELASTICSEARCH_URL}/_query" \
   -H "Authorization: ApiKey ${API_KEY}" \
   -H "Content-Type: application/json" \
   -d '{
   "query": "FROM speedtest_fixed | LIMIT 1"
-}' | jq '.columns[] | {name, type}'
+}'
 ```
+:::
+
+::::
 
 The response lists every column name and its inferred type:
 
