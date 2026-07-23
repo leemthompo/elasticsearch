@@ -91,13 +91,23 @@ FROM access_logs METADATA _file.path, _file.name, _file.size
 | LIMIT 10
 ```
 
-## Full-text search
+## Search functions
 
-[`MATCH`](functions-operators/search-functions/match.md) can filter dataset rows by evaluating the query against values read from the files. This runtime search does not use an inverted index and does not contribute to `_score`. `_score` remains null for dataset rows.
+[Search functions](functions-operators/search-functions/index.md) can filter dataset rows by evaluating the query against values read from the files. This runtime search does not use an inverted index and does not contribute to `_score`. `_score` remains null for dataset rows.
 
-Because there is no inverted index, `MATCH` on a dataset evaluates by scanning values row by row. For large datasets where full-text search is the primary access pattern, consider ingesting the data into {{es}} for indexed search performance.
+Because there is no inverted index, search functions on a dataset evaluate by scanning values row by row. For large datasets where search is the primary access pattern, consider ingesting the data into {{es}} for indexed search performance.
 
-[`MATCH_PHRASE`](functions-operators/search-functions/match_phrase.md) is not currently available for datasets.
+The following search functions are available for datasets:
+
+| Function | Stack | Serverless |
+|---|---|---|
+| [`MATCH`](functions-operators/search-functions/match.md) | {applies_to}`stack: preview 9.5` | {applies_to}`serverless: preview` |
+| [`MATCH_PHRASE`](functions-operators/search-functions/match_phrase.md) | {applies_to}`stack: preview 9.6` | {applies_to}`serverless: preview` |
+| `_score` for dataset rows | Not yet available | Not yet available |
+
+:::{tip}
+New search functions are available on {{serverless-short}} first.
+:::
 
 ## Limitations
 
@@ -107,8 +117,8 @@ The operations below require structures that only exist in an {{es}} index, such
 |---|---|---|
 | `LOOKUP JOIN`, with a dataset as the lookup target | A dataset works as the left (source) side of the join. The lookup target must be an {{es}} index. | `LOOKUP JOIN against a dataset is not supported` |
 | `TS` (time series) | A time-series source must be an {{es}} index. | `TS command is not supported for datasets` |
-| `LOGSDB` and other non-standard index modes | These index modes apply only to {{es}} indices. | `LOGSDB index mode on FROM <dataset> is not supported` |
-| `MATCH_PHRASE` | Runtime phrase search is not currently available for datasets. | `… cannot operate on [<field>], which is not a field from an index mapping` |
+| Non-standard index modes (`LOGSDB`, `COLUMNAR`, `VECTORDB_DOCUMENT`, and others) | Datasets only support the standard index mode. | `FROM <dataset> with index mode [<mode>] is not supported` |
+| Search functions | Not all search functions are available immediately on all deployment types. Refer to the [availability table](#search-functions). | `… cannot operate on [<field>], which is not a field from an index mapping` |
 | `KNN` | `KNN` requires a vector field from an index mapping, which a dataset does not have. | `… cannot operate on [<field>], which is not a field from an index mapping` |
 | `KQL`, `QSTR` | These query an {{es}} index. | `… cannot be used after [FROM <dataset>]` |
 | Document-level security (DLS) and field-level security (FLS) | A dataset's `read` grant cannot carry document- or field-level security. Queries where DLS or FLS applies to a dataset are rejected during authorization. | `Datasets with document or field level security restrictions are not supported` |

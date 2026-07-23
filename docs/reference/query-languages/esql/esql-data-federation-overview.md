@@ -64,6 +64,10 @@ The following data source types are supported:
 :::{include} _snippets/data-federation/supported-data-source-types.md
 :::
 
+:::{tip}
+New data source types are available on {{serverless-short}} first.
+:::
+
 ## Supported file formats
 
 Federated data sources can read the following file formats:
