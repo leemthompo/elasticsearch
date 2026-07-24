@@ -12,7 +12,7 @@ products:
 
 A dataset is a read source for the standard {{esql}} pipeline. You query it with `FROM` like an index, and every processing command works the same way it does for an index. For a worked example, refer to [get started with {{esql}} Data Federation](esql-data-federation-quickstart.md).
 
-## How queries read external data
+## How external data is read
 
 When you query a dataset, {{es}} reads data from object storage (such as Amazon S3) rather than from a local index. This means every column and every row that a query touches results in network I/O. The query engine applies several optimizations automatically, and there are things you can do to help it read less data.
 
@@ -56,7 +56,7 @@ A dataset's resource path can use glob patterns to match many files. Two cluster
 
 If your dataset exceeds these limits, narrow the resource path or adjust the settings. Refer to [cluster settings](esql-data-federation-cluster-settings.md) for details.
 
-## Query datasets and indices together
+## Query across datasets and indices
 
 Datasets share the same namespace as indices, aliases, and [{{esql}} views](esql-views.md), so `FROM` resolves each name independently. You can query a dataset and an index together in a single `FROM`:
 
@@ -68,7 +68,7 @@ FROM speedtest_data, network_incidents METADATA _index
 
 When sources have different schemas, columns that do not exist in a given source return `null` for rows from that source. Use `METADATA _index` to see which source each row came from. The `_index` column returns the dataset name for dataset rows and the index name for index rows.
 
-## Metadata columns
+## Use metadata columns
 
 [Metadata columns](/reference/query-languages/esql/esql-metadata-fields.md) are available using the `METADATA` directive:
 
@@ -91,7 +91,7 @@ FROM access_logs METADATA _file.path, _file.name, _file.size
 | LIMIT 10
 ```
 
-## Search functions
+## Use search functions
 
 [Search functions](/reference/query-languages/esql/functions-operators/search-functions.md) can filter dataset rows by evaluating the query against values read from the files. This runtime search does not use an inverted index and does not contribute to `_score`. `_score` remains null for dataset rows.
 
