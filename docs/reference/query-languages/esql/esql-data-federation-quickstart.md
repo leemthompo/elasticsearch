@@ -14,16 +14,12 @@ This guide walks you through connecting {{es}} to external data and querying it 
 
 The example uses the [Ookla Open Speedtest dataset](https://github.com/teamookla/ookla-open-data), a publicly accessible collection of internet performance metrics aggregated by geographic tile. Because the bucket allows anonymous access, you can follow along without AWS credentials.
 
-::::{admonition} Requirements
-:applies_to: { ess:, ece:, eck:, self: }
-For {{ech}}, {{ece}}, and {{eck}} deployments or self-managed clusters, ES|QL Data Federation requires an [Enterprise subscription](https://www.elastic.co/subscriptions).
-::::
-
 ## Before you begin
 
 Make sure you have the following:
 
 - An {{es}} deployment running version 9.5 or later, or a serverless project.
+- An [Enterprise subscription](https://www.elastic.co/subscriptions) for {{ech}}, {{ece}}, {{eck}}, or self-managed deployments.
 - The cluster `manage` privilege to create data sources.
 - The index `manage` privilege to create datasets.
 
